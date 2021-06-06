@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const Features = () => {
+const About = () => {
   return (
     <div>
       <div className="bg-orange-100">
@@ -67,4 +67,4 @@ const Features = () => {
   );
 };
 
-export default Features;
+export default About;

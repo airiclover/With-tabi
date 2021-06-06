@@ -1,13 +1,13 @@
 import Header from "src/components/common/Header";
 import FirstView from "src/components/common/FirstView";
-import Features from "src/components/common/Features";
+import About from "src/components/common/About";
 
 const IndexPage = () => {
   return (
     <>
       <Header />
       <FirstView />
-      <Features />
+      <About />
     </>
   );
 };
