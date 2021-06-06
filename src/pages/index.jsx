@@ -1,7 +1,15 @@
-export default function Home() {
+import Header from "src/components/common/Header";
+import FirstView from "src/components/common/FirstView";
+import Features from "src/components/common/Features";
+
+const IndexPage = () => {
   return (
-    <div>
-      <div className="text-5xl">Hello World!</div>
-    </div>
+    <>
+      <Header />
+      <FirstView />
+      <Features />
+    </>
   );
-}
+};
+
+export default IndexPage;
