@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const FirstView = () => {
+export const FirstView = () => {
   return (
     <div>
       <div className="px-4">
@@ -28,5 +28,3 @@ const FirstView = () => {
     </div>
   );
 };
-
-export default FirstView;

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const About = () => {
+export const About = () => {
   return (
     <div>
       <div className="bg-orange-100">
@@ -17,7 +17,7 @@ const About = () => {
         <div className="pt-28 pb-24 px-4">
           <div className="pb-20 flex justify-around items-center">
             <Image
-              src="/img/phone.png"
+              src="/img/phone.webp"
               alt="abputImg"
               width={100}
               height={170}
@@ -55,7 +55,7 @@ const About = () => {
               </div>
             </div>
             <Image
-              src="/img/phone.png"
+              src="/img/phone.webp"
               alt="abputImg"
               width={100}
               height={170}
@@ -66,5 +66,3 @@ const About = () => {
     </div>
   );
 };
-
-export default About;
