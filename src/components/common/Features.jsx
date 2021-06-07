@@ -53,7 +53,7 @@ export const Features = () => {
 
         <div className="pb-6 text-center">
           <Image
-            src="/img/makeTrip.png"
+            src="/img/maketrip.png"
             alt="catchcopyImg"
             width={230}
             height={45}
