@@ -25,7 +25,7 @@ export const Features = () => {
 
   return (
     <div>
-      <div className="py-20 px-4">
+      <div className="py-20 px-3">
         <h1 className="pb-12 text-2xl font-semibold">
           <p>旅を楽しくする</p>
           <p>さまざまな機能たち</p>
@@ -35,7 +35,7 @@ export const Features = () => {
           return (
             <div
               key={feature.src}
-              className="bg-orange-50 mb-12 mx-5 p-8 text-center border-2 border-orange-100 rounded-3xl"
+              className="bg-orange-50 mb-12 mx-4 pt-7 px-7 pb-10 text-center border-2 border-orange-100 rounded-3xl"
             >
               <Image
                 src={`/img/${feature.src}`}
@@ -56,7 +56,7 @@ export const Features = () => {
             src="/img/maketrip.png"
             alt="catchcopyImg"
             width={230}
-            height={45}
+            height={38}
           />
         </div>
 

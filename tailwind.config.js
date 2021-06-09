@@ -10,6 +10,9 @@ module.exports = {
         blue: colors.lightBlue,
         orange: colors.orange,
       },
+      fontSize: {
+        xxs: ".625rem",
+      },
     },
   },
   variants: {
