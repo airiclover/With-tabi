@@ -15,13 +15,13 @@ export const FirstView = () => {
           <Image
             src="/img/undraw-travel.svg"
             alt="firstViewImg"
-            width={190}
-            height={140}
+            width={180}
+            height={130}
             loading="eager"
             priority
           />
         </div>
-        <div className="py-8 text-lg font-extrabold tracking-wider">
+        <div className="py-8 text-lg font-extrabold tracking-widest">
           Let’s make a trip!
         </div>
       </div>
