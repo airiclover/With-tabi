@@ -57,6 +57,8 @@ export const Features = () => {
             alt="catchcopyImg"
             width={230}
             height={38}
+            loading="eager"
+            priority
           />
         </div>
 
