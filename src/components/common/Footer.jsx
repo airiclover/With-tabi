@@ -48,6 +48,8 @@ export const Footer = () => {
         width={140}
         height={60}
         layout="responsive"
+        loading="eager"
+        priority
       />
 
       <div className="py-10 px-4">
