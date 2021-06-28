@@ -1,0 +1,77 @@
+
+😸firestore設計memo
+
+# =====================================================
+# =====================================================
+
+
+## With-tabi アプリ Plan の仕様
+
+-Plan を登録できる
+-Plan を一覧できる
+
+-Plan 詳細を登録できる
+-Plan 詳細を一覧できる
+-Plan 詳細の編集ができる
+
+
+## Model
+
+-user
+-plan
+-plandetail
+
+
+## With-tabi アプリ Blog の仕様
+
+-Plan が完成したら決める
+
+
+# =====================================================
+# =====================================================
+
+
+
+😸Firestore設計のmemo
+#「users」「plans」「blogs」は性質の異なるデータのため、データベースのルートレベルでコレクションを作成
+# (【レストランのレビュー取得の例】Cloud Firestoreのクエリは十分速い、トップレベルに定義したコレクションの中の、何百万件あるレビューの中から「hello shop」という名前の特定のレストランのレビューを取得してくる時間的コストと、あるレストランの下に作った単一の reviewsサブコレクションのレビュードキュメントを全件取得してくる時間的コストとは、実質大して変わらない。)
+
+
+# usersコレクション
+users: {
+  ユーザー1: {
+    documentID（コレクション）: userID (ドキュメントのIDに意味を持たせるとルールを作りやすくなるため、useIdを指定。)
+    name: String? # 👈はnullかもしれないので一応「?」をつけている
+    iconURL: array?
+    sns: map? # ex) {twitter:"http//..."},{Insta:"http//..."}
+    introduce: String?
+  },
+  ...
+}
+
+
+# plansコレクション
+  # userとplanをコレクション別で分けているため、日付順(startDayが古いものが下になる順番)にソートをかけるには複合インデックスの生成が必要
+plans（コレクション）: {
+  プラン1: {
+    documentID: auto (自動取得)
+    userID: String
+    title: String
+    emogi: String(❗️Stringじゃないかも?)
+    startDay: timestamp 
+    lastDay: timestamp
+
+    # plansのサブコレクション(データが時間とともに増加する可能性があるためサブコレクションとする)
+    # 日付順(startDayが古いものが下になる順番)にソートをかけるには複合インデックスの生成が必要
+    plandetail（サブコレクション）: {
+      documentID: auto (自動取得) or planIDにする?
+      title: String
+      emogi: String(❗️Stringじゃないかも?)
+      startDay: timestamp (日にち+開始時間)
+      lastDay: timestamp (日にち+終了時間)
+      memo: String
+      money: number
+    }
+  },
+  ...
+},
