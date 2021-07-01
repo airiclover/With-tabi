@@ -1,4 +1,4 @@
-import { Header } from "src/components/common/Header";
+import { Layout } from "src/components/Layout/Layout";
 import { FirstView } from "src/components/common/FirstView";
 import { About } from "src/components/common/About";
 import { Features } from "src/components/common/Features";
@@ -7,14 +7,13 @@ import { Footer } from "src/components/common/Footer";
 
 const IndexPage = () => {
   return (
-    <>
-      <Header />
+    <Layout>
       <FirstView />
       <About />
       <Features />
       <CommonBlog />
       <Footer />
-    </>
+    </Layout>
   );
 };
 
