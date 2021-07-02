@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.3.0",
     "@tailwindcss/line-clamp": "^0.2.1",
     "firebase": "^8.6.8",
     "next": "^11.0.1",
