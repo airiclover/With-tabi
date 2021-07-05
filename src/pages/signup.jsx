@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const SignUp = () => {
   return (
-    <div>
+    <>
       <div className="min-h-screen pt-28 px-4 text-center">
         <Image src="/img/logo.png" alt="logoImg" width={180} height={42} />
 
@@ -52,7 +52,7 @@ const SignUp = () => {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
