@@ -22,13 +22,13 @@ export const Header = () => {
 
         {/* 👇ログインしていない場合はこちらを表示させる */}
         <div className="w-3/5 pr-2 text-right">
-          <Link href="/">
+          <Link href="/login">
             <a className="mr-2 py-1.5 px-2.5 text-xs text-yellow-500 border border-yellow-500 rounded-full leading-6">
               ログイン
             </a>
           </Link>
 
-          <Link href="/">
+          <Link href="/signup">
             <a className="text-xs py-1.5 px-2.5 bg-yellow-500 text-white border border-yellow-500 rounded-full leading-6">
               新規登録
             </a>

@@ -9,7 +9,7 @@ const LogIn = () => {
         <div className="mt-20">
           <button
             onClick={() => console.log("Twitter")}
-            className="w-full mb-8 py-5 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
+            className="w-full mb-12 py-4 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@ const LogIn = () => {
 
           <button
             onClick={() => console.log("google")}
-            className="w-full py-5 bg-gray-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
+            className="w-full py-4 bg-gray-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

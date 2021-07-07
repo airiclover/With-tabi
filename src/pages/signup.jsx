@@ -1,6 +1,35 @@
 import Image from "next/image";
+import { useCallback } from "react";
+import { auth } from "src/utils/firebase/firebase";
+import firebase from "src/utils/firebase/firebase";
+
+// ❕❕❕6issuesが出てるのでチェックする🗯❕❕❕
 
 const SignUp = () => {
+  const googleLogin = useCallback(async () => {
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    await auth
+      .signInWithPopup(googleProvider)
+      .then((result) => {
+        return result;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+
+  const twitterLogin = useCallback(async () => {
+    const twitterProvider = new firebase.auth.TwitterAuthProvider();
+    await auth
+      .signInWithPopup(twitterProvider)
+      .then((userCredential) => {
+        console.log(userCredential);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <>
       <div className="min-h-screen pt-28 px-4 text-center">
@@ -8,8 +37,8 @@ const SignUp = () => {
 
         <div className="mt-20">
           <button
-            onClick={() => console.log("Twitter")}
-            className="w-full mb-8 py-5 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
+            onClick={twitterLogin}
+            className="w-full mb-12 py-4 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -30,8 +59,8 @@ const SignUp = () => {
           </button>
 
           <button
-            onClick={() => console.log("google")}
-            className="w-full py-5 bg-gray-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
+            onClick={googleLogin}
+            className="w-full py-4 bg-gray-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
