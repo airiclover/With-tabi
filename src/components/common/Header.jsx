@@ -34,7 +34,8 @@ export const Header = () => {
               <Link href="/[userId]/plan" as={`/${uid}/plan`}>
                 <a className="mr-1 py-2 flex-1">
                   <div className="flex flex-col items-center">
-                    <PlanIcon size="6" />
+                    {/* <PlanIcon size="6" /> */}
+                    <PlanIcon className={"h-6 w-6"} />
                     <p className="pt-1.5">旅行プラン</p>
                   </div>
                 </a>

@@ -175,7 +175,7 @@ const UserPage = () => {
       {/* 💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛 */}
 
       <div className="py-4 flex items-center relative">
-        <PlanIcon size="9" />
+        <PlanIcon className={"h-9 w-9"} />
         <h1 className="pl-2 text-4xl font-bold tracking-wider">Travel Plans</h1>
       </div>
 
