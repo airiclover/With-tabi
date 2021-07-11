@@ -1,9 +1,17 @@
 // import Image from "next/image";
+import { useRouter } from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useState } from "react";
 import { PlanLayout } from "src/components/Layout/PlanLayout";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
+import { auth } from "src/utils/firebase/firebase";
+import { useSetRecoilState } from "recoil";
+import { userState } from "src/utils/recoil/userState";
+import { PlanIcon } from "src/components/common/assets/PlanIcon";
+import { PlusIcon } from "src/components/common/assets/PlusIcon";
+import { CloseIcon } from "src/components/common/assets/CloseIcon";
+import { EmojiIcon } from "src/components/common/assets/EmojiIcon";
 
 /* 👇一時的にeslintの絵文字入力を許可 */
 /* eslint-disable jsx-a11y/accessible-emoji */
@@ -15,6 +23,24 @@ const UserPage = () => {
   const [title, setTitle] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [backDate, setBackDate] = useState("");
+
+  // 仮ボタン==========================
+  const router = useRouter();
+  const setUserInfo = useSetRecoilState(userState);
+  const logoutPage = () => {
+    auth
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        setUserInfo({ uid: null });
+        router.push("/");
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error);
+      });
+  };
+  // 仮ボタン==========================
 
   //モーダルを開ける
   const openModal = useCallback(() => {
@@ -69,18 +95,7 @@ const UserPage = () => {
                     className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500"
                     onClick={closeModal}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <CloseIcon />
                   </button>
                 </div>
 
@@ -93,20 +108,7 @@ const UserPage = () => {
                         onClick={openEmoji}
                         className="p-2.5 bg-gray-100 rounded-lg mr-3"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
+                        <EmojiIcon />
                       </button>
                       <p className="pt-2">
                         {emoji ? <Emoji emoji={emoji} size={30} /> : null}
@@ -173,22 +175,18 @@ const UserPage = () => {
       {/* 💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛 */}
 
       <div className="py-4 flex items-center relative">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-9 w-9"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
-        </svg>
+        <PlanIcon className={"h-9 w-9"} />
         <h1 className="pl-2 text-4xl font-bold tracking-wider">Travel Plans</h1>
       </div>
+
+      {/* =============仮ボタン============= */}
+      <button
+        className="h-11 w-28 bg-gray-500 text-white rounded-full"
+        onClick={logoutPage}
+      >
+        ログアウト
+      </button>
+      {/* =============仮ボタン============= */}
 
       {/* ========================== */}
       <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
@@ -250,24 +248,9 @@ const UserPage = () => {
 
       {/* ========================== */}
 
-      <button
-        onClick={openModal}
-        // onClick={() => console.log("登録")}
-        className="fixed bottom-6 right-6"
-      >
+      <button onClick={openModal} className="fixed bottom-6 right-6">
         <div className="h-16 w-16 bg-yellow-500 text-center rounded-full flex flex-col relative">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-10 w-10 text-white absolute top-1.5 left-3"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <PlusIcon />
           <p className="text-xs text-white font-semibold absolute top-10 left-5">
             登録
           </p>
