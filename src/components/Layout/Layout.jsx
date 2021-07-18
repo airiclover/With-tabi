@@ -5,9 +5,7 @@ export const Layout = (props) => {
 
   return (
     <>
-      <div>
-        <Header />
-      </div>
+      <Header />
       <div className="text-gray-800">{children}</div>
     </>
   );

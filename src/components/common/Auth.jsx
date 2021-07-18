@@ -2,18 +2,17 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { useSetRecoilState } from "recoil";
-import { auth } from "src/utils/firebase/firebase";
+import { auth, db } from "src/utils/firebase/firebase";
 import firebase from "src/utils/firebase/firebase";
 import { userState } from "src/utils/recoil/userState";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { GoogleIcon } from "src/components/common/assets/GoogleIcon";
 
-// ❕❕❕6issuesが出てるのでチェックする🗯❕❕❕
+// ❕❕❕issuesが出てるのでチェックする❕❕❕
 
 //ソーシャルログインは新規登録・ログインの関数が同じため、Authコンポーネントにまとめて記述
-
 export const Auth = (props) => {
-  // 👇signupして取得してきたデータをrecoilの関数で書き換え、グローバルでstateを管理する
+  // ==================
   const setUserInfo = useSetRecoilState(userState);
   const router = useRouter();
 
@@ -22,10 +21,35 @@ export const Auth = (props) => {
     await auth
       .signInWithPopup(twitterProvider)
       .then(async (userCredential) => {
-        setUserInfo({ uid: userCredential.user.uid });
         const uid = userCredential.user.uid;
+        const providerData = userCredential.user.providerData[0];
+        const userDoc = db.collection("users").doc(uid);
+
+        await userDoc
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              //userDocにデータがある場合
+              setUserInfo({
+                uid: uid,
+                name: doc.data().name,
+                iconURL: doc.data().iconURL,
+              });
+            } else {
+              //userDocにデータがない場合
+              setUserInfo({
+                uid: uid,
+                name: providerData.displayName,
+                iconURL: providerData.photoURL,
+              });
+              setUserDoc(uid, providerData);
+            }
+          })
+          .catch((error) => {
+            console.log("エラーだよ！:", error);
+          });
+
         await router.push(`/${uid}/plan`);
-        return userCredential;
       })
       .catch(function (error) {
         console.log(error);
@@ -38,14 +62,58 @@ export const Auth = (props) => {
     await auth
       .signInWithPopup(googleProvider)
       .then(async (userCredential) => {
-        setUserInfo({ uid: userCredential.user.uid });
         const uid = userCredential.user.uid;
+        const providerData = userCredential.user.providerData[0];
+        const userDoc = db.collection("users").doc(uid);
+
+        await userDoc
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              //userDocにデータがある場合
+              setUserInfo({
+                uid: uid,
+                name: doc.data().name,
+                iconURL: doc.data().iconURL,
+              });
+            } else {
+              //userDocにデータがない場合
+              setUserInfo({
+                uid: uid,
+                name: providerData.displayName,
+                iconURL: providerData.photoURL,
+              });
+              setUserDoc(uid, providerData);
+            }
+          })
+          .catch((error) => {
+            console.log("エラーだよ！:", error);
+          });
+
         await router.push(`/${uid}/plan`);
       })
       .catch(function (error) {
         console.log(error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // ==================
+
+  // docに該当uidが存在しない場合、プロバイダ情報をsetする
+  const setUserDoc = useCallback((uid, providerData) => {
+    db.collection("users")
+      .doc(uid)
+      .set({
+        name: providerData.displayName,
+        iconURL: providerData.photoURL,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      .then(() => {
+        console.log("新規Userドキュメントが作成されたよ！");
+      })
+      .catch((error) => {
+        console.error("エラーだよ！: ", error);
+      });
   }, []);
 
   return (
@@ -68,7 +136,7 @@ export const Auth = (props) => {
 
           <button
             onClick={googleLogin}
-            className="w-full py-4 bg-gray-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
+            className="w-full py-4 bg-gray-600 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
           >
             <GoogleIcon />
             <span className="ml-3">

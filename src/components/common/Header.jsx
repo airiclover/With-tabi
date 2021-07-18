@@ -6,8 +6,8 @@ import { PlanIcon } from "src/components/common/assets/PlanIcon";
 import { BlogIcon } from "src/components/common/assets/BlogIcon";
 
 export const Header = () => {
-  const userStateCheck = useRecoilValue(userState);
-  const uid = userStateCheck.uid;
+  const userInfo = useRecoilValue(userState);
+  const uid = userInfo.uid;
 
   return (
     <header>
@@ -34,7 +34,6 @@ export const Header = () => {
               <Link href="/[userId]/plan" as={`/${uid}/plan`}>
                 <a className="mr-1 py-2 flex-1">
                   <div className="flex flex-col items-center">
-                    {/* <PlanIcon size="6" /> */}
                     <PlanIcon className={"h-6 w-6"} />
                     <p className="pt-1.5">旅行プラン</p>
                   </div>
@@ -54,16 +53,16 @@ export const Header = () => {
                 <a className="mr-1 py-2 flex-1">
                   <div className="flex flex-col items-center">
                     <Image
-                      src="/img/icon.png"
-                      alt="logoImg"
-                      width={24}
-                      height={24}
+                      src={userInfo.iconURL}
+                      alt="userIcon"
+                      width={28}
+                      height={28}
                       objectFit="cover"
                       className="rounded-full"
                       loading="eager"
                       priority
                     />
-                    <p className="pt-1.5">マイページ</p>
+                    <p className="pt-0.5">マイページ</p>
                   </div>
                 </a>
               </Link>

@@ -1,12 +1,12 @@
 // import Image from "next/image";
 import { useRouter } from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { PlanLayout } from "src/components/Layout/PlanLayout";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
-import { auth } from "src/utils/firebase/firebase";
-import { useSetRecoilState } from "recoil";
+import { auth, db } from "src/utils/firebase/firebase";
+import { useRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
 import { PlanIcon } from "src/components/common/assets/PlanIcon";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
@@ -23,55 +23,66 @@ const UserPage = () => {
   const [title, setTitle] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [backDate, setBackDate] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [userInfo, setUserInfo] = useRecoilState(userState);
 
   // 仮ボタン==========================
   const router = useRouter();
-  const setUserInfo = useSetRecoilState(userState);
-  const logoutPage = () => {
+  const logoutPageButton = () => {
     auth
       .signOut()
       .then(() => {
-        // Sign-out successful.
-        setUserInfo({ uid: null });
+        setUserInfo({ uid: null, name: null, iconURL: null });
         router.push("/");
       })
       .catch((error) => {
-        // An error happened.
         console.log(error);
       });
   };
   // 仮ボタン==========================
 
-  //モーダルを開ける
+  // データ取得チェック=========================
+  //recoilにセットしてるuidよりデータ取得
+  useEffect(() => {
+    const userDoc = db.collection("users").doc(userInfo.uid);
+    userDoc
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("planページデータチェック:", doc.data());
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch((error) => {
+        console.log("エラーだよ！:", error);
+      });
+  }, [userInfo.uid]);
+  // データ取得チェック=========================
+
   const openModal = useCallback(() => {
     setIsOpenModal(true);
   }, []);
 
-  //モーダルを閉める
   const closeModal = useCallback(() => {
     setIsOpenModal(false);
   }, []);
 
-  //emoji-martの開け閉め
   const openEmoji = useCallback(() => {
     setIsOpenEmoji((isOpenEmoji) => !isOpenEmoji);
   }, []);
 
-  //タイトル登録
   const onChangeTitle = useCallback((e) => setTitle(e.target.value), []);
 
-  //出発日登録
   const onChangeDepartureDate = useCallback(
     (e) => setDepartureDate(e.target.value),
     []
   );
 
-  //帰着日登録
   const onChangeBackDate = useCallback((e) => setBackDate(e.target.value), []);
 
   return (
     <PlanLayout>
-      {/* 💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛 */}
       <Transition appear show={isOpenModal} as={Fragment}>
         <Dialog
           as="div"
@@ -172,8 +183,6 @@ const UserPage = () => {
         </Dialog>
       </Transition>
 
-      {/* 💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛💛 */}
-
       <div className="py-4 flex items-center relative">
         <PlanIcon className={"h-9 w-9"} />
         <h1 className="pl-2 text-4xl font-bold tracking-wider">Travel Plans</h1>
@@ -182,7 +191,7 @@ const UserPage = () => {
       {/* =============仮ボタン============= */}
       <button
         className="h-11 w-28 bg-gray-500 text-white rounded-full"
-        onClick={logoutPage}
+        onClick={logoutPageButton}
       >
         ログアウト
       </button>
