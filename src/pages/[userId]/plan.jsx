@@ -1,7 +1,7 @@
 // import Image from "next/image";
 import { useRouter } from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { PlanLayout } from "src/components/Layout/PlanLayout";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
@@ -23,6 +23,7 @@ const UserPage = () => {
   const [title, setTitle] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [backDate, setBackDate] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
   // 仮ボタン==========================
@@ -42,19 +43,21 @@ const UserPage = () => {
 
   // データ取得チェック=========================
   //recoilにセットしてるuidよりデータ取得
-  const docRef = db.collection("users").doc(userInfo.uid);
-  docRef
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        console.log("Docデータ:", doc.data());
-      } else {
-        console.log("No such document!");
-      }
-    })
-    .catch((error) => {
-      console.log("Error getting document:", error);
-    });
+  useEffect(() => {
+    const userDoc = db.collection("users").doc(userInfo.uid);
+    userDoc
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("planページデータチェック:", doc.data());
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch((error) => {
+        console.log("エラーだよ！:", error);
+      });
+  }, [userInfo.uid]);
   // データ取得チェック=========================
 
   const openModal = useCallback(() => {
