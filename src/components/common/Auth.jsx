@@ -12,7 +12,7 @@ import { GoogleIcon } from "src/components/common/assets/GoogleIcon";
 
 //ソーシャルログインは新規登録・ログインの関数が同じため、Authコンポーネントにまとめて記述
 export const Auth = (props) => {
-  // signupして取得してきたデータをrecoilの関数で定義し、グローバルなstateを保持する
+  // ==================
   const setUserInfo = useSetRecoilState(userState);
   const router = useRouter();
 
@@ -20,60 +20,84 @@ export const Auth = (props) => {
     const twitterProvider = new firebase.auth.TwitterAuthProvider();
     await auth
       .signInWithPopup(twitterProvider)
-      .then((userCredential) => {
-        socialAuth(userCredential);
+      .then(async (userCredential) => {
+        const uid = userCredential.user.uid;
+        const providerData = userCredential.user.providerData[0];
+        const userDoc = db.collection("users").doc(uid);
+
+        await userDoc
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              //userDocにデータがある場合
+              setUserInfo({
+                uid: uid,
+                name: doc.data().name,
+                iconURL: doc.data().iconURL,
+              });
+            } else {
+              //userDocにデータがない場合
+              setUserInfo({
+                uid: uid,
+                name: providerData.displayName,
+                iconURL: providerData.photoURL,
+              });
+              setUserDoc(uid, providerData);
+            }
+          })
+          .catch((error) => {
+            console.log("エラーだよ！:", error);
+          });
+
+        await router.push(`/${uid}/plan`);
       })
       .catch(function (error) {
         console.log(error);
       });
-  }, [socialAuth]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const googleLogin = useCallback(async () => {
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     await auth
       .signInWithPopup(googleProvider)
-      .then((userCredential) => {
-        socialAuth(userCredential);
+      .then(async (userCredential) => {
+        const uid = userCredential.user.uid;
+        const providerData = userCredential.user.providerData[0];
+        const userDoc = db.collection("users").doc(uid);
+
+        await userDoc
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              //userDocにデータがある場合
+              setUserInfo({
+                uid: uid,
+                name: doc.data().name,
+                iconURL: doc.data().iconURL,
+              });
+            } else {
+              //userDocにデータがない場合
+              setUserInfo({
+                uid: uid,
+                name: providerData.displayName,
+                iconURL: providerData.photoURL,
+              });
+              setUserDoc(uid, providerData);
+            }
+          })
+          .catch((error) => {
+            console.log("エラーだよ！:", error);
+          });
+
+        await router.push(`/${uid}/plan`);
       })
       .catch(function (error) {
         console.log(error);
       });
-  }, [socialAuth]);
-
-  const socialAuth = useCallback(
-    async (userCredential) => {
-      const uid = userCredential.user.uid;
-      const providerData = userCredential.user.providerData[0];
-
-      const userDoc = db.collection("users").doc(uid);
-      await userDoc
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            //userDocにデータがある場合
-            setUserInfo({
-              uid: uid,
-              name: doc.data().name,
-              iconURL: doc.data().iconURL,
-            });
-          } else {
-            //userDocにデータがない場合
-            setUserInfo({
-              uid: uid,
-              name: providerData.displayName,
-              iconURL: providerData.photoURL,
-            });
-            setUserDoc(uid, providerData);
-          }
-        })
-        .catch((error) => {
-          console.log("エラーだよ！:", error);
-        });
-
-      await router.push(`/${uid}/plan`);
-    },
-    [router, setUserDoc, setUserInfo]
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // ==================
 
   // docに該当uidが存在しない場合、プロバイダ情報をsetする
   const setUserDoc = useCallback((uid, providerData) => {
