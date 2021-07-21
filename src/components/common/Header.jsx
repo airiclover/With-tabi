@@ -49,11 +49,11 @@ export const Header = () => {
                 </a>
               </Link>
 
-              <Link href="/">
+              <Link href="/[userId]" as={`/${uid}`}>
                 <a className="mr-1 py-2 flex-1">
                   <div className="flex flex-col items-center">
                     <Image
-                      src={userInfo.iconURL}
+                      src={userInfo.icon}
                       alt="userIcon"
                       width={28}
                       height={28}
