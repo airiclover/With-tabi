@@ -16,7 +16,7 @@ import { EmojiIcon } from "src/components/common/assets/EmojiIcon";
 /* 👇一時的にeslintの絵文字入力を許可 */
 /* eslint-disable jsx-a11y/accessible-emoji */
 
-const UserPage = () => {
+const UserPlanPage = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const [emoji, setEmoji] = useState(null);
@@ -32,7 +32,14 @@ const UserPage = () => {
     auth
       .signOut()
       .then(() => {
-        setUserInfo({ uid: null, name: null, iconURL: null });
+        setUserInfo({
+          uid: "",
+          name: "",
+          icon: "",
+          twitter: "",
+          instagram: "",
+          introduce: "",
+        });
         router.push("/");
       })
       .catch((error) => {
@@ -55,7 +62,7 @@ const UserPage = () => {
         }
       })
       .catch((error) => {
-        console.log("エラーだよ！:", error);
+        console.log("planページエラーだよ！:", error);
       });
   }, [userInfo.uid]);
   // データ取得チェック=========================
@@ -269,4 +276,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default UserPlanPage;

@@ -28,25 +28,32 @@ export const Auth = (props) => {
         await userDoc
           .get()
           .then((doc) => {
+            const docData = doc.data();
             if (doc.exists) {
               //userDocにデータがある場合
               setUserInfo({
                 uid: uid,
-                name: doc.data().name,
-                iconURL: doc.data().iconURL,
+                name: docData.name,
+                icon: docData.icon,
+                twitter: docData.twitter,
+                instagram: docData.instagram,
+                introduce: docData.introduce,
               });
             } else {
               //userDocにデータがない場合
               setUserInfo({
                 uid: uid,
                 name: providerData.displayName,
-                iconURL: providerData.photoURL,
+                icon: providerData.photoURL,
+                twitter: "",
+                instagram: "",
+                introduce: "",
               });
               setUserDoc(uid, providerData);
             }
           })
           .catch((error) => {
-            console.log("エラーだよ！:", error);
+            console.log("Auth(twitter)エラーだよ！:", error);
           });
 
         await router.push(`/${uid}/plan`);
@@ -65,29 +72,37 @@ export const Auth = (props) => {
         const uid = userCredential.user.uid;
         const providerData = userCredential.user.providerData[0];
         const userDoc = db.collection("users").doc(uid);
+        console.log(providerData);
 
         await userDoc
           .get()
           .then((doc) => {
+            const docData = doc.data();
             if (doc.exists) {
               //userDocにデータがある場合
               setUserInfo({
                 uid: uid,
-                name: doc.data().name,
-                iconURL: doc.data().iconURL,
+                name: docData.name,
+                icon: docData.icon,
+                twitter: docData.twitter,
+                instagram: docData.instagram,
+                introduce: docData.introduce,
               });
             } else {
               //userDocにデータがない場合
               setUserInfo({
                 uid: uid,
                 name: providerData.displayName,
-                iconURL: providerData.photoURL,
+                icon: providerData.photoURL,
+                twitter: "",
+                instagram: "",
+                introduce: "",
               });
               setUserDoc(uid, providerData);
             }
           })
           .catch((error) => {
-            console.log("エラーだよ！:", error);
+            console.log("Auth(google)エラーだよ！:", error);
           });
 
         await router.push(`/${uid}/plan`);
@@ -99,20 +114,24 @@ export const Auth = (props) => {
   }, []);
   // ==================
 
-  // docに該当uidが存在しない場合、プロバイダ情報をsetする
+  // docに該当uidが存在しない場合、プロバイダ情報やプロフィールをsetする
   const setUserDoc = useCallback((uid, providerData) => {
     db.collection("users")
       .doc(uid)
       .set({
         name: providerData.displayName,
-        iconURL: providerData.photoURL,
+        icon: providerData.photoURL,
+        twitter: "",
+        instagram: "",
+        introduce: "",
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(() => {
         console.log("新規Userドキュメントが作成されたよ！");
       })
       .catch((error) => {
-        console.error("エラーだよ！: ", error);
+        console.error("Auth(3)エラーだよ！: ", error);
       });
   }, []);
 
@@ -126,7 +145,7 @@ export const Auth = (props) => {
             onClick={twitterLogin}
             className="w-full mb-12 py-4 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
           >
-            <TwitterIcon />
+            <TwitterIcon width="24" height="24" fill="#fff" />
             <span className="ml-3">
               {props.page === "login"
                 ? "Twitterからログイン"
