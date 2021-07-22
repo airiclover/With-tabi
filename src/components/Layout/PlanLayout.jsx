@@ -5,9 +5,7 @@ export const PlanLayout = (props) => {
 
   return (
     <>
-      <div>
-        <Header />
-      </div>
+      <Header />
       <div className="min-h-screen pb-10 px-3 bg-gray-100 text-gray-800">
         {children}
       </div>
