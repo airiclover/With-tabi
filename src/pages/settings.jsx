@@ -72,9 +72,9 @@ const Settings = () => {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
     //Recoilのstate変更
-    await updateUserRecoil();
+    updateUserRecoil();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    updateUserRecoil,
     userIcon,
     userInfo.uid,
     userInstagram,
@@ -83,7 +83,7 @@ const Settings = () => {
     userTwitter,
   ]);
 
-  const updateUserRecoil = useCallback(async () => {
+  const updateUserRecoil = async () => {
     setUserInfo({
       uid: userInfo.uid,
       name: userName,
@@ -93,16 +93,7 @@ const Settings = () => {
       introduce: userIntroduce,
     });
     await router.push(`/${userInfo.uid}`);
-  }, [
-    router,
-    setUserInfo,
-    userIcon,
-    userInfo.uid,
-    userInstagram,
-    userIntroduce,
-    userName,
-    userTwitter,
-  ]);
+  };
 
   return (
     <Layout>
