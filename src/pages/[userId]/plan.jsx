@@ -1,12 +1,11 @@
 // import Image from "next/image";
-import { useRouter } from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { PlanLayout } from "src/components/Layout/PlanLayout";
+import { CommonLayout } from "src/components/Layout/CommonLayout";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
-import { auth, db } from "src/utils/firebase/firebase";
-import { useRecoilState } from "recoil";
+import { db } from "src/utils/firebase/firebase";
+import { useRecoilValue } from "recoil";
 import { userState } from "src/utils/recoil/userState";
 import { PlanIcon } from "src/components/common/assets/PlanIcon";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
@@ -23,30 +22,7 @@ const UserPlanPage = () => {
   const [title, setTitle] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [backDate, setBackDate] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-
-  // 仮ボタン==========================
-  const router = useRouter();
-  const logoutPageButton = () => {
-    auth
-      .signOut()
-      .then(() => {
-        setUserInfo({
-          uid: "",
-          name: "",
-          icon: "",
-          twitter: "",
-          instagram: "",
-          introduce: "",
-        });
-        router.push("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  // 仮ボタン==========================
+  const userInfo = useRecoilValue(userState);
 
   // データ取得チェック=========================
   //recoilにセットしてるuidよりデータ取得
@@ -89,7 +65,7 @@ const UserPlanPage = () => {
   const onChangeBackDate = useCallback((e) => setBackDate(e.target.value), []);
 
   return (
-    <PlanLayout>
+    <CommonLayout>
       <Transition appear show={isOpenModal} as={Fragment}>
         <Dialog
           as="div"
@@ -126,7 +102,7 @@ const UserPlanPage = () => {
                         onClick={openEmoji}
                         className="p-2.5 bg-gray-100 rounded-lg mr-3"
                       >
-                        <EmojiIcon />
+                        <EmojiIcon className="w-6 h-6" />
                       </button>
                       <p className="pt-2">
                         {emoji ? <Emoji emoji={emoji} size={30} /> : null}
@@ -190,65 +166,26 @@ const UserPlanPage = () => {
         </Dialog>
       </Transition>
 
-      <div className="py-4 flex items-center relative">
-        <PlanIcon className={"h-9 w-9"} />
-        <h1 className="pl-2 text-4xl font-bold tracking-wider">Travel Plans</h1>
-      </div>
+      <div className="px-3">
+        <div className="py-4 flex items-center relative">
+          <PlanIcon className={"h-9 w-9"} />
+          <h1 className="pl-2 text-4xl font-bold tracking-wider">
+            Travel Plans
+          </h1>
+        </div>
 
-      {/* =============仮ボタン============= */}
-      <button
-        className="h-11 w-28 bg-gray-500 text-white rounded-full"
-        onClick={logoutPageButton}
-      >
-        ログアウト
-      </button>
-      {/* =============仮ボタン============= */}
+        {/* ========================== */}
+        <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
+          <h2 className="pb-1 text-lg font-bold line-clamp-2">
+            🇦🇺 オーストラリア旅行
+          </h2>
+          <p className="pl-6 text-sm">2021/12/31(金) - 2022/1/5(水)</p>
+        </div>
+        {/* ========================== */}
 
-      {/* ========================== */}
-      <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
-        <h2 className="pb-1 text-lg font-bold line-clamp-2">
-          🇦🇺 オーストラリア旅行
-        </h2>
-        <p className="pl-6 text-sm">2021/12/31(金) - 2022/1/5(水)</p>
-      </div>
-      {/* <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
-        <h2 className="pb-1 text-lg font-bold line-clamp-2">
-          🇦🇺 Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </h2>
-        <p className="pl-6 text-xs">2021/12/31(金) - 2022/1/5(水)</p>
-      </div>
-      <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
-        <h2 className="pb-1 text-lg font-bold line-clamp-2">
-          🇦🇺 Eius maiores dolores impedit architecto adipisci doloremque
-          perferendis odio consequuntur, obcaecati velit accusamus enim ad?
-          Veniam, necessitatibus rem! Fugiat eligendi praesentium a.
-        </h2>
-        <p className="pl-6 text-xs">2021/12/31(金) - 2022/1/5(水)</p>
-      </div>
-      <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
-        <h2 className="pb-1 text-lg font-bold line-clamp-2">
-          🇦🇺 オーストラリア旅行
-        </h2>
-        <p className="pl-6 text-xs">2021/12/31(金) - 2022/1/5(水)</p>
-      </div>
-      <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
-        <h2 className="pb-1 text-lg font-bold line-clamp-2">
-          🇦🇺 アジア・オセアニア・ヨーロッパ3ヶ月旅
-        </h2>
-        <p className="pl-6 text-xs">2021/12/31(金) - 2022/1/5(水)</p>
-      </div>
-      <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
-        <h2 className="pb-1 text-lg font-bold line-clamp-2">
-          🇦🇺
-          オーストラリア旅行オーストラリア旅行オーストラリア旅行オーストラリア旅行
-        </h2>
-        <p className="pl-6 text-xs">2021/12/31(金) - 2022/1/5(水)</p>
-      </div> */}
-      {/* ========================== */}
+        {/* 👇データがないとき */}
 
-      {/* 👇データがないとき */}
-
-      {/* <div className="pt-10 pb-14 pl-4 font-semibold">
+        {/* <div className="pt-10 pb-14 pl-4 font-semibold">
         <p>右下の登録ボタンから</p>
         <p>旅のプランを作成してみよう。</p>
       </div>
@@ -262,17 +199,18 @@ const UserPlanPage = () => {
         layout="responsive"
       /> */}
 
-      {/* ========================== */}
+        {/* ========================== */}
 
-      <button onClick={openModal} className="fixed bottom-6 right-6">
-        <div className="h-16 w-16 bg-yellow-500 text-center rounded-full flex flex-col relative">
-          <PlusIcon />
-          <p className="text-xs text-white font-semibold absolute top-10 left-5">
-            登録
-          </p>
-        </div>
-      </button>
-    </PlanLayout>
+        <button onClick={openModal} className="fixed bottom-6 right-6">
+          <div className="h-16 w-16 bg-yellow-500 text-center rounded-full flex flex-col relative hover:bg-hover-yellow">
+            <PlusIcon />
+            <p className="text-xs text-white font-semibold absolute top-10 left-5">
+              登録
+            </p>
+          </div>
+        </button>
+      </div>
+    </CommonLayout>
   );
 };
 
