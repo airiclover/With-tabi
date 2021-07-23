@@ -32,7 +32,7 @@ export const Header = () => {
           <div className="w-3/5">
             <div className="h-16 flex items-center text-xxs">
               <Link href="/[userId]/plan" as={`/${uid}/plan`}>
-                <a className="mr-1 py-2 flex-1">
+                <a className="py-2 flex-1 hover:bg-gray-50">
                   <div className="flex flex-col items-center">
                     <PlanIcon className={"h-6 w-6"} />
                     <p className="pt-1.5">旅行プラン</p>
@@ -40,8 +40,8 @@ export const Header = () => {
                 </a>
               </Link>
 
-              <Link href="/">
-                <a className="py-2 flex-1 border-r-2 border-l-2">
+              <Link href="/[userId]/blog" as={`/${uid}/blog`}>
+                <a className="py-2 flex-1 border-r-2 border-l-2 hover:bg-gray-50">
                   <div className="flex flex-col items-center">
                     <BlogIcon />
                     <p className="pt-1.5">ブログ</p>
@@ -49,8 +49,8 @@ export const Header = () => {
                 </a>
               </Link>
 
-              <Link href="/[userId]" as={`/${uid}`}>
-                <a className="mr-1 py-2 flex-1">
+              <Link href="/settings">
+                <a className="py-2 flex-1 hover:bg-gray-50">
                   <div className="flex flex-col items-center">
                     <Image
                       src={userInfo.icon}
