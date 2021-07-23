@@ -1,6 +1,6 @@
 import { Header } from "src/components/common/Header";
 
-export const PlanLayout = (props) => {
+export const CommonLayout = (props) => {
   const { children } = props;
 
   return (
