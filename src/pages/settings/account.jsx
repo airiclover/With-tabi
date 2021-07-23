@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { useRouter } from "next/router";
 import firebase from "src/utils/firebase/firebase";
+import { useRouter } from "next/router";
 import { useState, useEffect, useCallback } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
@@ -92,7 +92,7 @@ const Settings = () => {
       instagram: userInstagram,
       introduce: userIntroduce,
     });
-    await router.push(`/${userInfo.uid}`);
+    await router.push("/settings");
   };
 
   return (
@@ -103,7 +103,6 @@ const Settings = () => {
 
           <h1 className="p-4 text-4xl font-bold tracking-wider">Settings</h1>
           <div className="px-10 pb-6">
-            {/* 💬【todo】画像変更処理を追加する */}
             <div className="pt-2 pb-6 flex flex-col items-center">
               <Image
                 src={userIcon}
@@ -120,7 +119,6 @@ const Settings = () => {
               </button>
             </div>
 
-            {/* 💬【todo】以下全てにバリデーションかける処理を記述する */}
             {/* 1文字以上50文字以内 */}
             <InputSettings
               title="名前（ニックネーム）"
@@ -157,10 +155,9 @@ const Settings = () => {
               />
             </label>
 
-            {/* 💬【todo】ボタンのコンポーネント分割する？ */}
             <div className="text-right">
               <button
-                className="h-11 w-28 bg-yellow-500 text-white rounded-full"
+                className="h-11 w-28 bg-yellow-500 text-white rounded-full hover:bg-hover-yellow"
                 onClick={updateSettingsButton}
               >
                 変更する
@@ -169,9 +166,8 @@ const Settings = () => {
           </div>
         </div>
       ) : (
-        <h1>ローディング中！！！</h1>
+        <div>ローディング中！！！</div>
       )}
-      {/* 💬【todo】👆ローディング中のスケルトンローダーを入れる */}
     </Layout>
   );
 };
