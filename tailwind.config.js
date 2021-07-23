@@ -9,6 +9,7 @@ module.exports = {
         gray: colors.gray,
         blue: colors.sky,
         orange: colors.orange,
+        "hover-yellow": "#f58b0b",
       },
       fontSize: {
         xxs: ".625rem",
