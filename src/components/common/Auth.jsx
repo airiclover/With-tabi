@@ -143,7 +143,7 @@ export const Auth = (props) => {
         <div className="mt-20">
           <button
             onClick={twitterLogin}
-            className="w-full mb-12 py-4 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
+            className="w-full mb-12 py-4 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center hover:bg-blue-600"
           >
             <TwitterIcon width="24" height="24" fill="#fff" />
             <span className="ml-3">
@@ -155,7 +155,7 @@ export const Auth = (props) => {
 
           <button
             onClick={googleLogin}
-            className="w-full py-4 bg-gray-600 text-white font-semibold tracking-wider rounded-full flex justify-center items-center"
+            className="w-full py-4 bg-gray-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center hover:bg-gray-600"
           >
             <GoogleIcon />
             <span className="ml-3">
