@@ -96,7 +96,7 @@ const UserPage = () => {
         <p className="pl-2">ログアウト</p>
       </button>
 
-      <Link href="/">
+      <Link href="/settings/delete_account">
         <a className="py-4 px-6 text-sm border-t-2 border-b-2 block hover:bg-gray-200">
           アカウントを削除
         </a>

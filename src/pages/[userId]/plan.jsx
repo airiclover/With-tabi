@@ -43,13 +43,13 @@ const UserPlanPage = () => {
   }, [userInfo.uid]);
   // データ取得チェック=========================
 
-  const openModal = useCallback(() => {
+  const openModal = () => {
     setIsOpenModal(true);
-  }, []);
+  };
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
     setIsOpenModal(false);
-  }, []);
+  };
 
   const openEmoji = useCallback(() => {
     setIsOpenEmoji((isOpenEmoji) => !isOpenEmoji);
