@@ -7,12 +7,10 @@ import firebase from "src/utils/firebase/firebase";
 import { userState } from "src/utils/recoil/userState";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { GoogleIcon } from "src/components/common/assets/GoogleIcon";
-
-// ❕❕❕issuesが出てるのでチェックする❕❕❕
+import toast from "react-hot-toast";
 
 //ソーシャルログインは新規登録・ログインの関数が同じため、Authコンポーネントにまとめて記述
 export const Auth = (props) => {
-  // ==================
   const setUserInfo = useSetRecoilState(userState);
   const router = useRouter();
 
@@ -21,45 +19,11 @@ export const Auth = (props) => {
     await auth
       .signInWithPopup(twitterProvider)
       .then(async (userCredential) => {
-        const uid = userCredential.user.uid;
-        const providerData = userCredential.user.providerData[0];
-        const userDoc = db.collection("users").doc(uid);
-
-        await userDoc
-          .get()
-          .then((doc) => {
-            const docData = doc.data();
-            if (doc.exists) {
-              //userDocにデータがある場合
-              setUserInfo({
-                uid: uid,
-                name: docData.name,
-                icon: docData.icon,
-                twitter: docData.twitter,
-                instagram: docData.instagram,
-                introduce: docData.introduce,
-              });
-            } else {
-              //userDocにデータがない場合
-              setUserInfo({
-                uid: uid,
-                name: providerData.displayName,
-                icon: providerData.photoURL,
-                twitter: "",
-                instagram: "",
-                introduce: "",
-              });
-              setUserDoc(uid, providerData);
-            }
-          })
-          .catch((error) => {
-            console.log("Auth(twitter)エラーだよ！:", error);
-          });
-
-        await router.push(`/${uid}/plan`);
+        commonAuth(userCredential);
       })
       .catch(function (error) {
         console.log(error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -69,50 +33,54 @@ export const Auth = (props) => {
     await auth
       .signInWithPopup(googleProvider)
       .then(async (userCredential) => {
-        const uid = userCredential.user.uid;
-        const providerData = userCredential.user.providerData[0];
-        const userDoc = db.collection("users").doc(uid);
-        console.log(providerData);
-
-        await userDoc
-          .get()
-          .then((doc) => {
-            const docData = doc.data();
-            if (doc.exists) {
-              //userDocにデータがある場合
-              setUserInfo({
-                uid: uid,
-                name: docData.name,
-                icon: docData.icon,
-                twitter: docData.twitter,
-                instagram: docData.instagram,
-                introduce: docData.introduce,
-              });
-            } else {
-              //userDocにデータがない場合
-              setUserInfo({
-                uid: uid,
-                name: providerData.displayName,
-                icon: providerData.photoURL,
-                twitter: "",
-                instagram: "",
-                introduce: "",
-              });
-              setUserDoc(uid, providerData);
-            }
-          })
-          .catch((error) => {
-            console.log("Auth(google)エラーだよ！:", error);
-          });
-
-        await router.push(`/${uid}/plan`);
+        commonAuth(userCredential);
       })
       .catch(function (error) {
         console.log(error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // ==================
+
+  const commonAuth = async (userCredential) => {
+    const uid = userCredential.user.uid;
+    const providerData = userCredential.user.providerData[0];
+    const userDoc = db.collection("users").doc(uid);
+
+    await userDoc
+      .get()
+      .then((doc) => {
+        const docData = doc.data();
+        if (doc.exists) {
+          //userDocにデータがある場合
+          setUserInfo({
+            uid: uid,
+            name: docData.name,
+            icon: docData.icon,
+            twitter: docData.twitter,
+            instagram: docData.instagram,
+            introduce: docData.introduce,
+          });
+        } else {
+          //userDocにデータがない場合
+          setUserInfo({
+            uid: uid,
+            name: providerData.displayName,
+            icon: providerData.photoURL,
+            twitter: "",
+            instagram: "",
+            introduce: "",
+          });
+          setUserDoc(uid, providerData);
+        }
+      })
+      .catch((error) => {
+        console.log("Auth(twitter)エラーだよ！:", error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
+      });
+
+    await router.push(`/${uid}/plan`);
+  };
 
   // docに該当uidが存在しない場合、プロバイダ情報やプロフィールをsetする
   const setUserDoc = useCallback((uid, providerData) => {
@@ -128,10 +96,11 @@ export const Auth = (props) => {
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(() => {
-        console.log("新規Userドキュメントが作成されたよ！");
+        toast.success("アカウントが新規作成されました");
       })
       .catch((error) => {
-        console.error("Auth(3)エラーだよ！: ", error);
+        console.error("Auth新規登録エラーだよ！: ", error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
   }, []);
 
