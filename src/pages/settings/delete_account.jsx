@@ -1,0 +1,91 @@
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
+import { auth, db } from "src/utils/firebase/firebase";
+import { useRecoilState } from "recoil";
+import { userState } from "src/utils/recoil/userState";
+import { CommonLayout } from "src/components/Layout/CommonLayout";
+import { Modal } from "src/components/common/Modal";
+import { useState } from "react";
+
+const DeleteAccount = () => {
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const router = useRouter();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const deleteAccount = () => {
+    deleteUserDoc();
+
+    const user = auth.currentUser;
+    user
+      .delete()
+      .then(() => {
+        setUserInfo({
+          uid: "",
+          name: "",
+          icon: "",
+          twitter: "",
+          instagram: "",
+          introduce: "",
+        });
+        toast.success("アカウントが削除されました");
+        router.push("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
+      });
+  };
+
+  const deleteUserDoc = () => {
+    const userDoc = db.collection("users").doc(userInfo.uid);
+    userDoc
+      .delete()
+      .then(() => {
+        console.log("docデータ削除したよ！");
+      })
+      .catch((error) => {
+        console.error("doc削除エラー: ", error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
+      });
+  };
+
+  return (
+    <CommonLayout>
+      {console.log("レンダリング")}
+      <div className="px-4">
+        <h1 className="py-6 text-xl font-semibold">
+          アカウントを削除しますか？
+        </h1>
+        <p>アカウントを削除すると全てのデータが失われます。</p>
+        <button
+          onClick={openModal}
+          className="py-2 px-3 text-yellow-500 border border-yellow-500 rounded-full leading-6"
+        >
+          アカウントを削除
+        </button>
+      </div>
+
+      <Modal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        openModal={openModal}
+        deleteAccount={deleteAccount}
+        title="アカウントを削除"
+        subTitle="アカウントが削除されます。"
+        button1="キャンセル"
+        button2="削除する"
+      />
+    </CommonLayout>
+  );
+};
+
+export default DeleteAccount;
