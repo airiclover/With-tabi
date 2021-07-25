@@ -106,6 +106,7 @@ const Settings = () => {
                   placeholder="@なしで入力"
                   {...register("twitter", {
                     required: false,
+                    pattern: /^[0-9_a-zA-Z]+$/,
                     maxLength: 15,
                   })}
                   className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
@@ -124,6 +125,7 @@ const Settings = () => {
                   placeholder="@なしで入力"
                   {...register("instagram", {
                     required: false,
+                    pattern: /^[0-9_.a-zA-Z]+$/,
                     maxLength: 30,
                   })}
                   className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
