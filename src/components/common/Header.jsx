@@ -77,7 +77,7 @@ export const Header = () => {
             </Link>
 
             <Link href="/signup">
-              <a className="text-xs py-1.5 px-2.5 bg-yellow-500 text-white border border-yellow-500 rounded-full leading-6">
+              <a className="text-xs py-1.5 px-2.5 bg-yellow-500 text-white border border-yellow-500 rounded-full leading-6 hover:bg-hover-yellow">
                 新規登録
               </a>
             </Link>
