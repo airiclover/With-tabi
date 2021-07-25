@@ -1,59 +1,55 @@
 import Image from "next/image";
 import firebase from "src/utils/firebase/firebase";
 import { useRouter } from "next/router";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
 import { Layout } from "src/components/Layout/Layout";
 import { db } from "src/utils/firebase/firebase";
-import { InputSettings } from "src/components/common/InputSettings";
+import { useForm } from "react-hook-form";
 
 const Settings = () => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
-  const [userProfile, setUserProfile] = useState("");
-
   // eslint-disable-next-line no-unused-vars
   const [userIcon, setUserIcon] = useState(userInfo.icon);
-  const [userName, setUserName] = useState(userInfo.name);
-  const [userTwitter, setUserTwitter] = useState(userInfo.twitter);
-  const [userInstagram, setUserInstagram] = useState(userInfo.instagram);
-  const [userIntroduce, setUserIntroduce] = useState(userInfo.introduce);
   const router = useRouter();
 
-  const onChangeUserName = useCallback((e) => setUserName(e.target.value), []);
-  const onChangeUserTwitter = useCallback(
-    (e) => setUserTwitter(e.target.value),
-    []
-  );
-  const onChangeUserInstagram = useCallback(
-    (e) => setUserInstagram(e.target.value),
-    []
-  );
-  const onChangeUserIntroduce = useCallback(
-    (e) => setUserIntroduce(e.target.value),
-    []
-  );
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  //recoilにセットしてるuidよりデータ取得
-  const getUserProfile = useCallback(async () => {
+  const on_submit = useCallback(async (data) => {
     const userDoc = db.collection("users").doc(userInfo.uid);
-
-    await userDoc
-      .get()
-      .then((doc) => {
-        const docData = doc.data();
-        setUserProfile(docData);
-      })
-      .catch((error) => {
-        console.log("settingページエラーだよ！:", error);
-      });
+    await userDoc.update({
+      name: data.name,
+      icon: userIcon,
+      twitter: data.twitter,
+      instagram: data.instagram,
+      introduce: data.introduce,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    //Recoilのstate変更
+    updateUserRecoil(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    getUserProfile();
-  }, [getUserProfile]);
+  const updateUserRecoil = useCallback(
+    (data) => {
+      setUserInfo({
+        uid: userInfo.uid,
+        name: data.name,
+        icon: userIcon,
+        twitter: data.twitter,
+        instagram: data.instagram,
+        introduce: data.introduce,
+      });
+      router.push("/settings");
+    },
+    [router, setUserInfo, userIcon, userInfo.uid]
+  );
 
   // (仮)アイコン画像変更チェック=========================
   const changeIcon = useCallback(() => {
@@ -61,108 +57,111 @@ const Settings = () => {
   }, []);
   // ==================================================
 
-  const updateSettingsButton = useCallback(async () => {
-    const userDoc = db.collection("users").doc(userInfo.uid);
-    await userDoc.update({
-      name: userName,
-      icon: userIcon,
-      twitter: userTwitter,
-      instagram: userInstagram,
-      introduce: userIntroduce,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-    //Recoilのstate変更
-    updateUserRecoil();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    userIcon,
-    userInfo.uid,
-    userInstagram,
-    userIntroduce,
-    userName,
-    userTwitter,
-  ]);
-
-  const updateUserRecoil = async () => {
-    setUserInfo({
-      uid: userInfo.uid,
-      name: userName,
-      icon: userIcon,
-      twitter: userTwitter,
-      instagram: userInstagram,
-      introduce: userIntroduce,
-    });
-    await router.push("/settings");
-  };
-
   return (
     <Layout>
-      {userProfile ? (
+      {userInfo ? (
         <div>
-          {console.log("コンポーネント内", userProfile)}
-
           <h1 className="p-4 text-4xl font-bold tracking-wider">Settings</h1>
           <div className="px-10 pb-6">
-            <div className="pt-2 pb-6 flex flex-col items-center">
-              <Image
-                src={userIcon}
-                alt="userIcon"
-                width={110}
-                height={110}
-                objectFit="cover"
-                className="rounded-full"
-                loading="eager"
-                priority
-              />
-              <button className="text-sm text-gray-500" onClick={changeIcon}>
-                アイコンを変更する
-              </button>
-            </div>
+            <form onSubmit={handleSubmit(on_submit)}>
+              <div className="pt-2 pb-6 flex flex-col items-center">
+                <Image
+                  src={userIcon}
+                  alt="userIcon"
+                  width={110}
+                  height={110}
+                  objectFit="cover"
+                  className="rounded-full"
+                  loading="eager"
+                  priority
+                />
+                <button className="text-sm text-gray-500" onClick={changeIcon}>
+                  アイコンを変更する
+                </button>
+              </div>
 
-            {/* 1文字以上50文字以内 */}
-            <InputSettings
-              title="名前（ニックネーム）"
-              placeholder="名前"
-              userName={userName}
-              onChangeUserName={onChangeUserName}
-            />
+              <label className="text-sm mb-4 flex flex-col">
+                名前（ニックネーム）
+                <input
+                  defaultValue={userInfo.name}
+                  placeholder="名前"
+                  {...register("name", {
+                    required: true,
+                    minLength: 1,
+                    maxLength: 50,
+                  })}
+                  className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
+                />
+                {errors.name && (
+                  <span className="pt-1 text-red-500 text-xs">
+                    入力は必須です(1-50文字以内)
+                  </span>
+                )}
+              </label>
 
-            {/* 15文字以内  */}
-            <InputSettings
-              title="Twitterユーザー名"
-              placeholder="@なしで入力"
-              userName={userTwitter}
-              onChangeUserName={onChangeUserTwitter}
-            />
+              <label className="text-sm mb-4 flex flex-col">
+                Twitterユーザー名
+                <input
+                  defaultValue={userInfo.twitter}
+                  placeholder="@なしで入力"
+                  {...register("twitter", {
+                    required: false,
+                    maxLength: 15,
+                  })}
+                  className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
+                />
+                {errors.twitter && (
+                  <span className="pt-1 text-red-500 text-xs">
+                    正しいユーザー名を入力してください。
+                  </span>
+                )}
+              </label>
 
-            {/* 30文字以内  */}
-            <InputSettings
-              title="Instagramユーザー名"
-              placeholder="@なしで入力"
-              userName={userInstagram}
-              onChangeUserName={onChangeUserInstagram}
-            />
+              <label className="text-sm mb-4 flex flex-col">
+                Instagramユーザー名
+                <input
+                  defaultValue={userInfo.instagram}
+                  placeholder="@なしで入力"
+                  {...register("instagram", {
+                    required: false,
+                    maxLength: 30,
+                  })}
+                  className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
+                />
+                {errors.instagram && (
+                  <span className="pt-1 text-red-500 text-xs">
+                    正しいユーザー名を入力してください。
+                  </span>
+                )}
+              </label>
 
-            {/* 160文字以内 */}
-            <label className="text-sm">
-              自己紹介
-              <textarea
-                type="text"
-                placeholder="自己紹介（160文字以内）"
-                value={userIntroduce}
-                onChange={onChangeUserIntroduce}
-                className="w-full mb-4 h-24 p-2.5 text-base bg-gray-100 rounded-lg resize-none"
-              />
-            </label>
+              <label className="text-sm mb-4 flex flex-col">
+                自己紹介
+                <textarea
+                  defaultValue={userInfo.introduce}
+                  placeholder="自己紹介（160文字以内）"
+                  {...register("introduce", {
+                    required: false,
+                    maxLength: 160,
+                  })}
+                  className="w-full h-24 p-2.5 text-base bg-gray-100 rounded-lg resize-none"
+                />
+                {errors.introduce && (
+                  <span className="pt-1 text-red-500 text-xs">
+                    入力は160文字以内です。
+                  </span>
+                )}
+              </label>
 
-            <div className="text-right">
-              <button
-                className="h-11 w-28 bg-yellow-500 text-white rounded-full hover:bg-hover-yellow"
-                onClick={updateSettingsButton}
-              >
-                変更する
-              </button>
-            </div>
+              <div className="text-right">
+                <button
+                  type="submit"
+                  className="h-11 w-28 bg-yellow-500 text-white rounded-full hover:bg-hover-yellow"
+                >
+                  変更する
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       ) : (
