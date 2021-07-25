@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CommonButton } from "src/components/common/CommonButton";
+import Link from "next/link";
 
 export const Features = () => {
   const FEATURES = [
@@ -62,7 +62,13 @@ export const Features = () => {
           />
         </div>
 
-        <CommonButton text="今すぐはじめる" bgColor="bg-yellow-500" />
+        <Link href="/signup">
+          <a>
+            <div className="w-full py-3.5 text-white font-semibold tracking-wider rounded-full text-center bg-yellow-500 hover:bg-hover-yellow">
+              今すぐはじめる
+            </div>
+          </a>
+        </Link>
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
+import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { useSetRecoilState } from "recoil";
@@ -7,7 +9,6 @@ import firebase from "src/utils/firebase/firebase";
 import { userState } from "src/utils/recoil/userState";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { GoogleIcon } from "src/components/common/assets/GoogleIcon";
-import toast from "react-hot-toast";
 
 //ソーシャルログインは新規登録・ログインの関数が同じため、Authコンポーネントにまとめて記述
 export const Auth = (props) => {
@@ -133,6 +134,14 @@ export const Auth = (props) => {
                 : "Googleから新規登録"}
             </span>
           </button>
+
+          <Link href={`/${props.textlink}`}>
+            <a>
+              <div className="mt-10 text-sm text-gray-400 border-b border-gray-400 inline-block hover:text-gray-800 hover:border-gray-800">
+                {props.text}
+              </div>
+            </a>
+          </Link>
         </div>
       </div>
     </>

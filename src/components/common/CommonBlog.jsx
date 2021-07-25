@@ -1,5 +1,5 @@
+import Link from "next/link";
 import { BlogWrap } from "src/components/blog/BlogWrap";
-import { CommonButton } from "src/components/common/CommonButton";
 
 export const CommonBlog = () => {
   return (
@@ -16,7 +16,13 @@ export const CommonBlog = () => {
           <BlogWrap />
         </div>
 
-        <CommonButton text="もっとブログをみる" bgColor="bg-blue-500" />
+        <Link href="/">
+          <a>
+            <div className="w-full py-3.5 text-white font-semibold tracking-wider rounded-full text-center bg-blue-500 hover:bg-blue-600">
+              もっとブログをみる
+            </div>
+          </a>
+        </Link>
       </div>
     </div>
   );
