@@ -1,13 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useRecoilValue } from "recoil";
-import { userState } from "src/utils/recoil/userState";
+import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { PlanIcon } from "src/components/common/assets/PlanIcon";
 import { BlogIcon } from "src/components/common/assets/BlogIcon";
 
 export const Header = () => {
-  const userInfo = useRecoilValue(userState);
-  const uid = userInfo.uid;
+  const { userInfo } = useCurrentUser();
+  // const { authChecking, userInfo } = useCurrentUser();
 
   return (
     <header>
@@ -28,10 +27,10 @@ export const Header = () => {
         </div>
 
         {/* 👇ユーザー情報がある場合とない場合でHeaderの表示を分ける */}
-        {uid ? (
+        {userInfo ? (
           <div className="w-3/5">
             <div className="h-16 flex items-center text-xxs">
-              <Link href="/[userId]/plan" as={`/${uid}/plan`}>
+              <Link href="/[userId]/plan" as={`/${userInfo.uid}/plan`}>
                 <a className="py-2 flex-1 hover:bg-gray-50">
                   <div className="flex flex-col items-center">
                     <PlanIcon className={"h-6 w-6"} />
@@ -40,7 +39,7 @@ export const Header = () => {
                 </a>
               </Link>
 
-              <Link href="/[userId]/blog" as={`/${uid}/blog`}>
+              <Link href="/[userId]/blog" as={`/${userInfo.uid}/blog`}>
                 <a className="py-2 flex-1 border-r-2 border-l-2 hover:bg-gray-50">
                   <div className="flex flex-col items-center">
                     <BlogIcon />

@@ -1,12 +1,11 @@
 import Image from "next/image";
-import { useRecoilValue } from "recoil";
-import { userState } from "src/utils/recoil/userState";
 import { Layout } from "src/components/Layout/Layout";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
+import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 
 const UserBlogPage = () => {
-  const userInfo = useRecoilValue(userState);
+  const { userInfo } = useCurrentUser();
 
   return (
     <Layout>
@@ -47,7 +46,6 @@ const UserBlogPage = () => {
           </div>
         </div>
         <p className="py-4 text-2xl font-bold">{userInfo.name}</p>
-        {console.log("ユーザーページ", userInfo)}
         <p className="tracking-tight">{userInfo.introduce}</p>
       </div>
 

@@ -20,7 +20,8 @@ export const Auth = (props) => {
     await auth
       .signInWithPopup(twitterProvider)
       .then(async (userCredential) => {
-        commonAuth(userCredential);
+        const userData = userCredential.user;
+        commonAuth(userData);
       })
       .catch(function (error) {
         console.log(error);
@@ -34,7 +35,8 @@ export const Auth = (props) => {
     await auth
       .signInWithPopup(googleProvider)
       .then(async (userCredential) => {
-        commonAuth(userCredential);
+        const userData = userCredential.user;
+        commonAuth(userData);
       })
       .catch(function (error) {
         console.log(error);
@@ -43,9 +45,9 @@ export const Auth = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const commonAuth = async (userCredential) => {
-    const uid = userCredential.user.uid;
-    const providerData = userCredential.user.providerData[0];
+  const commonAuth = async (userData) => {
+    const uid = userData.uid;
+    const providerData = userData.providerData[0];
     const userDoc = db.collection("users").doc(uid);
 
     await userDoc
@@ -76,7 +78,7 @@ export const Auth = (props) => {
         }
       })
       .catch((error) => {
-        console.log("Auth(twitter)エラーだよ！:", error);
+        console.log("Auth(共通)エラーだよ！:", error);
         toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
 

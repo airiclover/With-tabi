@@ -1,15 +1,21 @@
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { auth, db } from "src/utils/firebase/firebase";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
 import { CommonLayout } from "src/components/Layout/CommonLayout";
 import { Modal } from "src/components/common/Modal";
 import { useState } from "react";
+import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
+import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 
 const DeleteAccount = () => {
-  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const setUserInfo = useSetRecoilState(userState);
+  const { userInfo } = useCurrentUser();
   const router = useRouter();
+
+  useRequireLogin();
+  console.log("アカウント削除ページ", userInfo);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,14 +34,8 @@ const DeleteAccount = () => {
     user
       .delete()
       .then(() => {
-        setUserInfo({
-          uid: "",
-          name: "",
-          icon: "",
-          twitter: "",
-          instagram: "",
-          introduce: "",
-        });
+        setUserInfo(undefined);
+
         toast.success("アカウントが削除されました");
         router.push("/");
       })
@@ -60,7 +60,6 @@ const DeleteAccount = () => {
 
   return (
     <CommonLayout>
-      {console.log("レンダリング")}
       <div className="px-4">
         <h1 className="py-6 text-xl font-semibold">
           アカウントを削除しますか？

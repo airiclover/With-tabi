@@ -12,7 +12,7 @@ const Settings = () => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
   // eslint-disable-next-line no-unused-vars
-  const [userIcon, setUserIcon] = useState(userInfo.icon);
+  const [userIcon, setUserIcon] = useState(userInfo?.icon); //仮コード
   const router = useRouter();
 
   const {
@@ -22,10 +22,10 @@ const Settings = () => {
   } = useForm();
 
   const on_submit = useCallback(async (data) => {
-    const userDoc = db.collection("users").doc(userInfo.uid);
+    const userDoc = db.collection("users").doc(userInfo?.uid);
     await userDoc.update({
       name: data.name,
-      icon: userIcon,
+      icon: userInfo?.icon, //仮コード
       twitter: data.twitter,
       instagram: data.instagram,
       introduce: data.introduce,
@@ -39,16 +39,16 @@ const Settings = () => {
   const updateUserRecoil = useCallback(
     (data) => {
       setUserInfo({
-        uid: userInfo.uid,
+        uid: userInfo?.uid,
         name: data.name,
-        icon: userIcon,
+        icon: userInfo?.icon, //仮コード
         twitter: data.twitter,
         instagram: data.instagram,
         introduce: data.introduce,
       });
       router.push("/settings");
     },
-    [router, setUserInfo, userIcon, userInfo.uid]
+    [router, setUserInfo, userInfo?.icon, userInfo?.uid]
   );
 
   // (仮)アイコン画像変更チェック=========================
@@ -66,7 +66,7 @@ const Settings = () => {
             <form onSubmit={handleSubmit(on_submit)}>
               <div className="pt-2 pb-6 flex flex-col items-center">
                 <Image
-                  src={userIcon}
+                  src={userInfo?.icon}
                   alt="userIcon"
                   width={110}
                   height={110}

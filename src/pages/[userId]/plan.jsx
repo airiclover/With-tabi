@@ -1,16 +1,15 @@
 // import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { CommonLayout } from "src/components/Layout/CommonLayout";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
-import { db } from "src/utils/firebase/firebase";
-import { useRecoilValue } from "recoil";
-import { userState } from "src/utils/recoil/userState";
 import { PlanIcon } from "src/components/common/assets/PlanIcon";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
 import { CloseIcon } from "src/components/common/assets/CloseIcon";
 import { EmojiIcon } from "src/components/common/assets/EmojiIcon";
+import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
+import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 
 /* 👇一時的にeslintの絵文字入力を許可 */
 /* eslint-disable jsx-a11y/accessible-emoji */
@@ -22,26 +21,12 @@ const UserPlanPage = () => {
   const [title, setTitle] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [backDate, setBackDate] = useState("");
-  const userInfo = useRecoilValue(userState);
 
   // データ取得チェック=========================
-  //recoilにセットしてるuidよりデータ取得
-  useEffect(() => {
-    const userDoc = db.collection("users").doc(userInfo.uid);
-    userDoc
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          console.log("planページデータチェック:", doc.data());
-        } else {
-          console.log("No such document!");
-        }
-      })
-      .catch((error) => {
-        console.log("planページエラーだよ！:", error);
-      });
-  }, [userInfo.uid]);
-  // データ取得チェック=========================
+  const { userInfo } = useCurrentUser();
+  useRequireLogin();
+  console.log("プランページ", userInfo);
+  // ========================================
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -51,18 +36,15 @@ const UserPlanPage = () => {
     setIsOpenModal(false);
   };
 
-  const openEmoji = useCallback(() => {
+  const openEmoji = () => {
     setIsOpenEmoji((isOpenEmoji) => !isOpenEmoji);
-  }, []);
+  };
 
-  const onChangeTitle = useCallback((e) => setTitle(e.target.value), []);
+  const onChangeTitle = (e) => setTitle(e.target.value);
 
-  const onChangeDepartureDate = useCallback(
-    (e) => setDepartureDate(e.target.value),
-    []
-  );
+  const onChangeDepartureDate = (e) => setDepartureDate(e.target.value);
 
-  const onChangeBackDate = useCallback((e) => setBackDate(e.target.value), []);
+  const onChangeBackDate = (e) => setBackDate(e.target.value);
 
   return (
     <CommonLayout>
