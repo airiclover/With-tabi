@@ -46,7 +46,7 @@ const UserPage = () => {
           <div className="bg-white mt-4 mx-5 mb-8 p-4 rounded-xl">
             <div className="flex">
               <Image
-                src={userInfo.icon}
+                src={userInfo?.icon}
                 alt="userIcon"
                 width={110}
                 height={110}
@@ -57,9 +57,9 @@ const UserPage = () => {
               />
 
               <div className="pl-3 flex items-end">
-                {userInfo.twitter ? (
+                {userInfo?.twitter ? (
                   <a
-                    href={`https://twitter.com/${userInfo.twitter}`}
+                    href={`https://twitter.com/${userInfo?.twitter}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="pr-1.5"
@@ -68,9 +68,9 @@ const UserPage = () => {
                   </a>
                 ) : null}
 
-                {userInfo.instagram ? (
+                {userInfo?.instagram ? (
                   <a
-                    href={`https://www.instagram.com/${userInfo.instagram}/?hl=ja`}
+                    href={`https://www.instagram.com/${userInfo?.instagram}/?hl=ja`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -79,8 +79,8 @@ const UserPage = () => {
                 ) : null}
               </div>
             </div>
-            <p className="py-4 text-2xl font-bold">{userInfo.name}</p>
-            <p className="tracking-tight">{userInfo.introduce}</p>
+            <p className="py-4 text-2xl font-bold">{userInfo?.name}</p>
+            <p className="tracking-tight">{userInfo?.introduce}</p>
 
             <Link href="/settings/account">
               <a>

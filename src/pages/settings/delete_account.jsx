@@ -46,7 +46,7 @@ const DeleteAccount = () => {
   };
 
   const deleteUserDoc = () => {
-    const userDoc = db.collection("users").doc(userInfo.uid);
+    const userDoc = db.collection("users").doc(userInfo?.uid);
     userDoc
       .delete()
       .then(() => {

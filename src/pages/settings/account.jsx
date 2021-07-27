@@ -83,7 +83,7 @@ const Settings = () => {
               <label className="text-sm mb-4 flex flex-col">
                 名前（ニックネーム）
                 <input
-                  defaultValue={userInfo.name}
+                  defaultValue={userInfo?.name}
                   placeholder="名前"
                   {...register("name", {
                     required: true,
@@ -102,7 +102,7 @@ const Settings = () => {
               <label className="text-sm mb-4 flex flex-col">
                 Twitterユーザー名
                 <input
-                  defaultValue={userInfo.twitter}
+                  defaultValue={userInfo?.twitter}
                   placeholder="@なしで入力"
                   {...register("twitter", {
                     required: false,
@@ -121,7 +121,7 @@ const Settings = () => {
               <label className="text-sm mb-4 flex flex-col">
                 Instagramユーザー名
                 <input
-                  defaultValue={userInfo.instagram}
+                  defaultValue={userInfo?.instagram}
                   placeholder="@なしで入力"
                   {...register("instagram", {
                     required: false,
@@ -140,7 +140,7 @@ const Settings = () => {
               <label className="text-sm mb-4 flex flex-col">
                 自己紹介
                 <textarea
-                  defaultValue={userInfo.introduce}
+                  defaultValue={userInfo?.introduce}
                   placeholder="自己紹介（160文字以内）"
                   {...register("introduce", {
                     required: false,
