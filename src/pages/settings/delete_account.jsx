@@ -61,10 +61,13 @@ const DeleteAccount = () => {
   return (
     <CommonLayout>
       <div className="px-4">
-        <h1 className="py-6 text-xl font-semibold">
+        <h1 className="py-10 text-xl font-semibold">
           アカウントを削除しますか？
         </h1>
-        <p>アカウントを削除すると全てのデータが失われます。</p>
+        <div className="pb-8">
+          <p>アカウントを削除すると全てのデータが失われます。</p>
+          <p>データは復元することができません。</p>
+        </div>
         <button
           onClick={openModal}
           className="py-2 px-3 text-yellow-500 border border-yellow-500 rounded-full leading-6"
@@ -79,7 +82,7 @@ const DeleteAccount = () => {
         openModal={openModal}
         deleteAccount={deleteAccount}
         title="アカウントを削除"
-        subTitle="アカウントが削除されます。"
+        subTitle="アカウントが削除されます。よろしいですか？"
         button1="キャンセル"
         button2="削除する"
       />
