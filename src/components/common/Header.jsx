@@ -6,7 +6,6 @@ import { BlogIcon } from "src/components/common/assets/BlogIcon";
 
 export const Header = () => {
   const { userInfo } = useCurrentUser();
-  // const { authChecking, userInfo } = useCurrentUser();
 
   return (
     <header>
@@ -26,8 +25,8 @@ export const Header = () => {
           </Link>
         </div>
 
-        {/* 👇ユーザー情報がある場合とない場合でHeaderの表示を分ける */}
         {userInfo ? (
+          // ユーザー情報がある場合
           <div className="w-3/5">
             <div className="h-16 flex items-center text-xxs">
               <Link href="/[userId]/plan" as={`/${userInfo.uid}/plan`}>
@@ -68,6 +67,7 @@ export const Header = () => {
             </div>
           </div>
         ) : (
+          // ユーザー情報がない場合
           <div className="w-3/5 pr-2 text-right">
             <Link href="/login">
               <a className="mr-2 py-1.5 px-2.5 text-xs text-yellow-500 border border-yellow-500 rounded-full leading-6">
