@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import { auth } from "src/utils/firebase/firebase";
 import { useSetRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
+import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
+import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 import { CommonLayout } from "src/components/Layout/CommonLayout";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
 import { EmojiIcon } from "src/components/common/assets/EmojiIcon";
 import { LogoutIcon } from "src/components/common/assets/LogoutIcon";
-import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
-import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 
 const UserPage = () => {
   const { userInfo } = useCurrentUser();
@@ -106,7 +106,7 @@ const UserPage = () => {
           </Link>
         </div>
       ) : (
-        <div>ローディング中！！！</div>
+        <div>ローディング中！！！</div> // 仮実装
       )}
     </CommonLayout>
   );

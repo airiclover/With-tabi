@@ -1,7 +1,7 @@
 import Image from "next/image";
 import firebase from "src/utils/firebase/firebase";
 import { useRouter } from "next/router";
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
 import { Layout } from "src/components/Layout/Layout";
@@ -10,9 +10,6 @@ import { useForm } from "react-hook-form";
 
 const Settings = () => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
-
-  // eslint-disable-next-line no-unused-vars
-  const [userIcon, setUserIcon] = useState(userInfo?.icon); //仮コード
   const router = useRouter();
 
   const {
