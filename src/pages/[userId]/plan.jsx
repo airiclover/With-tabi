@@ -1,31 +1,65 @@
 // import Image from "next/image";
+import { useRouter } from "next/router";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import { CommonLayout } from "src/components/Layout/CommonLayout";
+import { db } from "src/utils/firebase/firebase";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
-import { PlanIcon } from "src/components/common/assets/PlanIcon";
+import { CommonLayout } from "src/components/Layout/CommonLayout";
+import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
+import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
+import { CalendarIcon } from "src/components/common/assets/CalendarIcon";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
 import { CloseIcon } from "src/components/common/assets/CloseIcon";
 import { EmojiIcon } from "src/components/common/assets/EmojiIcon";
-import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
-import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
-
-/* 👇一時的にeslintの絵文字入力を許可 */
-/* eslint-disable jsx-a11y/accessible-emoji */
 
 const UserPlanPage = () => {
+  const [plans, setPlans] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
-  const [emoji, setEmoji] = useState(null);
+  const [emoji, setEmoji] = useState(null); //アイコン
   const [title, setTitle] = useState("");
-  const [departureDate, setDepartureDate] = useState("");
-  const [backDate, setBackDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [lastDate, setLastDate] = useState("");
+
+  const router = useRouter();
 
   // データ取得チェック=========================
   const { userInfo } = useCurrentUser();
   useRequireLogin();
   console.log("プランページ", userInfo);
+
+  // プラン取得チェック=========================
+  const getUsersPlans = () => {
+    db.collection("plans")
+      .where("userID", "==", userInfo.uid)
+      .get()
+      .then((querySnapshot) => {
+        const plansdata = [];
+
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          plansdata.push({
+            id: doc.id,
+            title: data.title,
+            planIcon: data.planIcon,
+            startDate: data.startDate,
+            lastDate: data.lastDate,
+          });
+        });
+        setPlans(plansdata);
+        console.log("plansdata", plansdata);
+      })
+      .catch((error) => {
+        console.log("プランデータ【エラー】だよ！", error);
+      });
+  };
+
+  useEffect(() => {
+    getUsersPlans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // ========================================
 
   const openModal = () => {
@@ -36,15 +70,43 @@ const UserPlanPage = () => {
     setIsOpenModal(false);
   };
 
+  const addPlan = () => {
+    db.collection("plans")
+      .add({
+        userID: userInfo?.uid,
+        title: title,
+        planIcon: emoji,
+        startDate: startDate,
+        lastDate: lastDate,
+      })
+      .then(async (docRef) => {
+        setPlans([
+          ...plans,
+          {
+            id: docRef.id, //追加されたドキュメントID
+            title: title,
+            planIcon: emoji,
+            startDate: startDate,
+            lastDate: lastDate,
+          },
+        ]);
+        closeModal();
+        await router.push(`/${userInfo.uid}/plan`);
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
+  };
+
   const openEmoji = () => {
     setIsOpenEmoji((isOpenEmoji) => !isOpenEmoji);
   };
 
   const onChangeTitle = (e) => setTitle(e.target.value);
 
-  const onChangeDepartureDate = (e) => setDepartureDate(e.target.value);
+  const onChangeStartDate = (e) => setStartDate(e.target.value);
 
-  const onChangeBackDate = (e) => setBackDate(e.target.value);
+  const onChangeLastDate = (e) => setLastDate(e.target.value);
 
   return (
     <CommonLayout>
@@ -115,8 +177,8 @@ const UserPlanPage = () => {
                     <input
                       type="text"
                       placeholder="2021/12/1"
-                      value={departureDate}
-                      onChange={onChangeDepartureDate}
+                      value={startDate}
+                      onChange={onChangeStartDate}
                       className="p-2 bg-gray-100 rounded-lg"
                     />
                   </div>
@@ -125,8 +187,8 @@ const UserPlanPage = () => {
                     <input
                       type="text"
                       placeholder="2021/12/10"
-                      value={backDate}
-                      onChange={onChangeBackDate}
+                      value={lastDate}
+                      onChange={onChangeLastDate}
                       className="p-2 bg-gray-100 rounded-lg"
                     />
                   </div>
@@ -137,7 +199,7 @@ const UserPlanPage = () => {
                   <button
                     type="button"
                     className="px-8 py-3 bg-yellow-500 text-white tracking-widest rounded-full hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={closeModal}
+                    onClick={addPlan}
                   >
                     登録
                   </button>
@@ -150,36 +212,50 @@ const UserPlanPage = () => {
 
       <div className="px-3">
         <div className="py-4 flex items-center relative">
-          <PlanIcon className={"h-9 w-9"} />
+          <CalendarIcon className={"h-9 w-9"} />
           <h1 className="pl-2 text-4xl font-bold tracking-wider">
             Travel Plans
           </h1>
         </div>
 
         {/* ========================== */}
-        <div className="h-24 bg-white mt-5 py-2 px-4 rounded-xl">
-          <h2 className="pb-1 text-lg font-bold line-clamp-2">
-            🇦🇺 オーストラリア旅行
-          </h2>
-          <p className="pl-6 text-sm">2021/12/31(金) - 2022/1/5(水)</p>
-        </div>
-        {/* ========================== */}
 
-        {/* 👇データがないとき */}
+        {console.log("プランの数！", plans.length)}
+        {plans.map((plan) => {
+          return (
+            <div
+              key={plan.id}
+              className="h-24 bg-white mt-5 py-3 px-4 rounded-xl"
+            >
+              <h2 className="text-lg font-bold leading-5 line-clamp-2">
+                {plan.planIcon ? (
+                  <span className="pr-1.5">
+                    <Emoji emoji={plan.planIcon} size={18} />
+                  </span>
+                ) : null}
+                <span>{plan.title}</span>
+              </h2>
+              <p className="pt-1 pl-6 text-sm">{`${plan.startDate} - ${plan.lastDate}`}</p>
+            </div>
+          );
+        })}
 
-        {/* <div className="pt-10 pb-14 pl-4 font-semibold">
-        <p>右下の登録ボタンから</p>
-        <p>旅のプランを作成してみよう。</p>
-      </div>
-      <Image
-        src="/img/undraw_travelplans.svg"
-        alt="travelplansImg"
-        width={100}
-        height={50}
-        loading="eager"
-        priority
-        layout="responsive"
-      /> */}
+        {/* 👇プランデータがないとき */}
+        {/* <div>
+            <div className="pt-10 pb-14 pl-4 font-semibold">
+              <p>右下の登録ボタンから</p>
+              <p>旅のプランを作成してみよう。</p>
+            </div>
+            <Image
+              src="/img/undraw_travelplans.svg"
+              alt="travelplansImg"
+              width={100}
+              height={50}
+              loading="eager"
+              priority
+              layout="responsive"
+            />
+          </div> */}
 
         {/* ========================== */}
 
