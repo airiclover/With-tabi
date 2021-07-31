@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
-import { PlanIcon } from "src/components/common/assets/PlanIcon";
+import { CalendarIcon } from "src/components/common/assets/CalendarIcon";
 import { BlogIcon } from "src/components/common/assets/BlogIcon";
 
 export const Header = () => {
@@ -32,7 +32,7 @@ export const Header = () => {
               <Link href="/[userId]/plan" as={`/${userInfo.uid}/plan`}>
                 <a className="py-2 flex-1 hover:bg-gray-50">
                   <div className="flex flex-col items-center">
-                    <PlanIcon className={"h-6 w-6"} />
+                    <CalendarIcon className={"h-6 w-6"} />
                     <p className="pt-1.5">旅行プラン</p>
                   </div>
                 </a>
