@@ -1,4 +1,5 @@
 
+
 😸firestore設計memo
 
 # =====================================================
@@ -41,37 +42,44 @@
 users: {
   ユーザー1: {
     documentID（コレクション）: userID (ドキュメントのIDに意味を持たせるとルールを作りやすくなるため、useIdを指定。)
-    name: String? # 👈はnullかもしれないので一応「?」をつけている
-    iconURL: array?
-    sns: map? # ex) {twitter:"http//..."},{Insta:"http//..."}
-    introduce: String?
+    name: String # 初期値は空文字
+    icon: String
+    instagram: String # 初期値は空文字
+    twitter: String # 初期値は空文字
+    introduce: String
+    createdAt: timestamp
+    updatedAt: timestamp
   },
   ...
 }
 
 
 # plansコレクション
-  # userとplanをコレクション別で分けているため、日付順(startDayが古いものが下になる順番)にソートをかけるには複合インデックスの生成が必要
+  # userとplanをコレクション別で分けているため、日付順(startDateが古いものが下になる順番)にソートをかけるには複合インデックスの生成が必要
 plans（コレクション）: {
   プラン1: {
     documentID: auto (自動取得)
     userID: String
     title: String
-    emogi: String(❗️Stringじゃないかも?)
-    startDay: timestamp 
-    lastDay: timestamp
+    planIcon: String
+    startDate: number 
+    lastDate: number
+    createdAt: timestamp
+    updatedAt: timestamp
 
     # plansのサブコレクション(データが時間とともに増加する可能性があるためサブコレクションとする)
-    # 日付順(startDayが古いものが下になる順番)にソートをかけるには複合インデックスの生成が必要
+    # 日付順(startDateが古いものが下になる順番)にソートをかけるには複合インデックスの生成が必要
     plandetail（サブコレクション）: {
       documentID: auto (自動取得) or planIDにする?
       title: String
-      emogi: String(❗️Stringじゃないかも?)
-      startDay: timestamp (日にち+開始時間)
-      lastDay: timestamp (日にち+終了時間)
+      planIcon: String
+      startDate: number
+      lastDate: number
       memo: String
       money: number
     }
   },
   ...
 },
+
+
