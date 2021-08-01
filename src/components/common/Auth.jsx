@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import firebase from "src/utils/firebase/firebase";
+import { auth, db } from "src/utils/firebase/firebase";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { useSetRecoilState } from "recoil";
-import { auth, db } from "src/utils/firebase/firebase";
-import firebase from "src/utils/firebase/firebase";
 import { userState } from "src/utils/recoil/userState";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { GoogleIcon } from "src/components/common/assets/GoogleIcon";
