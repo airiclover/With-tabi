@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import firebase from "src/utils/firebase/firebase";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
@@ -21,12 +22,6 @@ const UserPlanPage = () => {
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const [today, setToday] = useState("");
   const [emoji, setEmoji] = useState(null); //アイコン
-  // eslint-disable-next-line no-unused-vars
-  const [title, setTitle] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [startDate, setStartDate] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [lastDate, setLastDate] = useState("");
 
   const router = useRouter();
   const { userInfo } = useCurrentUser();
@@ -48,25 +43,33 @@ const UserPlanPage = () => {
   // ---------------------------------------
 
   // ------------プラン取得チェック--------------
-
   const getUsersPlans = () => {
     db.collection("plans")
       .where("userID", "==", userInfo.uid)
+      .orderBy("startDate", "desc") //startDateを降順でソートかける
       .get()
       .then((querySnapshot) => {
-        const plansdata = [];
+        const plansData = [];
+
+        const fixDate = (str) => {
+          return `${str.substr(0, 4)}/${str.substr(4, 2)}/${str.substr(6, 2)}`;
+        };
 
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          plansdata.push({
+
+          const fixStartDate = fixDate(data.startDate);
+          const fixLastDate = fixDate(data.lastDate);
+
+          plansData.push({
             id: doc.id,
             title: data.title,
             planIcon: data.planIcon,
-            startDate: data.startDate,
-            lastDate: data.lastDate,
+            startDate: fixStartDate,
+            lastDate: fixLastDate,
           });
         });
-        plansdata.length == 0 ? setPlans(null) : setPlans(plansdata);
+        plansData.length == 0 ? setPlans(null) : setPlans(plansData);
       })
       .catch((error) => {
         console.log("プランデータ【エラー】だよ！", error);
@@ -113,6 +116,8 @@ const UserPlanPage = () => {
         planIcon: emoji,
         startDate: data.startDate,
         lastDate: data.lastDate,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(async (docRef) => {
         plans == null
@@ -137,6 +142,7 @@ const UserPlanPage = () => {
             ]);
 
         closeModal();
+        getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
         await router.push(`/${userInfo.uid}/plan`);
       })
       .catch((error) => {
@@ -308,7 +314,7 @@ const UserPlanPage = () => {
               );
             })
           ) : (
-            // 👇プランデータが[]からnullもしくはデータフェッチされるまではローディングを表示させる
+            // 👇プランデータが[]からnullに変わるまでの間、もしくはデータフェッチされるまでの間は以下表示
             <div>ローディング中...</div>
           )
         ) : (
