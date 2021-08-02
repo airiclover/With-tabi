@@ -108,44 +108,42 @@ export const Auth = (props) => {
   }, []);
 
   return (
-    <>
-      <div className="min-h-screen pt-28 px-4 text-center">
-        <Image src="/img/logo.png" alt="logoImg" width={180} height={42} />
+    <div className="min-h-screen pt-28 px-4 text-center">
+      <Image src="/img/logo.png" alt="logoImg" width={180} height={42} />
 
-        <div className="mt-20">
-          <button
-            onClick={twitterLogin}
-            className="w-full mb-12 py-4 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center hover:bg-blue-600"
-          >
-            <TwitterIcon width="24" height="24" fill="#fff" />
-            <span className="ml-3">
-              {props.page === "login"
-                ? "Twitterからログイン"
-                : "Twitterから新規登録"}
-            </span>
-          </button>
+      <div className="mt-20">
+        <button
+          onClick={twitterLogin}
+          className="w-full mb-12 py-4 bg-blue-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center hover:bg-blue-600"
+        >
+          <TwitterIcon width="24" height="24" fill="#fff" />
+          <span className="ml-3">
+            {props.page === "login"
+              ? "Twitterからログイン"
+              : "Twitterから新規登録"}
+          </span>
+        </button>
 
-          <button
-            onClick={googleLogin}
-            className="w-full py-4 bg-gray-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center hover:bg-gray-600"
-          >
-            <GoogleIcon />
-            <span className="ml-3">
-              {props.page === "login"
-                ? "Googleからログイン"
-                : "Googleから新規登録"}
-            </span>
-          </button>
+        <button
+          onClick={googleLogin}
+          className="w-full py-4 bg-gray-500 text-white font-semibold tracking-wider rounded-full flex justify-center items-center hover:bg-gray-600"
+        >
+          <GoogleIcon />
+          <span className="ml-3">
+            {props.page === "login"
+              ? "Googleからログイン"
+              : "Googleから新規登録"}
+          </span>
+        </button>
 
-          <Link href={`/${props.textlink}`}>
-            <a>
-              <div className="mt-10 text-sm text-gray-400 border-b border-gray-400 inline-block hover:text-gray-800 hover:border-gray-800">
-                {props.text}
-              </div>
-            </a>
-          </Link>
-        </div>
+        <Link href={`/${props.textlink}`}>
+          <a>
+            <div className="mt-10 text-sm text-gray-400 border-b border-gray-400 inline-block hover:text-gray-800 hover:border-gray-800">
+              {props.text}
+            </div>
+          </a>
+        </Link>
       </div>
-    </>
+    </div>
   );
 };
