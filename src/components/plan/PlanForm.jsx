@@ -2,12 +2,12 @@ import router from "next/router";
 import firebase from "src/utils/firebase/firebase";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
+import { db } from "src/utils/firebase/firebase";
 import { useForm } from "react-hook-form";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
 import { CloseIcon } from "src/components/common/assets/CloseIcon";
 import { EmojiIcon } from "src/components/common/assets/EmojiIcon";
-import { db } from "src/utils/firebase/firebase";
 
 export const PlanForm = (props) => {
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
@@ -123,6 +123,7 @@ export const PlanForm = (props) => {
               <label className="pb-7 font-semibold flex flex-col">
                 旅行タイトル
                 <input
+                  type="text"
                   placeholder="旅行タイトル"
                   {...register("title", {
                     required: true,
@@ -141,7 +142,7 @@ export const PlanForm = (props) => {
               <label className="pb-7 font-semibold flex flex-col">
                 出発日
                 <input
-                  type="number"
+                  type="text"
                   placeholder={today}
                   {...register("startDate", {
                     required: true,
@@ -160,7 +161,7 @@ export const PlanForm = (props) => {
               <label className="pb-12 font-semibold flex flex-col">
                 帰着日
                 <input
-                  type="number"
+                  type="text"
                   placeholder={today}
                   {...register("lastDate", {
                     required: true,
