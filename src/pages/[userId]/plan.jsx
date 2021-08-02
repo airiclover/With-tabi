@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { db } from "src/utils/firebase/firebase";
 import { PlanForm } from "src/components/plan/PlanForm";
 import { Emoji } from "emoji-mart";
-import { CommonLayout } from "src/components/layout/CommonLayout";
+import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 import { Dropdown } from "src/components/plan/Dropdown";

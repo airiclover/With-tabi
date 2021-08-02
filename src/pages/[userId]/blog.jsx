@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Layout } from "src/components/layout/Layout";
+import { Layout } from "src/components/layouts/Layout";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";

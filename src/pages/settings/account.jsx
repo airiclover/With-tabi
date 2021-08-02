@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
-import { Layout } from "src/components/layout/Layout";
+import { Layout } from "src/components/layouts/Layout";
 import { db } from "src/utils/firebase/firebase";
 import { useForm } from "react-hook-form";
 
