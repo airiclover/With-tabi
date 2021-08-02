@@ -1,4 +1,4 @@
-import { Layout } from "src/components/Layout/Layout";
+import { Layout } from "src/components/layout/Layout";
 import { FirstView } from "src/components/common/FirstView";
 import { About } from "src/components/common/About";
 import { Features } from "src/components/common/Features";

@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { db } from "src/utils/firebase/firebase";
 import { PlanForm } from "src/components/plan/PlanForm";
 import { Emoji } from "emoji-mart";
-import { CommonLayout } from "src/components/Layout/CommonLayout";
+import { CommonLayout } from "src/components/layout/CommonLayout";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
+import { Dropdown } from "src/components/plan/Dropdown";
 import { CalendarIcon } from "src/components/common/assets/CalendarIcon";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
 
@@ -87,21 +88,26 @@ const UserPlanPage = () => {
           plans.length != 0 ? (
             plans.map((plan) => {
               return (
-                <Link key={plan.id} href="/">
-                  <a>
-                    <div className="h-24 bg-white mt-5 py-3 px-4 rounded-xl">
-                      <h2 className="text-lg font-bold leading-5 line-clamp-2">
-                        {plan.planIcon ? (
-                          <span className="pr-1.5">
-                            <Emoji emoji={plan.planIcon} size={18} />
-                          </span>
-                        ) : null}
-                        <span>{plan.title}</span>
-                      </h2>
-                      <p className="pt-1 pl-6 text-sm">{`${plan.startDate} - ${plan.lastDate}`}</p>
-                    </div>
-                  </a>
-                </Link>
+                <div key={plan.id} className="relative">
+                  <Link href="/">
+                    <a>
+                      <div className="h-24 bg-white mt-5 py-3 px-4 rounded-xl">
+                        <h2 className="text-lg font-bold leading-5">
+                          <div className="flex">
+                            {plan.planIcon ? (
+                              <div className="pr-2">
+                                <Emoji emoji={plan.planIcon} size={18} />
+                              </div>
+                            ) : null}
+                            <div className="line-clamp-2">{plan.title}</div>
+                          </div>
+                        </h2>
+                        <p className="pt-1 pl-6 text-sm">{`${plan.startDate} - ${plan.lastDate}`}</p>
+                      </div>
+                    </a>
+                  </Link>
+                  <Dropdown planID={plan.id} getUsersPlans={getUsersPlans} />
+                </div>
               );
             })
           ) : (

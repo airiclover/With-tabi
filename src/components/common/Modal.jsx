@@ -61,7 +61,7 @@ export const Modal = (props) => {
                 <button
                   type="button"
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-red-500 border border-red-500 rounded-md hover:bg-red-500 hover:text-white"
-                  onClick={props.deleteAccount}
+                  onClick={props.isDelete}
                 >
                   {props.button2}
                 </button>

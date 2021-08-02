@@ -6,7 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
-import { CommonLayout } from "src/components/Layout/CommonLayout";
+import { CommonLayout } from "src/components/layout/CommonLayout";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
 import { EmojiIcon } from "src/components/common/assets/EmojiIcon";

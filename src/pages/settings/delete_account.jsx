@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { auth, db } from "src/utils/firebase/firebase";
 import { useSetRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
-import { CommonLayout } from "src/components/Layout/CommonLayout";
+import { CommonLayout } from "src/components/layout/CommonLayout";
 import { Modal } from "src/components/common/Modal";
 import { useState } from "react";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
@@ -28,6 +28,7 @@ const DeleteAccount = () => {
   };
 
   const deleteAccount = () => {
+    isPlanDelete();
     deleteUserDoc();
 
     const user = auth.currentUser;
@@ -58,6 +59,22 @@ const DeleteAccount = () => {
       });
   };
 
+  const isPlanDelete = () => {
+    console.log("プラン取得チェック");
+    db.collection("plans")
+      .where("userID", "==", userInfo?.uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log("プランデータを消したよ！");
+          doc.ref.delete();
+        });
+      })
+      .catch((error) => {
+        console.log("プランデータ削除【エラー】だよ！", error);
+      });
+  };
+
   return (
     <CommonLayout>
       <div className="px-4">
@@ -79,8 +96,7 @@ const DeleteAccount = () => {
       <Modal
         isOpen={isOpen}
         closeModal={closeModal}
-        openModal={openModal}
-        deleteAccount={deleteAccount}
+        isDelete={deleteAccount}
         title="アカウントを削除"
         subTitle="アカウントが削除されます。よろしいですか？"
         button1="キャンセル"
