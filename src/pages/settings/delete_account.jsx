@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { auth, db } from "src/utils/firebase/firebase";
 import { useSetRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
-import { CommonLayout } from "src/components/layout/CommonLayout";
+import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { Modal } from "src/components/common/Modal";
 import { useState } from "react";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
