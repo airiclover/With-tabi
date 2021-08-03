@@ -56,7 +56,7 @@ export const PlanForm = (props) => {
         reset(result);
 
         setEmoji(null);
-        props.closeModal();
+        props.closeFormModal();
         props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
         await router.push(`/${props.userInfo.uid}/plan`);
       })
@@ -74,7 +74,7 @@ export const PlanForm = (props) => {
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto text-gray-800"
-        onClose={props.closeModal}
+        onClose={props.closeFormModal}
       >
         <Transition.Child
           as={Fragment}
@@ -90,7 +90,7 @@ export const PlanForm = (props) => {
               <button
                 type="button"
                 className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500"
-                onClick={props.closeModal}
+                onClick={props.closeFormModal}
               >
                 <CloseIcon />
               </button>
@@ -142,12 +142,11 @@ export const PlanForm = (props) => {
               <label className="pb-7 font-semibold flex flex-col">
                 出発日
                 <input
-                  type="text"
+                  type="date"
                   placeholder={today}
                   {...register("startDate", {
                     required: true,
-                    pattern: /[0-9]{8}/,
-                    maxLength: 8,
+                    maxLength: 10,
                   })}
                   className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
                 />
@@ -161,12 +160,11 @@ export const PlanForm = (props) => {
               <label className="pb-12 font-semibold flex flex-col">
                 帰着日
                 <input
-                  type="text"
+                  type="date"
                   placeholder={today}
                   {...register("lastDate", {
                     required: true,
-                    pattern: /[0-9]{8}/,
-                    maxLength: 8,
+                    maxLength: 10,
                   })}
                   className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
                 />

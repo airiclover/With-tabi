@@ -33,8 +33,13 @@ const UserPlanPage = () => {
       .then((querySnapshot) => {
         const plansData = [];
 
-        const fixDate = (str) => {
-          return `${str.substr(0, 4)}/${str.substr(4, 2)}/${str.substr(6, 2)}`;
+        const fixDate = (data) => {
+          const date = data.replace(/-/g, "/");
+          const setDate = new Date(date);
+          const arrayWeek = ["日", "月", "火", "水", "木", "金", "土"];
+          const week = `(${arrayWeek[setDate.getDay()]})`;
+
+          return date + week;
         };
 
         querySnapshot.forEach((doc) => {
@@ -58,23 +63,16 @@ const UserPlanPage = () => {
       });
   };
 
-  const openModal = () => {
+  const openFormModal = () => {
     setIsOpenModal(true);
   };
 
-  const closeModal = () => {
+  const closeFormModal = () => {
     setIsOpenModal(false);
   };
 
   return (
     <CommonLayout>
-      <PlanForm
-        userInfo={userInfo}
-        isOpenModal={isOpenModal}
-        closeModal={closeModal}
-        getUsersPlans={getUsersPlans}
-      />
-
       <div className="px-3 pb-28">
         <div className="py-4 flex items-center relative">
           <CalendarIcon className={"h-9 w-9"} />
@@ -106,7 +104,7 @@ const UserPlanPage = () => {
                       </div>
                     </a>
                   </Link>
-                  <Dropdown planID={plan.id} getUsersPlans={getUsersPlans} />
+                  <Dropdown plan={plan} getUsersPlans={getUsersPlans} />
                 </div>
               );
             })
@@ -134,7 +132,7 @@ const UserPlanPage = () => {
         )}
         {/* ========================== */}
 
-        <button onClick={openModal} className="fixed bottom-6 right-6">
+        <button onClick={openFormModal} className="fixed bottom-6 right-6">
           <div className="h-16 w-16 bg-yellow-500 text-center rounded-full flex flex-col relative hover:bg-hover-yellow">
             <PlusIcon />
             <p className="text-xs text-white font-semibold absolute top-10 left-5">
@@ -143,6 +141,13 @@ const UserPlanPage = () => {
           </div>
         </button>
       </div>
+
+      <PlanForm
+        userInfo={userInfo}
+        isOpenModal={isOpenModal}
+        closeFormModal={closeFormModal}
+        getUsersPlans={getUsersPlans}
+      />
     </CommonLayout>
   );
 };

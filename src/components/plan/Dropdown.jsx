@@ -1,19 +1,19 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { db } from "src/utils/firebase/firebase";
 import { Menu } from "@headlessui/react";
 import { Modal } from "src/components/common/Modal";
 import { DotsIcon } from "src/components/common/assets/DotsIcon";
-import toast from "react-hot-toast";
 
 export const Dropdown = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const isEdit = () => {
-    console.log("isEdit", props.planID);
+    console.log("isEdit", props.plan.id);
   };
 
   const isPlanDelete = () => {
-    const planDoc = db.collection("plans").doc(props?.planID);
+    const planDoc = db.collection("plans").doc(props.plan.id);
     planDoc
       .delete()
       .then(() => {
@@ -43,7 +43,7 @@ export const Dropdown = (props) => {
             <DotsIcon />
           </Menu.Button>
         </div>
-        <Menu.Items className="py-1.5 px-1 bg-white text-sm rounded-md shadow-lg flex flex-col z-10 absolute -bottom-20 right-0 ring-2 ring-gray-200 ring-opacity-25">
+        <Menu.Items className="py-1.5 px-1 bg-white text-sm rounded-md shadow-lg flex flex-col z-10 absolute -bottom-20 right-0">
           <Menu.Item>
             {({ active }) => (
               <button
