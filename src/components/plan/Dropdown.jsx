@@ -4,12 +4,15 @@ import { db } from "src/utils/firebase/firebase";
 import { Menu } from "@headlessui/react";
 import { Modal } from "src/components/common/Modal";
 import { DotsIcon } from "src/components/common/assets/DotsIcon";
+import { FixPlanForm } from "src/components/plan/FixPlanForm";
 
 export const Dropdown = (props) => {
+  const [isOpenFixForm, setIsOpenFixForm] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const isEdit = () => {
-    console.log("isEdit", props.plan.id);
+  const isPlanEdit = () => {
+    console.log("isEdit", props.plan);
+    openFixForm();
   };
 
   const isPlanDelete = () => {
@@ -27,6 +30,17 @@ export const Dropdown = (props) => {
       });
   };
 
+  // ========== Form for edit ===========
+  const openFixForm = () => {
+    setIsOpenFixForm(true);
+  };
+
+  const closeFixForm = () => {
+    setIsOpenFixForm(false);
+  };
+  // ====================================
+
+  // ======== Modal for delete ========
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -34,6 +48,7 @@ export const Dropdown = (props) => {
   const openModal = () => {
     setIsOpen(true);
   };
+  // ====================================
 
   return (
     <>
@@ -47,7 +62,7 @@ export const Dropdown = (props) => {
           <Menu.Item>
             {({ active }) => (
               <button
-                onClick={isEdit}
+                onClick={isPlanEdit}
                 className={`${active && "bg-gray-100"} py-1.5 px-6 rounded-md`}
               >
                 編集
@@ -67,6 +82,13 @@ export const Dropdown = (props) => {
           </Menu.Item>
         </Menu.Items>
       </Menu>
+
+      <FixPlanForm
+        plan={props.plan}
+        getUsersPlans={props.getUsersPlans}
+        isOpenFixForm={isOpenFixForm}
+        closeFixForm={closeFixForm}
+      />
 
       <Modal
         isOpen={isOpen}
