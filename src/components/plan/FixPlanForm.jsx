@@ -6,12 +6,15 @@ import { db } from "src/utils/firebase/firebase";
 import { useForm } from "react-hook-form";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
+import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { CloseIcon } from "src/components/common/assets/CloseIcon";
 import { EmojiIcon } from "src/components/common/assets/EmojiIcon";
 
-export const PlanForm = (props) => {
+export const FixPlanForm = (props) => {
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
-  const [emoji, setEmoji] = useState(null); //アイコン
+  const [emoji, setEmoji] = useState(props.plan.planIcon); //アイコン
+
+  const { userInfo } = useCurrentUser();
 
   const {
     register,
@@ -21,16 +24,15 @@ export const PlanForm = (props) => {
   } = useForm();
 
   const on_submit = (data) => {
-    console.log("on_submit関数内！！！");
+    console.log("編集！！！", data);
 
-    db.collection("plans")
-      .add({
-        userID: props.userInfo?.uid,
+    const planDoc = db.collection("plans").doc(props.plan.id);
+    planDoc
+      .update({
         title: data.title,
         planIcon: emoji,
         startDate: data.startDate,
         lastDate: data.lastDate,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(async () => {
@@ -42,9 +44,9 @@ export const PlanForm = (props) => {
         reset(result);
 
         setEmoji(null);
-        props.closeFormModal();
+        props.closeFixForm();
         props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
-        await router.push(`/${props.userInfo.uid}/plan`);
+        await router.push(`/${userInfo.uid}/plan`);
       })
       .catch((error) => {
         console.error("Error adding document: ", error);
@@ -56,11 +58,11 @@ export const PlanForm = (props) => {
   };
 
   return (
-    <Transition appear show={props.isOpenModal} as={Fragment}>
+    <Transition appear show={props.isOpenFixForm} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto text-gray-800"
-        onClose={props.closeFormModal}
+        onClose={props.closeFixForm}
       >
         <Transition.Child
           as={Fragment}
@@ -76,7 +78,7 @@ export const PlanForm = (props) => {
               <button
                 type="button"
                 className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
-                onClick={props.closeFormModal}
+                onClick={props.closeFixForm}
               >
                 <CloseIcon />
               </button>
@@ -109,6 +111,7 @@ export const PlanForm = (props) => {
               <label className="pb-7 font-semibold flex flex-col">
                 旅行タイトル
                 <input
+                  defaultValue={props.plan.title}
                   type="text"
                   placeholder="旅行タイトル"
                   {...register("title", {
@@ -128,6 +131,7 @@ export const PlanForm = (props) => {
               <label className="pb-7 font-semibold flex flex-col">
                 出発日
                 <input
+                  defaultValue={props.plan.beforeStartDate}
                   type="date"
                   {...register("startDate", {
                     required: true,
@@ -145,6 +149,7 @@ export const PlanForm = (props) => {
               <label className="pb-12 font-semibold flex flex-col">
                 帰着日
                 <input
+                  defaultValue={props.plan.beforeLastDate}
                   type="date"
                   {...register("lastDate", {
                     required: true,
@@ -164,7 +169,7 @@ export const PlanForm = (props) => {
                   type="submit"
                   className="px-8 py-3 bg-yellow-500 text-white tracking-widest rounded-full hover:opacity-90 focus:outline-none"
                 >
-                  登録
+                  編集
                 </button>
               </div>
             </form>

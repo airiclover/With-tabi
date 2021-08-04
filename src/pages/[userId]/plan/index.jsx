@@ -30,7 +30,7 @@ const UserPlanPage = () => {
       .where("userID", "==", userInfo.uid)
       .orderBy("startDate", "desc") //startDateを降順でソートかける
       .get()
-      .then((querySnapshot) => {
+      .then(async (querySnapshot) => {
         const plansData = [];
 
         const fixDate = (data) => {
@@ -54,6 +54,8 @@ const UserPlanPage = () => {
             planIcon: data.planIcon,
             startDate: fixStartDate,
             lastDate: fixLastDate,
+            beforeStartDate: data.startDate,
+            beforeLastDate: data.lastDate,
           });
         });
         plansData.length == 0 ? setPlans(null) : setPlans(plansData);
@@ -87,7 +89,10 @@ const UserPlanPage = () => {
             plans.map((plan) => {
               return (
                 <div key={plan.id} className="relative">
-                  <Link href="/">
+                  <Link
+                    href="/[userId]/plan/[planId]"
+                    as={`/${userInfo.uid}/plan/${plan.id}`}
+                  >
                     <a>
                       <div className="h-24 bg-white mt-5 py-3 px-4 rounded-xl">
                         <h2 className="text-lg font-bold leading-5">
@@ -130,7 +135,6 @@ const UserPlanPage = () => {
             />
           </div>
         )}
-        {/* ========================== */}
 
         <button onClick={openFormModal} className="fixed bottom-6 right-6">
           <div className="h-16 w-16 bg-yellow-500 text-center rounded-full flex flex-col relative hover:bg-hover-yellow">
