@@ -19,7 +19,6 @@ export const FixPlanForm = (props) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
@@ -36,14 +35,6 @@ export const FixPlanForm = (props) => {
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(async () => {
-        const result = {
-          title: "",
-          startDate: "",
-          lastDate: "",
-        };
-        reset(result);
-
-        setEmoji(null);
         props.closeFixForm();
         props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
         await router.push(`/${userInfo.uid}/plan`);
