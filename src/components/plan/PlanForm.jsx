@@ -21,6 +21,7 @@ export const PlanForm = (props) => {
   } = useForm();
 
   const on_submit = (data) => {
+    //絵文字等のサロゲートペア対応する
     console.log("on_submit関数内！！！");
 
     db.collection("plans")
