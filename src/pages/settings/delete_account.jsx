@@ -28,6 +28,8 @@ const DeleteAccount = () => {
   };
 
   const deleteAccount = () => {
+    const toastId = toast.loading("アカウントを削除しています。");
+
     isPlanDelete();
     deleteUserDoc();
 
@@ -36,25 +38,13 @@ const DeleteAccount = () => {
       .delete()
       .then(() => {
         setUserInfo(undefined);
-
-        toast.success("アカウントが削除されました");
+        toast.dismiss(toastId);
         router.push("/");
+        toast.success("アカウントが削除されました");
       })
       .catch((error) => {
+        toast.dismiss(toastId);
         console.log(error);
-        toast.error("エラーが発生しました。時間をおいてから試してください。");
-      });
-  };
-
-  const deleteUserDoc = () => {
-    const userDoc = db.collection("users").doc(userInfo?.uid);
-    userDoc
-      .delete()
-      .then(() => {
-        console.log("docデータ削除したよ！");
-      })
-      .catch((error) => {
-        console.error("doc削除エラー: ", error);
         toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
   };
@@ -71,7 +61,23 @@ const DeleteAccount = () => {
         });
       })
       .catch((error) => {
+        toast.dismiss();
         console.log("プランデータ削除【エラー】だよ！", error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
+      });
+  };
+
+  const deleteUserDoc = () => {
+    const userDoc = db.collection("users").doc(userInfo?.uid);
+    userDoc
+      .delete()
+      .then(() => {
+        console.log("docデータ削除したよ！");
+      })
+      .catch((error) => {
+        toast.dismiss();
+        console.error("doc削除エラー: ", error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
   };
 
