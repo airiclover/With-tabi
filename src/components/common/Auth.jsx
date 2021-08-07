@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import firebase from "src/utils/firebase/firebase";
 import { auth, db } from "src/utils/firebase/firebase";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
 import { useSetRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
@@ -15,35 +14,39 @@ export const Auth = (props) => {
   const setUserInfo = useSetRecoilState(userState);
   const router = useRouter();
 
-  const twitterLogin = useCallback(async () => {
+  const twitterLogin = async () => {
+    toast.loading("Loading...🏝");
+
     const twitterProvider = new firebase.auth.TwitterAuthProvider();
     await auth
       .signInWithPopup(twitterProvider)
-      .then(async (userCredential) => {
+      .then((userCredential) => {
         const userData = userCredential.user;
         commonAuth(userData);
       })
       .catch(function (error) {
+        toast.dismiss();
         console.log(error);
         toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
-  const googleLogin = useCallback(async () => {
+  const googleLogin = async () => {
+    toast.loading("Loading...🏝");
+
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     await auth
       .signInWithPopup(googleProvider)
-      .then(async (userCredential) => {
+      .then((userCredential) => {
         const userData = userCredential.user;
         commonAuth(userData);
       })
       .catch(function (error) {
+        toast.dismiss();
         console.log(error);
         toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   const commonAuth = async (userData) => {
     const uid = userData.uid;
@@ -78,15 +81,17 @@ export const Auth = (props) => {
         }
       })
       .catch((error) => {
+        toast.dismiss();
         console.log("Auth(共通)エラーだよ！:", error);
         toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
 
+    toast.dismiss();
     await router.push(`/${uid}/plan`);
   };
 
   // docに該当uidが存在しない場合、プロバイダ情報やプロフィールをsetする
-  const setUserDoc = useCallback((uid, providerData) => {
+  const setUserDoc = (uid, providerData) => {
     db.collection("users")
       .doc(uid)
       .set({
@@ -102,10 +107,11 @@ export const Auth = (props) => {
         toast.success("アカウントが新規作成されました");
       })
       .catch((error) => {
+        toast.dismiss();
         console.error("Auth新規登録エラーだよ！: ", error);
         toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
-  }, []);
+  };
 
   return (
     <div className="min-h-screen pt-28 px-4 text-center">

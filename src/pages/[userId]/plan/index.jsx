@@ -8,12 +8,14 @@ import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 import { Dropdown } from "src/components/plan/Dropdown";
+import { fixDate } from "src/components/plan/fixDate";
 import { CalendarIcon } from "src/components/common/assets/CalendarIcon";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
 
 const UserPlanPage = () => {
   const [plans, setPlans] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const { fixedDate } = fixDate();
 
   const { userInfo } = useCurrentUser();
 
@@ -33,20 +35,11 @@ const UserPlanPage = () => {
       .then(async (querySnapshot) => {
         const plansData = [];
 
-        const fixDate = (data) => {
-          const date = data.replace(/-/g, "/");
-          const setDate = new Date(date);
-          const arrayWeek = ["日", "月", "火", "水", "木", "金", "土"];
-          const week = `(${arrayWeek[setDate.getDay()]})`;
-
-          return date + week;
-        };
-
         querySnapshot.forEach((doc) => {
           const data = doc.data();
 
-          const fixStartDate = fixDate(data.startDate);
-          const fixLastDate = fixDate(data.lastDate);
+          const fixStartDate = fixedDate(data.startDate);
+          const fixLastDate = fixedDate(data.lastDate);
 
           plansData.push({
             id: doc.id,
