@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 import { db } from "src/utils/firebase/firebase";
 import { Emoji } from "emoji-mart";
+import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 import { CommonLayout } from "src/components/layouts/CommonLayout";
+import { fixDate } from "src/components/plan/fixDate";
 
 const PlanId = () => {
   const [plan, setPlan] = useState();
   const [startDate, setStartDate] = useState();
   const [lastDate, setLastDate] = useState();
   const router = useRouter();
+  const { fixedDate } = fixDate();
   console.log(router.query.planId);
 
   useRequireLogin();
@@ -27,17 +29,8 @@ const PlanId = () => {
       .then((doc) => {
         const docData = doc.data();
 
-        const fixDate = (data) => {
-          const date = data.replace(/-/g, "/");
-          const setDate = new Date(date);
-          const arrayWeek = ["日", "月", "火", "水", "木", "金", "土"];
-          const week = `(${arrayWeek[setDate.getDay()]})`;
-
-          return date + week;
-        };
-
-        const fixStartDate = fixDate(docData.startDate);
-        const fixLastDate = fixDate(docData.lastDate);
+        const fixStartDate = fixedDate(docData.startDate);
+        const fixLastDate = fixedDate(docData.lastDate);
 
         if (doc.exists) {
           setPlan(docData);
@@ -60,6 +53,7 @@ const PlanId = () => {
         <div className="py-6 px-4  font-extrabold">
           <h1 className="text-2xl">
             <Emoji emoji={plan?.planIcon} size={25} />
+            &nbsp;
             {plan?.title}
           </h1>
           <p className="py-2 text-right">{`${startDate} - ${lastDate}`}</p>
