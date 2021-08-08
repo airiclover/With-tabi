@@ -4,7 +4,7 @@ export const FirstView = () => {
   return (
     <div className="px-4">
       <h1 className="pt-12 pb-14 text-2xl font-semibold tracking-wider">
-        旅を自由にプランしよう
+        旅をもっと楽しく快適に
       </h1>
       <div className="h-56 flex justify-around">
         <div className="w-5/12 pr-2 text-sm font-semibold leading-7">
