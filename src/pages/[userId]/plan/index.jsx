@@ -8,14 +8,14 @@ import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 import { Dropdown } from "src/components/plan/Dropdown";
-import { FixDate } from "src/components/plan/FixDate";
+import { fixDate } from "src/components/plan/fixDate";
 import { CalendarIcon } from "src/components/common/assets/CalendarIcon";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
 
 const UserPlanPage = () => {
   const [plans, setPlans] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const { fixedDate } = FixDate();
+  const { fixedDate } = fixDate();
 
   const { userInfo } = useCurrentUser();
 

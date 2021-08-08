@@ -4,7 +4,7 @@ import { db } from "src/utils/firebase/firebase";
 import { Emoji } from "emoji-mart";
 import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 import { CommonLayout } from "src/components/layouts/CommonLayout";
-import { FixDate } from "src/components/plan/FixDate";
+import { fixDate } from "src/components/plan/fixDate";
 import { PlanTab } from "src/components/plan/PlanTab";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
@@ -16,7 +16,7 @@ const PlanId = () => {
   const [lastDate, setLastDate] = useState();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const router = useRouter();
-  const { fixedDate } = FixDate();
+  const { fixedDate } = fixDate();
   const { userInfo } = useCurrentUser();
 
   useRequireLogin();
