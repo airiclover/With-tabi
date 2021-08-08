@@ -8,14 +8,14 @@ import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
 import { Dropdown } from "src/components/plan/Dropdown";
-import { fixDate } from "src/components/plan/fixDate";
+import { FixDate } from "src/components/plan/FixDate";
 import { CalendarIcon } from "src/components/common/assets/CalendarIcon";
 import { PlusIcon } from "src/components/common/assets/PlusIcon";
 
 const UserPlanPage = () => {
   const [plans, setPlans] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const { fixedDate } = fixDate();
+  const { fixedDate } = FixDate();
 
   const { userInfo } = useCurrentUser();
 
@@ -88,7 +88,7 @@ const UserPlanPage = () => {
                   >
                     <a>
                       <div className="h-24 bg-white mt-5 py-3 px-4 rounded-xl">
-                        <h2 className="text-lg font-bold leading-5">
+                        <h2 className="text-lg font-bold leading-tight">
                           <div className="flex">
                             {plan.planIcon ? (
                               <div className="pr-2">
