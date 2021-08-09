@@ -25,10 +25,6 @@ export const PlanForm = (props) => {
     //絵文字等のサロゲートペア対応する
     console.log("on_submit関数内！！！");
 
-    const startNumber = data.startDate.replace(/-/g, "");
-    const lastNumber = data.lastDate.replace(/-/g, "");
-    const getNumber = lastNumber - startNumber + 1;
-
     const startDate = new Date(data.startDate);
     const lastDate = new Date(data.lastDate);
     const last = lastDate.setDate(lastDate.getDate() + 1);
@@ -37,11 +33,13 @@ export const PlanForm = (props) => {
 
     for (let d = new Date(startDate); d < last; d.setDate(d.getDate() + 1)) {
       startDate.setDate(startDate.getDate() + 1);
-      arrDates.push(new Date(d));
+      const newDate = new Date(d);
+      const month = newDate.getMonth() + 1;
+      const date = newDate.getDate();
+      arrDates.push(`${month}/${date}`);
     }
-    console.log(arrDates);
 
-    getNumber <= 7 //プラン日程が7日までの場合、かつ、
+    arrDates.length <= 7 //プラン日程が7日までの場合、かつ、
       ? data.startDate <= data.lastDate //出発日が帰着日より未来の場合
         ? db
             .collection("plans")
@@ -55,17 +53,18 @@ export const PlanForm = (props) => {
               updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
               arrDates: arrDates,
             })
-            .then(async (docRef) => {
+            .then(async () => {
+              // .then(async (docRef) => {
               // サブコレクション登録
-              arrDates.map((arrDate) => {
-                return db
-                  .collection("plans")
-                  .doc(docRef.id)
-                  .collection("plan")
-                  .add({
-                    date: arrDate,
-                  });
-              });
+              // arrDates.map((arrDate) => {
+              //   return db
+              //     .collection("plans")
+              //     .doc(docRef.id)
+              //     .collection("plan")
+              //     .add({
+              //       date: arrDate,
+              //     });
+              // });
 
               const result = {
                 title: "",
