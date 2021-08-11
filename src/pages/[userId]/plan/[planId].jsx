@@ -3,18 +3,20 @@ import { useRouter } from "next/router";
 import { db } from "src/utils/firebase/firebase";
 import { Emoji } from "emoji-mart";
 import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
-import { CommonLayout } from "src/components/layouts/CommonLayout";
-import { fixDate } from "src/components/plan/fixDate";
-import { PlanTab } from "src/components/plan/PlanTab";
-import { PlusIcon } from "src/components/common/assets/PlusIcon";
 import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
 import { PlanDetailForm } from "src/components/plan/PlanDetailForm";
+import { fixDate } from "src/components/plan/fixDate";
+import { PlanTab } from "src/components/plan/PlanTab";
+import { DetailWrap } from "src/components/plan/DetailWrap";
+import { CommonLayout } from "src/components/layouts/CommonLayout";
+import { PlusIcon } from "src/components/common/assets/PlusIcon";
 
 const PlanId = () => {
   const [plan, setPlan] = useState();
   const [startDate, setStartDate] = useState();
   const [lastDate, setLastDate] = useState();
   const [arrPlans, setArrPlans] = useState([]);
+  const [isTabId, setIsTabId] = useState(0);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const router = useRouter();
   const { fixedDate } = fixDate();
@@ -58,8 +60,12 @@ const PlanId = () => {
 
                 planData.push({
                   id: doc.id,
+                  planIcon: data.planIcon,
                   title: data.title,
                   startTime: data.startTime,
+                  lastTime: data.lastTime,
+                  memo: data.memo,
+                  money: data.money,
                 });
               });
 
@@ -93,16 +99,24 @@ const PlanId = () => {
       {/* 念の為、「arrPlans.length == plan.arrDates.length」のチェックも挟む */}
       {plan && arrPlans.length == plan.arrDates.length ? (
         <div>
-          <div className="pt-6 pb-3 px-4 font-extrabold">
-            <h1 className="text-2xl leading-snug">
-              <Emoji emoji={plan?.planIcon} size={25} />
-              &nbsp;
-              {plan?.title}
-            </h1>
+          <div className="pt-6 pb-4 px-4 font-extrabold">
+            <div className="flex items-center">
+              {plan?.planIcon && (
+                <div className="pt-1 pr-1.5">
+                  <Emoji emoji={plan?.planIcon} size={25} />
+                </div>
+              )}
+              <h1 className="text-2xl leading-snug">{plan?.title}</h1>
+            </div>
+
             <p className="py-2 text-right">{`${startDate} - ${lastDate}`}</p>
           </div>
 
-          <PlanTab plan={plan} arrPlans={arrPlans} />
+          {plan.arrDates.length <= 1 ? (
+            <DetailWrap arrPlans={arrPlans} />
+          ) : (
+            <PlanTab plan={plan} arrPlans={arrPlans} setIsTabId={setIsTabId} />
+          )}
         </div>
       ) : (
         <div>ローディング中</div>
@@ -119,9 +133,12 @@ const PlanId = () => {
 
       <PlanDetailForm
         userInfo={userInfo}
+        plan={plan}
         isOpenModal={isOpenModal}
         closeFormModal={closeFormModal}
-        // getUsersPlans={getUsersPlans}
+        query={router.query.planId}
+        isTabId={isTabId}
+        getPlan={getPlan}
       />
     </CommonLayout>
   );
