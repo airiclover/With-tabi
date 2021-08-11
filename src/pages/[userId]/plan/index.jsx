@@ -102,7 +102,11 @@ const UserPlanPage = () => {
                       </div>
                     </a>
                   </Link>
-                  <Dropdown plan={plan} getUsersPlans={getUsersPlans} />
+                  <Dropdown
+                    page="planPage"
+                    plan={plan}
+                    getUsersPlans={getUsersPlans}
+                  />
                 </div>
               );
             })

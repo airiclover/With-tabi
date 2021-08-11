@@ -113,9 +113,19 @@ const PlanId = () => {
           </div>
 
           {plan.arrDates.length <= 1 ? (
-            <DetailWrap arrPlans={arrPlans} />
+            <DetailWrap
+              arrPlans={arrPlans}
+              getPlan={getPlan}
+              query={router.query.planId}
+            />
           ) : (
-            <PlanTab plan={plan} arrPlans={arrPlans} setIsTabId={setIsTabId} />
+            <PlanTab
+              plan={plan}
+              arrPlans={arrPlans}
+              getPlan={getPlan}
+              query={router.query.planId}
+              setIsTabId={setIsTabId}
+            />
           )}
         </div>
       ) : (

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Emoji } from "emoji-mart";
+import { Dropdown } from "src/components/plan/Dropdown";
 
 export const DetailWrap = (props) => {
   return (
@@ -12,7 +13,7 @@ export const DetailWrap = (props) => {
               {arrPlan.map((plan) => (
                 <li
                   key={plan.id}
-                  className="bg-white text-sm mb-5 p-5 rounded-md"
+                  className="bg-white text-sm mb-5 pt-5 px-5 pb-9 rounded-md relative"
                 >
                   <div className="font-semibold flex items-center">
                     <div className="flex flex-col items-center">
@@ -44,6 +45,12 @@ export const DetailWrap = (props) => {
                   {plan.money && (
                     <p className="mt-4 pt-4 text-xs pr-2 text-right border-dotted border-t-2 border-gray-400">{`金額：¥${plan.money}`}</p>
                   )}
+                  <Dropdown
+                    page="detailPage"
+                    plan={plan}
+                    getPlan={props.getPlan}
+                    query={props.query}
+                  />
                 </li>
               ))}
             </ul>
