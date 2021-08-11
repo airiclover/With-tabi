@@ -1,4 +1,3 @@
-import router from "next/router";
 import firebase from "src/utils/firebase/firebase";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
@@ -53,18 +52,9 @@ export const PlanForm = (props) => {
               updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
               arrDates: arrDates,
             })
-            .then(async () => {
-              // .then(async (docRef) => {
-              // サブコレクション登録
-              // arrDates.map((arrDate) => {
-              //   return db
-              //     .collection("plans")
-              //     .doc(docRef.id)
-              //     .collection("plan")
-              //     .add({
-              //       date: arrDate,
-              //     });
-              // });
+            .then(() => {
+              props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
+              props.closeFormModal();
 
               const result = {
                 title: "",
@@ -72,11 +62,7 @@ export const PlanForm = (props) => {
                 lastDate: "",
               };
               reset(result);
-
               setEmoji("");
-              props.closeFormModal();
-              props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
-              await router.push(`/${props.userInfo.uid}/plan`);
             })
             .catch((error) => {
               console.error("Error adding document: ", error);
@@ -105,7 +91,7 @@ export const PlanForm = (props) => {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="min-h-screen pt-6 px-4 inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white">
+          <div className="min-h-screen pt-6 px-6 inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white">
             <div className="text-right">
               <button
                 type="button"
