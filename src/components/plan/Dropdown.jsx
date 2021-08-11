@@ -30,6 +30,25 @@ export const Dropdown = (props) => {
       });
   };
 
+  const isPlanDetailDelete = () => {
+    const detailDoc = db
+      .collection("plans")
+      .doc(props.query)
+      .collection("plan")
+      .doc(props.plan.id);
+    detailDoc
+      .delete()
+      .then(() => {
+        console.log("planデータ削除したよ！");
+        toast.success("データを削除しました。");
+        props.getPlan();
+      })
+      .catch((error) => {
+        console.error("doc削除エラー: ", error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
+      });
+  };
+
   // ========== Form for edit ===========
   const openFixForm = () => {
     setIsOpenFixForm(true);
@@ -93,7 +112,7 @@ export const Dropdown = (props) => {
       <Modal
         isOpen={isOpen}
         closeModal={closeModal}
-        isDelete={isPlanDelete}
+        isDelete={props.page === "planPage" ? isPlanDelete : isPlanDetailDelete}
         title="プランを削除"
         subTitle="プランが削除されます。よろしいですか？"
         button1="キャンセル"
