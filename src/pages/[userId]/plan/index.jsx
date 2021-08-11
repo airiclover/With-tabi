@@ -89,9 +89,9 @@ const UserPlanPage = () => {
                     <a>
                       <div className="h-24 bg-white mt-5 py-3 px-4 rounded-xl">
                         <h2 className="text-lg font-bold leading-tight">
-                          <div className="flex">
+                          <div className="flex items-center">
                             {plan.planIcon ? (
-                              <div className="pr-2">
+                              <div className="pt-1 pr-1.5">
                                 <Emoji emoji={plan.planIcon} size={18} />
                               </div>
                             ) : null}

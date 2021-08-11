@@ -1,8 +1,6 @@
-// import router from "next/router";
-// import firebase from "src/utils/firebase/firebase";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
-// import { db } from "src/utils/firebase/firebase";
+import { db } from "src/utils/firebase/firebase";
 import { useForm } from "react-hook-form";
 import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
@@ -16,40 +14,43 @@ export const PlanDetailForm = (props) => {
   const {
     register,
     handleSubmit,
-    // reset,
+    reset,
     formState: { errors },
   } = useForm();
 
   const on_submit = (data) => {
     //絵文字等のサロゲートペア対応する
-    console.log("on_submit関数内！！！", data);
+    console.log("on_submitディテール！", data);
 
-    // db.collection("plans")
-    //   .add({
-    //     userID: props.userInfo?.uid,
-    //     title: data.title,
-    //     planIcon: emoji,
-    //     startDate: data.startDate,
-    //     lastDate: data.lastDate,
-    //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    //     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    //   })
-    //   .then(async () => {
-    //     const result = {
-    //       title: "",
-    //       startDate: "",
-    //       lastDate: "",
-    //     };
-    //     reset(result);
+    db.collection("plans")
+      .doc(props.query)
+      .collection("plan")
+      .add({
+        day: props.plan.arrDates[props.isTabId], // Tabで選択した日にち
+        planIcon: emoji,
+        title: data.title,
+        startTime: data.startTime,
+        lastTime: data.lastTime,
+        memo: data.memo,
+        money: data.money.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"),
+      })
+      .then(() => {
+        props.getPlan(); //Tabで日付分けたい＆startTimeを降順でソートしたものを反映したいため関数呼び出し
+        props.closeFormModal();
 
-    //     setEmoji("");
-    //     props.closeFormModal();
-    //     props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
-    //     await router.push(`/${props.userInfo.uid}/plan`);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error adding document: ", error);
-    //   });
+        const result = {
+          title: "",
+          startTime: "",
+          lastTime: "",
+          memo: "",
+          money: "",
+        };
+        reset(result);
+        setEmoji("");
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
   };
 
   const openEmoji = () => {
@@ -72,7 +73,7 @@ export const PlanDetailForm = (props) => {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="min-h-screen pt-6 px-4 inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white">
+          <div className="min-h-screen pt-6 pb-10 px-6 inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white">
             <div className="text-right">
               <button
                 type="button"
@@ -126,38 +127,67 @@ export const PlanDetailForm = (props) => {
                 )}
               </label>
 
-              <label className="pb-7 font-semibold flex flex-col">
-                出発日
-                <input
-                  type="time"
-                  {...register("startDate", {
-                    required: true,
-                    pattern: /^[0-9]+$/,
-                    maxLength: 10,
+              <div className="flex pb-6">
+                <label className="w-5/12 mr-6 font-semibold">
+                  開始時刻
+                  <input
+                    type="time"
+                    {...register("startTime", {
+                      required: true,
+                    })}
+                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg inline-block"
+                  />
+                  {errors.startTime && (
+                    <span className="pt-1 text-red-500 text-xs">
+                      入力は必須です
+                    </span>
+                  )}
+                </label>
+
+                <label className="w-5/12 font-semibold">
+                  終了時刻
+                  <input
+                    type="time"
+                    {...register("lastTime", {
+                      required: false,
+                    })}
+                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                  />
+                </label>
+              </div>
+
+              <label className="mb-6 font-semibold flex flex-col">
+                メモ
+                <textarea
+                  placeholder="メモ"
+                  {...register("memo", {
+                    required: false,
+                    maxLength: 800,
                   })}
-                  className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                  className="w-full h-24 p-2.5 text-base bg-gray-100 rounded-lg resize-none"
                 />
-                {errors.startDate && (
+                {errors.memo && (
                   <span className="pt-1 text-red-500 text-xs">
-                    入力は必須です(数値8文字)
+                    入力は800文字以内です。
                   </span>
                 )}
               </label>
 
-              <label className="pb-12 font-semibold flex flex-col">
-                帰着日
+              <label className="mb-10 font-semibold flex flex-col">
+                金額
                 <input
-                  type="time"
-                  {...register("lastDate", {
-                    required: true,
+                  type="text"
+                  placeholder="10000(数値のみ)"
+                  {...register("money", {
+                    required: false,
                     pattern: /^[0-9]+$/,
-                    maxLength: 10,
+                    maxLength: 8,
                   })}
-                  className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                  className="w-full p-2 bg-gray-100 rounded-lg"
                 />
-                {errors.lastDate && (
+                {errors.money && (
                   <span className="pt-1 text-red-500 text-xs">
-                    入力は必須です(数値8文字)
+                    数値(半角8桁以内)を入力して下さい。
                   </span>
                 )}
               </label>
