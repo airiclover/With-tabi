@@ -4,7 +4,7 @@ import { db } from "src/utils/firebase/firebase";
 import { Menu } from "@headlessui/react";
 import { Modal } from "src/components/common/Modal";
 import { DotsIcon } from "src/components/common/assets/DotsIcon";
-import { FixPlanForm } from "src/components/plan/FixPlanForm";
+import { EditPlanForm } from "src/components/plan/EditPlanForm";
 
 export const Dropdown = (props) => {
   const [isOpenFixForm, setIsOpenFixForm] = useState(false);
@@ -102,9 +102,12 @@ export const Dropdown = (props) => {
         </Menu.Items>
       </Menu>
 
-      <FixPlanForm
+      <EditPlanForm
+        planPage={props.page}
         plan={props.plan}
+        query={props.query}
         getUsersPlans={props.getUsersPlans}
+        getPlan={props.getPlan}
         isOpenFixForm={isOpenFixForm}
         closeFixForm={closeFixForm}
       />

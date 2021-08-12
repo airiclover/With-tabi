@@ -6,6 +6,7 @@ import { EmojiMart } from "src/utils/emojimart";
 import { Emoji } from "emoji-mart";
 import { CloseIcon } from "src/components/common/assets/CloseIcon";
 import { EmojiIcon } from "src/components/common/assets/EmojiIcon";
+import toast from "react-hot-toast";
 
 export const PlanDetailForm = (props) => {
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
@@ -22,35 +23,38 @@ export const PlanDetailForm = (props) => {
     //絵文字等のサロゲートペア対応する
     console.log("on_submitディテール！", data);
 
-    db.collection("plans")
-      .doc(props.query)
-      .collection("plan")
-      .add({
-        day: props.plan.arrDates[props.isTabId], // Tabで選択した日にち
-        planIcon: emoji,
-        title: data.title,
-        startTime: data.startTime,
-        lastTime: data.lastTime,
-        memo: data.memo,
-        money: data.money.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"),
-      })
-      .then(() => {
-        props.getPlan(); //Tabで日付分けたい＆startTimeを降順でソートしたものを反映したいため関数呼び出し
-        props.closeFormModal();
+    data.lastTime && data.lastTime <= data.startTime // 終了時刻があるかつ、開始時刻と終了時刻が逆の場合
+      ? toast.error("正しい時刻を登録して下さい。")
+      : db
+          .collection("plans")
+          .doc(props.query)
+          .collection("plan")
+          .add({
+            day: props.plan.arrDates[props.isTabId], // Tabで選択した日にち
+            planIcon: emoji,
+            title: data.title,
+            startTime: data.startTime,
+            lastTime: data.lastTime,
+            memo: data.memo,
+            money: data.money.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"),
+          })
+          .then(() => {
+            props.getPlan(); //Tabで日付分けたい＆startTimeを降順でソートしたものを反映したいため関数呼び出し
+            props.closeFormModal();
 
-        const result = {
-          title: "",
-          startTime: "",
-          lastTime: "",
-          memo: "",
-          money: "",
-        };
-        reset(result);
-        setEmoji("");
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-      });
+            const result = {
+              title: "",
+              startTime: "",
+              lastTime: "",
+              memo: "",
+              money: "",
+            };
+            reset(result);
+            setEmoji("");
+          })
+          .catch((error) => {
+            console.error("Error adding document: ", error);
+          });
   };
 
   const openEmoji = () => {
@@ -174,7 +178,7 @@ export const PlanDetailForm = (props) => {
               </label>
 
               <label className="mb-10 font-semibold flex flex-col">
-                金額
+                推定金額
                 <input
                   type="text"
                   placeholder="10000(数値のみ)"
