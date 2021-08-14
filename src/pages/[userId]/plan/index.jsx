@@ -49,6 +49,8 @@ const UserPlanPage = () => {
             lastDate: fixLastDate,
             beforeStartDate: data.startDate,
             beforeLastDate: data.lastDate,
+            arrDates: data.arrDates,
+            unnecessaryDate: data.unnecessaryDate,
           });
         });
         plansData.length == 0 ? setPlans(null) : setPlans(plansData);

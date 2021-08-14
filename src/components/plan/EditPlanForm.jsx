@@ -37,41 +37,74 @@ export const EditPlanForm = (props) => {
       arrDates.push(`${month}/${date}`);
     }
 
+    // =================================
+    // 👇 日程変更があった場合、不要となる日付を抽出するため以下処理
+
+    const beforeArr = props.plan.arrDates;
+    const result = [...beforeArr, ...arrDates]; //元々登録されていたの日程配列と、変更後の日程配列を合わせる
+    const duplicateArr = result.filter(
+      (x, i, self) => self.indexOf(x) === i && i !== self.lastIndexOf(x)
+    ); // 重複しているもののみを抽出
+    const setResult = [...beforeArr, ...duplicateArr]; // 変更前の配列と重複している配列を合わせる
+    const unnecessaryArr = setResult.filter(
+      (x, i, self) => self.indexOf(x) === self.lastIndexOf(x)
+    ); // 変更前の配列から不要な値(重複していたもの)のみを抽出
+    // =================================
+
     const planDoc = db.collection("plans").doc(props.plan.id);
-    // const detailDoc = db
-    //   .collection("plans")
-    //   .doc(props.query)
-    //   .collection("plan")
-    //   .doc(props.plan.id);
 
-    arrDates.length <= 7 //プラン日程が7日までの場合、かつ、
-      ? data.startDate <= data.lastDate // 出発日 < 帰着日の場合
-        ? planDoc
-            .update({
-              title: data.title,
-              planIcon: emoji,
-              startDate: data.startDate,
-              lastDate: data.lastDate,
-              updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-              arrDates: arrDates,
-            })
-            .then(() => {
-              // 🚨 👇日程を変えた場合サブコレクションをどうするか決める 🚨
-              // detailDoc.update({
-              //   day: data.
-              // })
+    props.plan.unnecessaryDate == false // 詳細プランの日付変更が必要なため処理させない
+      ? arrDates.length <= 7 //プラン日程が7日までの場合、かつ、
+        ? data.startDate <= data.lastDate // 出発日 < 帰着日の場合
+          ? planDoc
+              .update({
+                title: data.title,
+                planIcon: emoji,
+                startDate: data.startDate,
+                lastDate: data.lastDate,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                arrDates: arrDates,
+              })
+              .then(() => {
+                const changeDateArr = [];
 
-              props.closeFixForm();
-              props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
-            })
-            .catch((error) => {
-              console.error("Error adding document: ", error);
-            })
-        : toast.error("正しい帰着日を登録して下さい。") // 出発日 > 帰着日の場合
-      : toast.error("日程が7日を超える場合はプランを分けて登録して下さい。"); //プラン日程が8日以上の場合
+                unnecessaryArr.length != 0 && // 日程変更があり、不要な日付があった場合以下処理をして、変更が必要な詳細データがないかチェックする
+                  unnecessaryArr.map((unnecessaryDay) => {
+                    const dateArr = [];
+
+                    planDoc
+                      .collection("plan")
+                      .where("day", "==", unnecessaryDay)
+                      .get()
+                      .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                          planDoc.collection("plan").doc(doc.id).update({
+                            dateChange: true,
+                          });
+                          dateArr.push(doc.data().day);
+                        });
+
+                        // 上記forEachでデータがなかったら以下処理しないよう条件分岐
+                        // (でないと空配列が入り1としてカウントされてしまうため)
+                        dateArr.length != 0 && changeDateArr.push(dateArr);
+
+                        // 不要な日付に詳細データがあった場合のみ、
+                        // 「unnecessaryDate: true」をドキュメントに追加させる
+                        changeDateArr.length != 0 &&
+                          planDoc.update({ unnecessaryDate: true });
+                      });
+                  });
+
+                props.closeFixForm();
+                props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
+              })
+              .catch((error) => {
+                console.error("エラーだよ！: ", error);
+              })
+          : toast.error("正しい帰着日を登録して下さい。") // 出発日 > 帰着日の場合
+        : toast.error("日程が7日を超える場合はプランを分けて登録して下さい。") //プラン日程が8日以上の場合
+      : toast.error("プランページで日程変更の必要なデータがあります。");
   };
-
-  console.log(props);
 
   const on_submit_detail = (data) => {
     //絵文字等のサロゲートペア対応する
@@ -92,7 +125,7 @@ export const EditPlanForm = (props) => {
             startTime: data.startTime,
             lastTime: data.lastTime,
             memo: data.memo,
-            money: data.money.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"),
+            money: data.money,
           })
           .then(() => {
             props.closeFixForm();

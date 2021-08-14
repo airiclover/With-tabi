@@ -36,7 +36,7 @@ export const PlanDetailForm = (props) => {
             startTime: data.startTime,
             lastTime: data.lastTime,
             memo: data.memo,
-            money: data.money.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"),
+            money: data.money,
           })
           .then(() => {
             props.getPlan(); //Tabで日付分けたい＆startTimeを降順でソートしたものを反映したいため関数呼び出し
