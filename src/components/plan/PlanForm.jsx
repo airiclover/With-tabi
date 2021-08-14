@@ -51,6 +51,7 @@ export const PlanForm = (props) => {
               createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
               arrDates: arrDates,
+              unnecessaryDate: false,
             })
             .then(() => {
               props.getUsersPlans(); //startDateを降順でソートしたものを反映したいため関数呼び出し
