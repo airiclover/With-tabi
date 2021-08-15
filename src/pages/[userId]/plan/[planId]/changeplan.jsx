@@ -7,6 +7,7 @@ import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { ExclamationIcon } from "src/components/common/assets/ExclamationIcon";
 import { Dropdown } from "src/components/plan/Dropdown";
 import Link from "next/link";
+import { CheckCircleIcon } from "src/components/common/assets/CheckCircleIcon";
 
 const Changeplan = () => {
   const [docData, setDocData] = useState();
@@ -36,7 +37,6 @@ const Changeplan = () => {
     const dateChangeArr = [];
 
     dateChange.forEach((doc) => {
-      // if (doc.exists) {
       const data = doc.data();
       dateChangeArr.push({
         id: doc.id,
@@ -104,7 +104,9 @@ const Changeplan = () => {
                   )}
                   <Dropdown
                     page="changeDetailPage"
+                    arrChangePlans={arrChangePlans}
                     plan={arrChangePlan}
+                    docData={docData}
                     getPage={getChangeDate}
                     query={router.query.planId}
                   />
@@ -114,7 +116,12 @@ const Changeplan = () => {
           </>
         ) : (
           <>
-            <p className="py-14 mx-3">変更が必要なデータがなくなりました。</p>
+            <div className="pt-14 pb-20 px-4">
+              <div className="flex">
+                <CheckCircleIcon class="text-green-400" />
+                <p>変更が必要なデータがなくなりました。</p>
+              </div>
+            </div>
             <Link
               href="/[userId]/plan/[planId]"
               as={`/${router.query.userId}/plan/${router.query.planId}`}
