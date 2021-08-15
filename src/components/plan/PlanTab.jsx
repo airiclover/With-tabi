@@ -89,7 +89,7 @@ export const PlanTab = (props) => {
                       <Dropdown
                         page="detailPage"
                         plan={plan}
-                        getPlan={props.getPlan}
+                        getPage={props.getPage}
                         query={props.query}
                       />
                     </li>

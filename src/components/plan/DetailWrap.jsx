@@ -48,7 +48,7 @@ export const DetailWrap = (props) => {
                   <Dropdown
                     page="detailPage"
                     plan={plan}
-                    getPlan={props.getPlan}
+                    getPage={props.getPage}
                     query={props.query}
                   />
                 </li>
