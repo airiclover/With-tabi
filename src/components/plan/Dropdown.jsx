@@ -39,9 +39,14 @@ export const Dropdown = (props) => {
     detailDoc
       .delete()
       .then(() => {
-        console.log("planデータ削除したよ！");
         toast.success("データを削除しました。");
-        props.getPlan();
+        props.getPage();
+        props.page ==
+          db
+            .collection("plans")
+            .doc(props.query)
+            .update({ unnecessaryDate: false });
+        props.page == "changeDetailPage" && closeModal();
       })
       .catch((error) => {
         console.error("doc削除エラー: ", error);
@@ -107,7 +112,7 @@ export const Dropdown = (props) => {
         plan={props.plan}
         query={props.query}
         getUsersPlans={props.getUsersPlans}
-        getPlan={props.getPlan}
+        getPage={props.getPage}
         isOpenFixForm={isOpenFixForm}
         closeFixForm={closeFixForm}
       />
