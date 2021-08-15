@@ -39,7 +39,7 @@ export const PlanDetailForm = (props) => {
             money: data.money,
           })
           .then(() => {
-            props.getPlan(); //Tabで日付分けたい＆startTimeを降順でソートしたものを反映したいため関数呼び出し
+            props.getPage(); //Tabで日付分けたい＆startTimeを降順でソートしたものを反映したいため関数呼び出し
             props.closeFormModal();
 
             const result = {
