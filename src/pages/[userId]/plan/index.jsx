@@ -73,7 +73,7 @@ const UserPlanPage = () => {
       <div className="px-3 pb-28">
         <div className="py-4 flex items-center relative">
           <CalendarIcon className={"h-9 w-9"} />
-          <h1 className="pl-2 text-4xl font-bold tracking-wider">
+          <h1 className="pl-2 text-4xl font-bold tracking-wide">
             Travel Plans
           </h1>
         </div>
@@ -83,25 +83,26 @@ const UserPlanPage = () => {
           plans.length != 0 ? (
             plans.map((plan) => {
               return (
-                <div key={plan.id} className="relative">
+                <div
+                  key={plan.id}
+                  className="h-24 bg-white mt-5 py-3 px-4 rounded-xl relative"
+                >
                   <Link
                     href="/[userId]/plan/[planId]"
                     as={`/${userInfo.uid}/plan/${plan.id}`}
                   >
                     <a>
-                      <div className="h-24 bg-white mt-5 py-3 px-4 rounded-xl">
-                        <h2 className="text-lg font-bold leading-tight">
-                          <div className="flex items-center">
-                            {plan.planIcon ? (
-                              <div className="pt-1 pr-1.5">
-                                <Emoji emoji={plan.planIcon} size={18} />
-                              </div>
-                            ) : null}
-                            <div className="line-clamp-2">{plan.title}</div>
-                          </div>
-                        </h2>
-                        <p className="pt-1 pl-6 text-sm">{`${plan.startDate} - ${plan.lastDate}`}</p>
-                      </div>
+                      <h2 className="text-lg font-bold leading-tight">
+                        <div className="flex items-center">
+                          {plan.planIcon ? (
+                            <div className="pt-1 pr-1.5">
+                              <Emoji emoji={plan.planIcon} size={18} />
+                            </div>
+                          ) : null}
+                          <div className="line-clamp-2">{plan.title}</div>
+                        </div>
+                      </h2>
+                      <p className="pt-1 pl-6 text-sm">{`${plan.startDate} - ${plan.lastDate}`}</p>
                     </a>
                   </Link>
                   <Dropdown
