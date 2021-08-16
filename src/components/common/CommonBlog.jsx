@@ -3,8 +3,13 @@ import { BlogWrap } from "src/components/blog/BlogWrap";
 
 export const CommonBlog = () => {
   return (
-    <div className="pt-20 pb-14 px-4 bg-blue-50">
-      <h1 className="pb-12 text-2xl font-bold tracking-wider">Blog</h1>
+    <div className="pt-28 pb-14 px-4 bg-blue-50">
+      <div className="pb-12 relative">
+        <p className="text-blue-400 text-opacity-25 text-6xl font-black tracking-wider absolute bottom-16 left-1">
+          Blog
+        </p>
+        <h1 className="text-2xl font-semibold">旅の思い出</h1>
+      </div>
 
       <div className="pb-10">
         <BlogWrap />

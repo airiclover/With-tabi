@@ -25,16 +25,22 @@ export const Features = () => {
 
   return (
     <div className="py-20 px-3">
-      <h1 className="pb-12 text-2xl font-semibold">
-        <p>旅を楽しくする</p>
-        <p>さまざまな機能たち</p>
-      </h1>
+      <div className="pt-8 pb-12 relative">
+        <p className="text-yellow-400 text-opacity-30 text-6xl font-black tracking-wider absolute bottom-24 left-1">
+          Features
+        </p>
+        <h1 className="text-2xl font-semibold">
+          旅を楽しくする
+          <br />
+          さまざまな機能たち
+        </h1>
+      </div>
 
       {FEATURES.map((feature) => {
         return (
           <div
             key={feature.src}
-            className="bg-orange-50 mb-12 mx-4 pt-7 px-7 pb-10 text-center border-2 border-orange-100 rounded-3xl"
+            className="bg-orange-50 mb-12 mx-4 pt-7 px-7 pb-10 text-center border-4 border-orange-100 rounded-3xl"
           >
             <Image
               src={`/img/${feature.src}`}

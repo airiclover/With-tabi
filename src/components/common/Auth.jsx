@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import firebase from "src/utils/firebase/firebase";
+import { useState } from "react";
 import { auth, db } from "src/utils/firebase/firebase";
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
@@ -11,11 +12,13 @@ import { GoogleIcon } from "src/components/common/assets/GoogleIcon";
 
 //ソーシャルログインは新規登録・ログインの関数が同じため、Authコンポーネントにまとめて記述
 export const Auth = (props) => {
+  const [isAuth, setIsAuth] = useState(false);
   const setUserInfo = useSetRecoilState(userState);
   const router = useRouter();
 
   const twitterLogin = async () => {
     toast.loading("Loading...🏝");
+    setIsAuth(true);
 
     const twitterProvider = new firebase.auth.TwitterAuthProvider();
     await auth
@@ -26,13 +29,17 @@ export const Auth = (props) => {
       })
       .catch(function (error) {
         toast.dismiss();
-        console.log(error);
-        toast.error("エラーが発生しました。時間をおいてから試してください。");
+        toast.error(
+          error,
+          ":エラーが発生しました。時間をおいてから試してください。"
+        );
+        setIsAuth(false);
       });
   };
 
   const googleLogin = async () => {
     toast.loading("Loading...🏝");
+    setIsAuth(true);
 
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     await auth
@@ -43,8 +50,11 @@ export const Auth = (props) => {
       })
       .catch(function (error) {
         toast.dismiss();
-        console.log(error);
-        toast.error("エラーが発生しました。時間をおいてから試してください。");
+        toast.error(
+          error,
+          ":エラーが発生しました。時間をおいてから試してください。"
+        );
+        setIsAuth(false);
       });
   };
 
@@ -82,11 +92,14 @@ export const Auth = (props) => {
       })
       .catch((error) => {
         toast.dismiss();
-        console.log("Auth(共通)エラーだよ！:", error);
-        toast.error("エラーが発生しました。時間をおいてから試してください。");
+        toast.error(
+          error,
+          ":エラーが発生しました。時間をおいてから試してください。"
+        );
       });
 
     toast.dismiss();
+    setIsAuth(false);
     await router.push(`/${uid}/plan`);
   };
 
@@ -108,13 +121,19 @@ export const Auth = (props) => {
       })
       .catch((error) => {
         toast.dismiss();
-        console.error("Auth新規登録エラーだよ！: ", error);
-        toast.error("エラーが発生しました。時間をおいてから試してください。");
+        toast.error(
+          error,
+          ":エラーが発生しました。時間をおいてから試してください。"
+        );
+        setIsAuth(false);
       });
   };
 
   return (
-    <div className="min-h-screen pt-28 px-4 text-center">
+    <div
+      className={`min-h-screen pt-28 px-4 text-center 
+        ${isAuth && "opacity-60"}`}
+    >
       <Image src="/img/logo.png" alt="logoImg" width={180} height={42} />
 
       <div className="mt-20">
