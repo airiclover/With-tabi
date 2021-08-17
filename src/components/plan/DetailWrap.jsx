@@ -53,6 +53,9 @@ export const DetailWrap = (props) => {
                   />
                 </li>
               ))}
+              {props.arrTotalMoney != 0 && (
+                <p className="pt-4 pr-2 text-sm font-bold text-right">{`合計金額：¥${props.arrTotalMoney[0]}`}</p>
+              )}
             </ul>
           ) : (
             // 👇 詳細プランデータがない場合
