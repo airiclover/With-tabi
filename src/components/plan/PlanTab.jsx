@@ -39,14 +39,7 @@ export const PlanTab = (props) => {
 
         <Tab.Panels className="mt-2">
           {props.arrPlans.map((arrPlan, index) => (
-            <Tab.Panel
-              key={index}
-              // className={classNames(
-              //   "bg-white rounded-xl p-3",
-              //   "focus:outline-none focus:ring-1 ring-offset-1 ring-offset-yellow-500 ring-yellow-500 ring-opacity-60"
-              // )}
-              className="p-2 pb-24"
-            >
+            <Tab.Panel key={index} className="p-2 pb-24">
               {arrPlan.length != 0 ? (
                 // 👇 詳細プランデータがある場合
                 <ul>
@@ -77,7 +70,7 @@ export const PlanTab = (props) => {
                       </div>
 
                       {plan.memo && (
-                        <div className="mt-4 pt-4 text-xs border-dotted border-t-2 border-gray-400">
+                        <div className="mt-4 pt-4 text-xs border-dotted border-t-2 border-gray-400 whitespace-pre-wrap">
                           {plan.memo}
                         </div>
                       )}

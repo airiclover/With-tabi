@@ -94,7 +94,7 @@ const Changeplan = () => {
                   </div>
 
                   {arrChangePlan.memo && (
-                    <div className="mt-4 pt-4 text-xs border-dotted border-t-2 border-gray-400">
+                    <div className="mt-4 pt-4 text-xs border-dotted border-t-2 border-gray-400 whitespace-pre-wrap">
                       {arrChangePlan.memo}
                     </div>
                   )}
