@@ -47,11 +47,6 @@ export const Dropdown = (props) => {
         toast.success("データを削除しました。");
         props.getPage();
 
-        // 👇 残り1つになったものが削除されたら0になるので、
-        //   「unnecessaryDate: false」を実行。
-        props.arrChangePlans.length == 1 &&
-          planDocQuery.update({ unnecessaryDate: false });
-
         props.page == "changeDetailPage" && closeModal();
       })
       .catch((error) => {

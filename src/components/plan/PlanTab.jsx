@@ -4,11 +4,11 @@ import { Emoji } from "emoji-mart";
 import { Dropdown } from "src/components/plan/Dropdown";
 
 export const PlanTab = (props) => {
-  console.log("TabCompのarrPlansだよ", props.arrPlans);
+  console.log("タブコンポーネントだよ！！！");
 
-  function classNames(...classes) {
+  const classNames = (...classes) => {
     return classes.filter(Boolean).join(" ");
-  }
+  };
 
   return (
     <div className="w-full max-w-md px-2 sm:px-0">
@@ -39,14 +39,7 @@ export const PlanTab = (props) => {
 
         <Tab.Panels className="mt-2">
           {props.arrPlans.map((arrPlan, index) => (
-            <Tab.Panel
-              key={index}
-              // className={classNames(
-              //   "bg-white rounded-xl p-3",
-              //   "focus:outline-none focus:ring-1 ring-offset-1 ring-offset-yellow-500 ring-yellow-500 ring-opacity-60"
-              // )}
-              className="p-2 pb-24"
-            >
+            <Tab.Panel key={index} className="p-2 pb-32">
               {arrPlan.length != 0 ? (
                 // 👇 詳細プランデータがある場合
                 <ul>
@@ -77,7 +70,7 @@ export const PlanTab = (props) => {
                       </div>
 
                       {plan.memo && (
-                        <div className="mt-4 pt-4 text-xs border-dotted border-t-2 border-gray-400">
+                        <div className="mt-4 pt-4 text-xs border-dotted border-t-2 border-gray-400 whitespace-pre-wrap">
                           {plan.memo}
                         </div>
                       )}
@@ -94,6 +87,10 @@ export const PlanTab = (props) => {
                       />
                     </li>
                   ))}
+
+                  {props.arrTotalMoney[index] != 0 && (
+                    <p className="pt-4 pr-2 text-sm font-bold text-right">{`合計金額：¥${props.arrTotalMoney[index]}`}</p>
+                  )}
                 </ul>
               ) : (
                 // 👇 詳細プランデータがない場合

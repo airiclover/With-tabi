@@ -17,6 +17,7 @@ const PlanId = () => {
   const [startDate, setStartDate] = useState();
   const [lastDate, setLastDate] = useState();
   const [arrPlans, setArrPlans] = useState([]);
+  const [arrTotalMoney, setArrTotalMoney] = useState([]);
   const [arrChangePlans, setArrChangePlans] = useState([]);
   const [isTabId, setIsTabId] = useState(0);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -46,6 +47,7 @@ const PlanId = () => {
         setLastDate(fixLastDate);
 
         const getPlanData = [];
+        const arrTotalMoney = [];
 
         docData.arrDates.map(async (arrDate) => {
           const querySnapshot = await planDoc
@@ -73,11 +75,26 @@ const PlanId = () => {
 
           getPlanData.push(planData);
 
+          // ===========================
+          // 合計金額の配列を作成
+          const totalMoney = planData.reduce((sum, element) => {
+            return sum + Number(element.money.replace(/,/g, ""));
+          }, 0);
+          // arrTotalMoney.push(totalMoney);
+          const money = String(totalMoney).replace(
+            /(\d)(?=(\d\d\d)+(?!\d))/g,
+            "$1,"
+          );
+          arrTotalMoney.push(money);
+          // ===========================
+
           // 🔸 forEachで回してgetしたデータを「planData」にpushし仮の配列作成
           // 👉 「getPlanData」と「docData.arrDates」の配列の数が同じになったら、setArrPlansでStateを更新
           // 👉 全て揃ったデータでコンポーネントが再レンダリングされる
           getPlanData.length == docData.arrDates.length &&
             setArrPlans(getPlanData);
+          getPlanData.length == docData.arrDates.length &&
+            setArrTotalMoney(arrTotalMoney);
         });
       })
       .catch((error) => {
@@ -149,12 +166,14 @@ const PlanId = () => {
           {plan.arrDates.length <= 1 ? (
             <DetailWrap
               arrPlans={arrPlans}
+              arrTotalMoney={arrTotalMoney}
               getPage={getPlan}
               query={router.query.planId}
             />
           ) : (
             <PlanTab
               plan={plan}
+              arrTotalMoney={arrTotalMoney}
               arrPlans={arrPlans}
               getPage={getPlan}
               query={router.query.planId}

@@ -37,7 +37,7 @@ export const DetailWrap = (props) => {
                   </div>
 
                   {plan.memo && (
-                    <div className="mt-4 pt-4 text-xs border-dotted border-t-2 border-gray-400">
+                    <div className="mt-4 pt-4 text-xs border-dotted border-t-2 border-gray-400 whitespace-pre-wrap">
                       {plan.memo}
                     </div>
                   )}
@@ -53,6 +53,9 @@ export const DetailWrap = (props) => {
                   />
                 </li>
               ))}
+              {props.arrTotalMoney != 0 && (
+                <p className="pt-4 pr-2 text-sm font-bold text-right">{`合計金額：¥${props.arrTotalMoney[0]}`}</p>
+              )}
             </ul>
           ) : (
             // 👇 詳細プランデータがない場合
