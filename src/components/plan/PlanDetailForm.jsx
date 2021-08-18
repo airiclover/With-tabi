@@ -30,6 +30,7 @@ export const PlanDetailForm = (props) => {
           .doc(props.query)
           .collection("plan")
           .add({
+            userID: props.plan.userID,
             day: props.plan.arrDates[props.isTabId], // Tabで選択した日にち
             planIcon: emoji,
             title: data.title,
