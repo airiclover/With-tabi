@@ -1,5 +1,6 @@
 import Image from "next/image";
 import firebase, { storage } from "src/utils/firebase/firebase";
+import loadImage from "blueimp-load-image";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -58,48 +59,56 @@ const Settings = () => {
     setIcon("");
   };
 
-  const onSetIconSubmit = (e) => {
+  const onSetIconSubmit = async (e) => {
     e.preventDefault();
     if (icon === "") {
       toast.error("画像が選択させていません。");
       return;
     }
 
-    // アップロード処理
-    toast.loading("画像をアップロード中です。");
-    const uploadTask = storage.ref(`/userIcon/${icon.name}`).put(icon);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        console.log("snapshot", snapshot);
-      },
-      (error) => {
-        console.log("エラーだよ！", error);
-        toast.dismiss();
-        toast.error("エラーが発生しました。時間をおいてから試してください。");
-      },
-      () => {
-        toast.dismiss();
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          const userDoc = db.collection("users").doc(userInfo?.uid);
-          userDoc.update({
-            icon: downloadURL,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+    const canvas = await loadImage(icon, {
+      maxWidth: 400,
+      canvas: true,
+    });
 
-          setUserInfo({
-            uid: userInfo?.uid,
-            name: userInfo?.name,
-            icon: downloadURL,
-            twitter: userInfo?.twitter,
-            instagram: userInfo?.instagram,
-            introduce: userInfo?.introduce,
+    canvas.image.toBlob((blob) => {
+      toast.loading("画像をアップロード中です。");
+
+      // アップロード処理
+      const uploadTask = storage.ref(`/userIcon/${icon.name}`).put(blob);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          console.log("snapshot", snapshot);
+        },
+        (error) => {
+          console.log("エラーだよ！", error);
+          toast.dismiss();
+          toast.error("エラーが発生しました。時間をおいてから試してください。");
+        },
+        () => {
+          toast.dismiss();
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            const userDoc = db.collection("users").doc(userInfo?.uid);
+            userDoc.update({
+              icon: downloadURL,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+            setUserInfo({
+              uid: userInfo?.uid,
+              name: userInfo?.name,
+              icon: downloadURL,
+              twitter: userInfo?.twitter,
+              instagram: userInfo?.instagram,
+              introduce: userInfo?.introduce,
+            });
+            setIcon("");
+            toast.success("アイコンの変更が完了しました。");
           });
-          setIcon("");
-          toast.success("アイコンの変更が完了しました。");
-        });
-      }
-    );
+        }
+      );
+    }, icon.type);
   };
 
   return (
