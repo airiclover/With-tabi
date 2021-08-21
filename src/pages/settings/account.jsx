@@ -55,10 +55,6 @@ const Settings = () => {
     setIcon(image);
   };
 
-  const chancelSetIcon = () => {
-    setIcon("");
-  };
-
   const onSetIconSubmit = async (e) => {
     e.preventDefault();
     if (icon === "") {
@@ -87,7 +83,6 @@ const Settings = () => {
           toast.error("エラーが発生しました。時間をおいてから試してください。");
         },
         () => {
-          toast.dismiss();
           uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
             const userDoc = db.collection("users").doc(userInfo?.uid);
             userDoc.update({
@@ -104,11 +99,16 @@ const Settings = () => {
               introduce: userInfo?.introduce,
             });
             setIcon("");
+            toast.dismiss();
             toast.success("アイコンの変更が完了しました。");
           });
         }
       );
     }, icon.type);
+  };
+
+  const chancelSetIcon = () => {
+    setIcon("");
   };
 
   return (
