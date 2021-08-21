@@ -76,6 +76,10 @@ export const PlanForm = (props) => {
     setIsOpenEmoji((isOpenEmoji) => !isOpenEmoji);
   };
 
+  const handleEmojiReset = () => {
+    setEmoji("");
+  };
+
   return (
     <Transition appear show={props.isOpenModal} as={Fragment}>
       <Dialog
@@ -113,7 +117,19 @@ export const PlanForm = (props) => {
                   <EmojiIcon className="w-6 h-6" />
                 </button>
                 <p className="pt-2">
-                  {emoji ? <Emoji emoji={emoji} size={30} /> : ""}
+                  {emoji ? (
+                    <div className="flex items-center">
+                      <Emoji emoji={emoji} size={30} />
+                      <button
+                        onClick={handleEmojiReset}
+                        className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
+                      >
+                        リセット
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </p>
               </div>
 
