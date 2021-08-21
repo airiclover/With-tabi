@@ -1,16 +1,18 @@
 import Image from "next/image";
-import firebase from "src/utils/firebase/firebase";
+import firebase, { storage } from "src/utils/firebase/firebase";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "src/utils/recoil/userState";
 import { Layout } from "src/components/layouts/Layout";
 import { db } from "src/utils/firebase/firebase";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const Settings = () => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const router = useRouter();
+  const [icon, setIcon] = useState("");
 
   const {
     register,
@@ -22,7 +24,6 @@ const Settings = () => {
     const userDoc = db.collection("users").doc(userInfo?.uid);
     await userDoc.update({
       name: data.name,
-      icon: userInfo?.icon, //仮コード
       twitter: data.twitter,
       instagram: data.instagram,
       introduce: data.introduce,
@@ -38,7 +39,7 @@ const Settings = () => {
       setUserInfo({
         uid: userInfo?.uid,
         name: data.name,
-        icon: userInfo?.icon, //仮コード
+        icon: userInfo?.icon,
         twitter: data.twitter,
         instagram: data.instagram,
         introduce: data.introduce,
@@ -48,35 +49,120 @@ const Settings = () => {
     [router, setUserInfo, userInfo?.icon, userInfo?.uid]
   );
 
-  // (仮)アイコン画像変更チェック=========================
-  const changeIcon = useCallback(() => {
-    console.log("アイコンチェンジ！");
-  }, []);
-  // ==================================================
+  const handleChangeIcon = (e) => {
+    const image = e.target.files[0];
+    setIcon(image);
+  };
+
+  const chancelSetIcon = () => {
+    setIcon("");
+  };
+
+  const onSetIconSubmit = (e) => {
+    e.preventDefault();
+    if (icon === "") {
+      toast.error("画像が選択させていません。");
+      return;
+    }
+
+    // アップロード処理
+    toast.loading("画像をアップロード中です。");
+    const uploadTask = storage.ref(`/userIcon/${icon.name}`).put(icon);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        console.log("snapshot", snapshot);
+      },
+      (error) => {
+        console.log("エラーだよ！", error);
+        toast.dismiss();
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
+      },
+      () => {
+        toast.dismiss();
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          const userDoc = db.collection("users").doc(userInfo?.uid);
+          userDoc.update({
+            icon: downloadURL,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+
+          setUserInfo({
+            uid: userInfo?.uid,
+            name: userInfo?.name,
+            icon: downloadURL,
+            twitter: userInfo?.twitter,
+            instagram: userInfo?.instagram,
+            introduce: userInfo?.introduce,
+          });
+          setIcon("");
+          toast.success("アイコンの変更が完了しました。");
+        });
+      }
+    );
+  };
 
   return (
     <Layout>
       {userInfo ? (
         <div>
           <h1 className="p-4 text-4xl font-bold tracking-wider">Settings</h1>
+
+          <div className="pt-2 pb-6 flex flex-col items-center">
+            {icon === "" ? (
+              <Image
+                src={userInfo?.icon}
+                alt="userIcon"
+                width={112}
+                height={112}
+                objectFit="cover"
+                className="rounded-full"
+                loading="eager"
+                priority
+              />
+            ) : (
+              <img
+                src={URL.createObjectURL(icon)}
+                alt="uploaded"
+                className="w-28 h-28 rounded-full object-cover"
+              />
+            )}
+
+            <label className="text-sm text-gray-500 border-b border-gray-500 cursor-pointer">
+              ファイルを選択する
+              <input
+                type="file"
+                onChange={handleChangeIcon}
+                accept="image/*"
+                className="hidden"
+              />
+            </label>
+
+            {icon != "" && (
+              <>
+                <div className="flex my-6">
+                  <button
+                    className="mr-2 py-2 px-4 text-yellow-500 text-sm rounded-full border border-yellow-500 hover:bg-hover-yellow"
+                    onClick={chancelSetIcon}
+                  >
+                    キャンセル
+                  </button>
+
+                  <form onSubmit={onSetIconSubmit}>
+                    <button
+                      className="py-2 px-4 bg-yellow-500 text-white text-sm rounded-full hover:bg-hover-yellow"
+                      onClick={onSetIconSubmit}
+                    >
+                      アイコンを変更する
+                    </button>
+                  </form>
+                </div>
+              </>
+            )}
+          </div>
+
           <div className="px-10 pb-6">
             <form onSubmit={handleSubmit(on_submit)}>
-              <div className="pt-2 pb-6 flex flex-col items-center">
-                <Image
-                  src={userInfo?.icon}
-                  alt="userIcon"
-                  width={110}
-                  height={110}
-                  objectFit="cover"
-                  className="rounded-full"
-                  loading="eager"
-                  priority
-                />
-                <button className="text-sm text-gray-500" onClick={changeIcon}>
-                  アイコンを変更する
-                </button>
-              </div>
-
               <label className="text-sm mb-4 flex flex-col">
                 名前（ニックネーム）
                 <input
