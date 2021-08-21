@@ -66,14 +66,14 @@ const Settings = () => {
       return;
     }
 
+    toast.loading("画像をアップロード中です。");
+
     const canvas = await loadImage(icon, {
       maxWidth: 400,
       canvas: true,
     });
 
     canvas.image.toBlob((blob) => {
-      toast.loading("画像をアップロード中です。");
-
       // アップロード処理
       const uploadTask = storage.ref(`/userIcon/${icon.name}`).put(blob);
       uploadTask.on(
