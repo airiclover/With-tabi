@@ -1,21 +1,23 @@
 import Link from "next/link";
-import Image from "next/image";
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { db } from "src/utils/firebase/firebase";
 import { PlanForm } from "src/components/plan/PlanForm";
 import { Emoji } from "emoji-mart";
 import { CommonLayout } from "src/components/layouts/CommonLayout";
-import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
-import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
+import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
+import { useRequireLogin } from "src/hooks/auth/useRequireLogin";
+import { useAddPlan } from "src/hooks/plan/useAddPlan";
+import { useFixDate } from "src/hooks/plan/useFixDate";
 import { Dropdown } from "src/components/plan/Dropdown";
-import { fixDate } from "src/components/plan/fixDate";
+import { NoPlan } from "src/components/plan/NoPlan";
 import { CalendarIcon } from "src/components/common/assets/CalendarIcon";
-import { PlusIcon } from "src/components/common/assets/PlusIcon";
+import { ButtonAddPlan } from "src/components/plan/ButtonAddPlan";
 
 const UserPlanPage = () => {
   const [plans, setPlans] = useState([]);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const { fixedDate } = fixDate();
+  const { isOpenModal, openFormModal, closeFormModal } = useAddPlan();
+  const { fixedDate } = useFixDate();
 
   const { userInfo } = useCurrentUser();
 
@@ -57,15 +59,8 @@ const UserPlanPage = () => {
       })
       .catch((error) => {
         console.log("プランデータ【エラー】だよ！", error);
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
-  };
-
-  const openFormModal = () => {
-    setIsOpenModal(true);
-  };
-
-  const closeFormModal = () => {
-    setIsOpenModal(false);
   };
 
   return (
@@ -114,36 +109,31 @@ const UserPlanPage = () => {
               );
             })
           ) : (
-            // 👇プランデータが[]からnullに変わるまでの間、もしくはデータフェッチされるまでの間は以下表示
-            <div>ローディング中...</div>
+            // プランデータがnullに変わるまでの間、もしくはデータフェッチされるまでの間は
+            // スケルトンローディングを表示
+            <>
+              {[1, 2, 3, 4].map((number) => (
+                <div
+                  key={number}
+                  className="h-24 mt-5 py-3 px-2 rounded-xl bg-white max-w-sm w-full mx-auto"
+                >
+                  <div className="animate-pulse flex space-x-2">
+                    <div className="h-6 w-6 rounded-full bg-gray-200"></div>
+                    <div className="flex-1 space-y-4">
+                      <div className="w-5/6 h-4 bg-gray-200 rounded"></div>
+                      <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
           )
         ) : (
           // 👇プランデータがない場合
-          <div>
-            <div className="pt-10 pb-14 pl-4 font-semibold">
-              <p>右下の登録ボタンから</p>
-              <p>旅のプランを作成してみよう！</p>
-            </div>
-            <Image
-              src="/img/undraw_travelplans.svg"
-              alt="travelplansImg"
-              width={100}
-              height={50}
-              loading="eager"
-              priority
-              layout="responsive"
-            />
-          </div>
+          <NoPlan class="pt-10 pb-14" />
         )}
 
-        <button onClick={openFormModal} className="fixed bottom-6 right-6">
-          <div className="h-16 w-16 bg-yellow-500 text-center rounded-full flex flex-col relative hover:bg-hover-yellow">
-            <PlusIcon />
-            <p className="text-xs text-white font-semibold absolute top-10 left-5">
-              登録
-            </p>
-          </div>
-        </button>
+        <ButtonAddPlan openFormModal={openFormModal} />
       </div>
 
       <PlanForm

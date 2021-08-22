@@ -6,8 +6,8 @@ import { userState } from "src/utils/recoil/userState";
 import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { Modal } from "src/components/common/Modal";
 import { useState } from "react";
-import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
-import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
+import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
+import { useRequireLogin } from "src/hooks/auth/useRequireLogin";
 
 const DeleteAccount = () => {
   const setUserInfo = useSetRecoilState(userState);
@@ -15,7 +15,6 @@ const DeleteAccount = () => {
   const router = useRouter();
 
   useRequireLogin();
-  console.log("アカウント削除ページ", userInfo);
 
   const [isOpen, setIsOpen] = useState(false);
 

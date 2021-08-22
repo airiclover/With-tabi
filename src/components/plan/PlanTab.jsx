@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Tab } from "@headlessui/react";
 import { Emoji } from "emoji-mart";
 import { Dropdown } from "src/components/plan/Dropdown";
+import { NoPlan } from "src/components/plan/NoPlan";
 
 export const PlanTab = (props) => {
   console.log("タブコンポーネントだよ！！！");
@@ -94,21 +94,7 @@ export const PlanTab = (props) => {
                 </ul>
               ) : (
                 // 👇 詳細プランデータがない場合
-                <div>
-                  <div className="pt-5 pb-7 pl-4 font-semibold">
-                    <p>右下の登録ボタンから</p>
-                    <p>旅の詳細プランを作成してみよう！</p>
-                  </div>
-                  <Image
-                    src="/img/undraw_travelplans.svg"
-                    alt="travelplansImg"
-                    width={100}
-                    height={50}
-                    loading="eager"
-                    priority
-                    layout="responsive"
-                  />
-                </div>
+                <NoPlan class="pt-5 pb-7" />
               )}
             </Tab.Panel>
           ))}

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Layout } from "src/components/layouts/Layout";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
-import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
+import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
 
 const UserBlogPage = () => {
   const { userInfo } = useCurrentUser();

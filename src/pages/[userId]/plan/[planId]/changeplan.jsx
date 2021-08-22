@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { db } from "src/utils/firebase/firebase";
 import { Emoji } from "emoji-mart";
-import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
+import { useRequireLogin } from "src/hooks/auth/useRequireLogin";
 import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { ExclamationIcon } from "src/components/common/assets/ExclamationIcon";
 import { Dropdown } from "src/components/plan/Dropdown";

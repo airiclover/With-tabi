@@ -62,7 +62,7 @@ const Settings = () => {
       return;
     }
 
-    toast.loading("画像をアップロード中です。");
+    const toastId = toast.loading("画像をアップロード中です。");
 
     const canvas = await loadImage(icon, {
       maxWidth: 400,
@@ -79,7 +79,7 @@ const Settings = () => {
         },
         (error) => {
           console.log("エラーだよ！", error);
-          toast.dismiss();
+          toast.dismiss(toastId);
           toast.error("エラーが発生しました。時間をおいてから試してください。");
         },
         () => {
@@ -99,7 +99,7 @@ const Settings = () => {
               introduce: userInfo?.introduce,
             });
             setIcon("");
-            toast.dismiss();
+            toast.dismiss(toastId);
             toast.success("アイコンの変更が完了しました。");
           });
         }

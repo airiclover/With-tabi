@@ -81,6 +81,8 @@ export const EditPlanForm = (props) => {
                         querySnapshot.forEach((doc) => {
                           planDoc.collection("plan").doc(doc.id).update({
                             dateChange: true,
+                            updatedAt:
+                              firebase.firestore.FieldValue.serverTimestamp(),
                           });
                           dateArr.push(doc.data().day);
                         });
@@ -184,19 +186,18 @@ export const EditPlanForm = (props) => {
                   >
                     <EmojiIcon className="w-6 h-6" />
                   </button>
-                  <p className="pt-2">
-                    {emoji ? (
-                      <div className="flex items-center">
-                        <Emoji emoji={emoji} size={30} />
-                        <button
-                          onClick={handleEmojiReset}
-                          className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
-                        >
-                          リセット
-                        </button>
-                      </div>
-                    ) : null}
-                  </p>
+
+                  {emoji ? (
+                    <div className="flex items-center">
+                      <Emoji emoji={emoji} size={30} />
+                      <button
+                        onClick={handleEmojiReset}
+                        className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
+                      >
+                        リセット
+                      </button>
+                    </div>
+                  ) : null}
                 </div>
 
                 {/* emoji-mart */}
@@ -297,21 +298,19 @@ export const EditPlanForm = (props) => {
                   >
                     <EmojiIcon className="w-6 h-6" />
                   </button>
-                  <p className="pt-2">
-                    {emoji ? (
-                      <div className="flex items-center">
-                        <Emoji emoji={emoji} size={30} />
-                        <button
-                          onClick={handleEmojiReset}
-                          className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
-                        >
-                          リセット
-                        </button>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </p>
+                  {emoji ? (
+                    <div className="flex items-center">
+                      <Emoji emoji={emoji} size={30} />
+                      <button
+                        onClick={handleEmojiReset}
+                        className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
+                      >
+                        リセット
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 {/* emoji-mart */}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
+import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
 
 export const useRequireLogin = () => {
   const { authChecking, userInfo } = useCurrentUser();

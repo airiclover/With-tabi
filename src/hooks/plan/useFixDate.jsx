@@ -1,4 +1,4 @@
-export const fixDate = () => {
+export const useFixDate = () => {
   const fixedDate = (data) => {
     const date = data.replaceAll("-", "/");
     const setDate = new Date(date);
