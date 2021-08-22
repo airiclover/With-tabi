@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
+import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
 import { CalendarIcon } from "src/components/common/assets/CalendarIcon";
 import { BlogIcon } from "src/components/common/assets/BlogIcon";
 
