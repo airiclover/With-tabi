@@ -1,16 +1,18 @@
+import Link from "next/link";
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { db } from "src/utils/firebase/firebase";
 import { Emoji } from "emoji-mart";
-import { useRequireLogin } from "src/components/common/hooks/useRequireLogin";
-import { useCurrentUser } from "src/components/common/hooks/useCurrentUser";
+import { useRequireLogin } from "src/hooks/auth/useRequireLogin";
+import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
 import { PlanDetailForm } from "src/components/plan/PlanDetailForm";
-import { fixDate } from "src/components/plan/fixDate";
+import { useAddPlan } from "src/hooks/plan/useAddPlan";
+import { useFixDate } from "src/hooks/plan/useFixDate";
 import { PlanTab } from "src/components/plan/PlanTab";
 import { DetailWrap } from "src/components/plan/DetailWrap";
 import { CommonLayout } from "src/components/layouts/CommonLayout";
-import { PlusIcon } from "src/components/common/assets/PlusIcon";
-import Link from "next/link";
+import { ButtonAddPlan } from "src/components/plan/ButtonAddPlan";
 
 const PlanId = () => {
   const [plan, setPlan] = useState();
@@ -20,9 +22,9 @@ const PlanId = () => {
   const [arrTotalMoney, setArrTotalMoney] = useState([]);
   const [arrChangePlans, setArrChangePlans] = useState([]);
   const [isTabId, setIsTabId] = useState(0);
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const { isOpenModal, openFormModal, closeFormModal } = useAddPlan();
   const router = useRouter();
-  const { fixedDate } = fixDate();
+  const { fixedDate } = useFixDate();
   const { userInfo } = useCurrentUser();
 
   useRequireLogin();
@@ -98,9 +100,8 @@ const PlanId = () => {
         });
       })
       .catch((error) => {
-        // toast.dismiss();
         console.log("planDetailページエラーだよ！:", error);
-        // toast.error("エラーが発生しました。時間をおいてから試してください。");
+        toast.error("エラーが発生しました。時間をおいてから試してください。");
       });
 
     // ==============================
@@ -124,14 +125,6 @@ const PlanId = () => {
 
     dateChangeArr.length != 0 && setArrChangePlans(dateChangeArr);
     // ==============================
-  };
-
-  const openFormModal = () => {
-    setIsOpenModal(true);
-  };
-
-  const closeFormModal = () => {
-    setIsOpenModal(false);
   };
 
   return (
@@ -182,17 +175,36 @@ const PlanId = () => {
           )}
         </div>
       ) : (
-        <div>ローディング中</div>
+        // スケルトンローディングを表示
+        <>
+          <div className="pt-6 pb-4 px-4">
+            <div className="animate-pulse flex flex-col space-y-2 space-x-2">
+              <div className="flex items-center">
+                <div className="h-7 w-7 mr-2 bg-gray-200 rounded-full"></div>
+                <div className="w-5/6 h-7 bg-gray-200 rounded"></div>
+              </div>
+              <div className="w-3/4 h-7 bg-gray-200 rounded self-end"></div>
+            </div>
+          </div>
+
+          {[1, 2, 3, 4].map((number) => (
+            <div
+              key={number}
+              className="h-24 mb-5 mx-4 py-3 px-2 rounded-xl bg-white"
+            >
+              <div className="animate-pulse flex space-x-2">
+                <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
+                <div className="flex-1 space-y-4">
+                  <div className="w-5/6 h-4 bg-gray-200 rounded"></div>
+                  <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </>
       )}
 
-      <button onClick={openFormModal} className="fixed bottom-6 right-6">
-        <div className="h-16 w-16 bg-yellow-500 text-center rounded-full flex flex-col relative hover:bg-hover-yellow">
-          <PlusIcon />
-          <p className="text-xs text-white font-semibold absolute top-10 left-5">
-            登録
-          </p>
-        </div>
-      </button>
+      <ButtonAddPlan openFormModal={openFormModal} />
 
       <PlanDetailForm
         userInfo={userInfo}
