@@ -190,7 +190,7 @@ const PlanId = () => {
           {[1, 2, 3, 4].map((number) => (
             <div
               key={number}
-              className="h-24 mb-5 mx-4 py-3 px-2 rounded-xl bg-white"
+              className="h-24 mb-5 mx-4 py-3 px-2 rounded-xl bg-white bg-opacity-50"
             >
               <div className="animate-pulse flex space-x-2">
                 <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
