@@ -1,5 +1,4 @@
 import toast from "react-hot-toast";
-import firebase from "src/utils/firebase/firebase";
 import { useState } from "react";
 import { db } from "src/utils/firebase/firebase";
 import { Menu } from "@headlessui/react";
@@ -59,7 +58,7 @@ export const Dropdown = (props) => {
     detailDoc
       .update({
         day: selected,
-        dateChange: firebase.firestore.FieldValue.delete(),
+        dateChange: false,
       })
       .then(async () => {
         toast.success("日付を変更しました。");

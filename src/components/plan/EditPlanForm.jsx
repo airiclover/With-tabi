@@ -81,8 +81,6 @@ export const EditPlanForm = (props) => {
                         querySnapshot.forEach((doc) => {
                           planDoc.collection("plan").doc(doc.id).update({
                             dateChange: true,
-                            updatedAt:
-                              firebase.firestore.FieldValue.serverTimestamp(),
                           });
                           dateArr.push(doc.data().day);
                         });
