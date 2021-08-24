@@ -57,11 +57,16 @@ const Changeplan = () => {
       {docData ? (
         docData?.unnecessaryDate ? (
           <>
-            <div className="py-5 px-3 flex items-center">
-              <ExclamationIcon />
-              <h1 className="pl-1 font-bold">
-                日付の変更、または削除が必要なデータ
-              </h1>
+            <div className="py-8 px-3">
+              <div className="flex items-center">
+                <ExclamationIcon />
+                <h1 className="pl-1 font-bold">
+                  日付の変更、または削除が必要なデータ
+                </h1>
+              </div>
+              <p className="pt-3 pl-4 text-xs">
+                (プラン右下の…ボタンから日付の変更、または削除をしてください。)
+              </p>
             </div>
 
             <ul className="px-4">
@@ -133,7 +138,22 @@ const Changeplan = () => {
           </>
         )
       ) : (
-        <div>ローディング中</div>
+        <>
+          {[1, 2, 3, 4].map((number) => (
+            <div
+              key={number}
+              className="h-24 mb-5 mx-4 py-3 px-2 rounded-xl bg-white bg-opacity-50"
+            >
+              <div className="animate-pulse flex space-x-2">
+                <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
+                <div className="flex-1 space-y-4">
+                  <div className="w-5/6 h-4 bg-gray-200 rounded"></div>
+                  <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </>
       )}
     </CommonLayout>
   );

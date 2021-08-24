@@ -2,8 +2,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
 export const Modal = (props) => {
-  console.log(props);
-
   return (
     <Transition appear show={props.isOpen} as={Fragment}>
       <Dialog
@@ -11,6 +9,8 @@ export const Modal = (props) => {
         className="fixed inset-0 z-10 overflow-y-auto"
         onClose={props.closeModal}
       >
+        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
             as={Fragment}
