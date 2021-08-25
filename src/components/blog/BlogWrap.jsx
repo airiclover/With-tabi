@@ -3,24 +3,24 @@ import Image from "next/image";
 
 export const BlogWrap = () => {
   return (
-    <div className="flex pb-4">
+    <div className="flex flex-col mb-8">
       <Link href="/" prefetch={false}>
-        <a className="flex-none">
+        <a className="h-52 ">
           <Image
             src="/img/example.webp"
             alt="exampleImg"
-            width={112}
-            height={112}
+            width={320}
+            height={208}
             objectFit="cover"
-            className="rounded-l-2xl"
+            className="rounded-t-lg"
           />
         </a>
       </Link>
 
-      <div className="h-28 bg-white flex flex-col justify-between flex-grow rounded-r-2xl">
+      <div className="h-28 w-80 bg-white flex flex-col justify-around rounded-b-lg">
         <Link href="/" prefetch={false}>
-          <a className="pt-2 px-1.5 flex-1">
-            <h2 className="text-lg font-semibold break-all line-clamp-2">
+          <a className="pt-2 px-1.5">
+            <h2 className="text-lg font-semibold leading-snug break-words line-clamp-2">
               グアム4泊5日旅行
             </h2>
             <div className="text-xs text-gray-500">2021年10月20日</div>
@@ -28,7 +28,7 @@ export const BlogWrap = () => {
         </Link>
 
         <Link href="/" prefetch={false}>
-          <a className="pb-2 pl-1.5 pr-4 flex justify-between">
+          <a className="pb-2 pl-2 pr-4 flex justify-between">
             <div className="flex items-center">
               <Image
                 src="/img/icon.png"
