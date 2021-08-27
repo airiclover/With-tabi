@@ -37,7 +37,7 @@ export const Header = () => {
               </a>
             </Link>
 
-            <Link href="/[userId]/blog" as={`/${userInfo.uid}/blog`}>
+            <Link href="/[userId]" as={`/${userInfo.uid}`}>
               <a className="py-2 flex-1 border-r-2 border-l-2 hover:bg-gray-50">
                 <div className="flex flex-col items-center">
                   <BlogIcon />
