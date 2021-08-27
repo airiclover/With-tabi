@@ -11,7 +11,7 @@ export const CommonBlog = () => {
         <h1 className="text-2xl font-semibold">旅の思い出</h1>
       </div>
 
-      <div className="pb-10">
+      <div className="pb-10 flex flex-col items-center">
         <BlogWrap />
         <BlogWrap />
         <BlogWrap />

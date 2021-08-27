@@ -1,8 +1,8 @@
-export const ExclamationIcon = () => {
+export const ExclamationIcon = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5 text-red-500"
+      className={`h-5 w-5 ${props.class}`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"

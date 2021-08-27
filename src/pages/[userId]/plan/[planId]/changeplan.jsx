@@ -59,7 +59,7 @@ const Changeplan = () => {
           <>
             <div className="py-8 px-3">
               <div className="flex items-center">
-                <ExclamationIcon />
+                <ExclamationIcon class="text-red-500" />
                 <h1 className="pl-1 font-bold">
                   日付の変更、または削除が必要なデータ
                 </h1>
