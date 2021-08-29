@@ -139,7 +139,7 @@ const PlanId = () => {
                   <Emoji emoji={plan?.planIcon} size={25} />
                 </div>
               )}
-              <h1 className="text-2xl leading-snug">{plan?.title}</h1>
+              <div className="text-2xl leading-snug">{plan?.title}</div>
             </div>
 
             <p className="py-2 text-right">{`${startDate} - ${lastDate}`}</p>

@@ -60,9 +60,9 @@ const Changeplan = () => {
             <div className="py-8 px-3">
               <div className="flex items-center">
                 <ExclamationIcon class="text-red-500" />
-                <h1 className="pl-1 font-bold">
+                <div className="pl-1 font-bold">
                   日付の変更、または削除が必要なデータ
-                </h1>
+                </div>
               </div>
               <p className="pt-3 pl-4 text-xs">
                 (プラン右下の…ボタンから日付の変更、または削除をしてください。)
@@ -92,9 +92,9 @@ const Changeplan = () => {
                           <Emoji emoji={arrChangePlan.planIcon} size={18} />
                         </div>
                       ) : null}
-                      <h2 className="pt-1 font-semibold">
+                      <div className="pt-1 font-semibold">
                         {arrChangePlan.title}
-                      </h2>
+                      </div>
                     </div>
                   </div>
 

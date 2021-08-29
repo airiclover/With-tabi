@@ -68,9 +68,9 @@ const UserPlanPage = () => {
       <div className="px-3 pb-28">
         <div className="py-4 flex items-center relative">
           <CalendarIcon className={"h-9 w-9"} />
-          <h1 className="pl-2 text-4xl font-bold tracking-wide">
+          <div className="pl-2 text-4xl font-bold tracking-wide">
             Travel Plans
-          </h1>
+          </div>
         </div>
 
         {plans != null ? (
@@ -87,7 +87,7 @@ const UserPlanPage = () => {
                     as={`/${userInfo.uid}/plan/${plan.id}`}
                   >
                     <a>
-                      <h2 className="text-lg font-bold leading-tight">
+                      <div className="text-lg font-bold leading-tight">
                         <div className="flex items-center">
                           {plan.planIcon ? (
                             <div className="pt-1 pr-1.5">
@@ -96,7 +96,7 @@ const UserPlanPage = () => {
                           ) : null}
                           <div className="line-clamp-2">{plan.title}</div>
                         </div>
-                      </h2>
+                      </div>
                       <p className="pt-1 pl-6 text-sm">{`${plan.startDate} - ${plan.lastDate}`}</p>
                     </a>
                   </Link>

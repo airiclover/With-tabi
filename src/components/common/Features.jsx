@@ -29,11 +29,11 @@ export const Features = () => {
         <p className="text-yellow-400 text-opacity-30 text-6xl font-black tracking-wider absolute bottom-24 left-1">
           Features
         </p>
-        <h1 className="text-2xl font-semibold">
+        <div className="text-2xl font-semibold">
           旅を楽しくする
           <br />
           さまざまな機能たち
-        </h1>
+        </div>
       </div>
 
       {FEATURES.map((feature) => {
@@ -48,7 +48,7 @@ export const Features = () => {
               width={160}
               height={160}
             />
-            <h2 className="py-4 text-xl font-semibold">{feature.title}</h2>
+            <div className="py-4 text-xl font-semibold">{feature.title}</div>
             <div className="text-sm text-left leading-6">
               {feature.Introduction}
             </div>

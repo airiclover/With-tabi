@@ -18,7 +18,9 @@ export const About = () => {
           <p className="text-gray-400 text-opacity-30 text-6xl font-black tracking-wider absolute bottom-4 left-1">
             About
           </p>
-          <h1 className="text-2xl font-bold tracking-wider">With tabiとは？</h1>
+          <div className="text-2xl font-bold tracking-wider">
+            With tabiとは？
+          </div>
         </div>
         <div className="pb-20 flex justify-around items-center">
           <Image
@@ -28,11 +30,11 @@ export const About = () => {
             height={170}
           />
           <div className="w-7/12">
-            <h2 className="pb-8 text-xl font-semibold tracking-wide">
+            <div className="pb-8 text-xl font-semibold tracking-wide">
               旅の予定がひと目
               <br />
               でわかる
-            </h2>
+            </div>
             <div>
               <p>
                 With
@@ -48,11 +50,11 @@ export const About = () => {
 
         <div className="flex justify-around items-center">
           <div className="w-7/12">
-            <h2 className="pb-8 text-xl font-semibold tracking-wide">
+            <div className="pb-8 text-xl font-semibold tracking-wide">
               シンプルで
               <br />
               わかりやすい操作
-            </h2>
+            </div>
             <div>
               <p>プランの追加や編集もかんたん。</p>
               <br />

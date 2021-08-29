@@ -65,7 +65,7 @@ export const PlanTab = (props) => {
                               <Emoji emoji={plan.planIcon} size={18} />
                             </div>
                           ) : null}
-                          <h2 className="pt-1 font-semibold">{plan.title}</h2>
+                          <div className="pt-1 font-semibold">{plan.title}</div>
                         </div>
                       </div>
 

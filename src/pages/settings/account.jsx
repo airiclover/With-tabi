@@ -112,7 +112,7 @@ const Settings = () => {
 
   return (
     <Layout>
-      <h1 className="p-4 text-4xl font-bold tracking-wider">Settings</h1>
+      <div className="p-4 text-4xl font-bold tracking-wider">Settings</div>
 
       <div className="pt-2 pb-10 flex flex-col items-center">
         {icon === "" ? (

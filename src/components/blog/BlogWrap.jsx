@@ -20,10 +20,10 @@ export const BlogWrap = () => {
       <div className="h-28 w-80 p-2 bg-white flex flex-col justify-around rounded-b-lg">
         <Link href="/" prefetch={false}>
           <a className="h-full flex flex-col justify-center">
-            <h2 className="text-lg font-semibold leading-snug break-words line-clamp-2">
+            <div className="text-lg font-semibold leading-snug break-words line-clamp-2">
               グアム4泊5日旅行
               {/* グアム4泊5日旅行グアム4泊5日旅行グアム4泊5日旅行 */}
-            </h2>
+            </div>
             <div className="text-xs text-gray-500">2021年10月20日</div>
           </a>
         </Link>
