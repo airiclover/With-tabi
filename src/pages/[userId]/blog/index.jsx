@@ -5,31 +5,32 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { db } from "src/utils/firebase/firebase";
 import { Layout } from "src/components/layouts/Layout";
-import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
-import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
 import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
 import { ButtonAddBlog } from "src/components/blog/ButtonAddBlog";
+import { BlogWrap } from "src/components/blog/BlogWrap";
+import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
+import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
 import { ExclamationIcon } from "src/components/common/assets/ExclamationIcon";
 
 const UserBlogPage = () => {
-  const [account, setAccount] = useState();
   const { userInfo } = useCurrentUser();
+  const [account, setAccount] = useState();
+  const [blogs, setblogs] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
-    console.log("ブログログインチェック");
-
     if (userInfo && userInfo.uid === router.query.userId) {
       console.log("管理者だよ");
       setAccount(userInfo);
+      getAuthorBlogs();
     } else {
       console.log("管理者じゃないよ");
-      tameshi();
+      checkAccount();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.userId]);
 
-  const tameshi = async () => {
+  const checkAccount = async () => {
     const userDoc = db.collection("users").doc(router.query.userId);
 
     await userDoc
@@ -51,6 +52,28 @@ const UserBlogPage = () => {
         );
       });
   };
+
+  // ================================
+  // ブログ表示など
+  const getAuthorBlogs = () => {
+    db.collection("blogs")
+      .where("authorName.uid", "==", router.query.userId)
+      // .where("authorName", "array-contains", "uid", "==", router.query.userId)
+      .orderBy("createdAt", "desc") //createdAtを降順でソートかける
+      .get()
+      .then((snapshot) => {
+        setblogs(
+          snapshot.docs.map((docs) => ({
+            id: docs.id,
+            data: docs.data(),
+          }))
+        );
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+  };
+  // ================================
 
   return (
     <Layout>
@@ -98,48 +121,57 @@ const UserBlogPage = () => {
           </div>
 
           {/* ========================= */}
-
-          <div className="h-96 py-12 bg-blue-50 font-semibold">
-            <div className="pb-12 pl-4 text-sm">
-              <div className="flex">
-                <ExclamationIcon />
-                {userInfo.uid === router.query.userId ? (
-                  <p className="pl-1">
-                    右下の投稿ボタンから
-                    <br />
-                    ブログを書いて投稿しよう！
-                  </p>
-                ) : (
-                  <p className="pl-1">まだ投稿がありません。</p>
-                )}
+          {blogs.length !== 0 ? (
+            // ブログ表示の試し
+            <div className="pt-10 pb-24 px-4 bg-blue-50 flex flex-col items-center">
+              {blogs.map((blog) => {
+                console.log("blog", blog);
+                return <BlogWrap key={blog.id} blog={blog} />;
+              })}
+            </div>
+          ) : (
+            <div className="h-96 py-12 bg-blue-50 font-semibold">
+              <div className="pb-12 pl-4 text-sm">
+                <div className="flex">
+                  <ExclamationIcon />
+                  {userInfo.uid === router.query.userId ? (
+                    <p className="pl-1">
+                      右下の投稿ボタンから
+                      <br />
+                      ブログを書いて投稿しよう！
+                    </p>
+                  ) : (
+                    <p className="pl-1">まだ投稿がありません。</p>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <Image
-              src="/img/undraw_wallpost.svg"
-              alt="blogImg"
-              width={70}
-              height={25}
-              loading="eager"
-              priority
-              layout="responsive"
-            />
-
-            {/* =================== */}
-            {/* 試し！！！ */}
-            <div className="p-4 bg-pink-300">
-              <Link href="/blog/tameshi">
-                <a>
-                  <div>試しページ1</div>
-                </a>
-              </Link>
+              <Image
+                src="/img/undraw_wallpost.svg"
+                alt="blogImg"
+                width={70}
+                height={25}
+                loading="eager"
+                priority
+                layout="responsive"
+              />
             </div>
-            {/* =================== */}
+          )}
+
+          {/* =================== */}
+          {/* 試し！！！ */}
+          <div className="p-4 bg-pink-300">
+            <Link href={`/${userInfo.uid}/blog/tameshi`}>
+              <a>
+                <div>試しページ1</div>
+              </a>
+            </Link>
           </div>
+          {/* =================== */}
 
           {/* 👇 自分のアカウントページだったら以下表示させる */}
           {userInfo.uid === router.query.userId && (
-            <Link href="/blog/post">
+            <Link href={`/${userInfo.uid}/blog/post`}>
               <a>
                 <ButtonAddBlog />
               </a>
