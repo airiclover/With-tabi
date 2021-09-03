@@ -1,13 +1,13 @@
 import { useState } from "react";
 import firebase, { db, storage } from "src/utils/firebase/firebase";
+import dynamic from "next/dynamic";
 import { EditorState, convertToRaw } from "draft-js";
 import loadImage from "blueimp-load-image";
 import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
 import { useRequireLogin } from "src/hooks/auth/useRequireLogin";
 import { Layout } from "src/components/layouts/Layout";
-import { Editor } from "react-draft-wysiwyg";
 import { convertToHTML } from "draft-convert";
-import DOMPurify from "dompurify";
+// import DOMPurify from "dompurify";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import toast from "react-hot-toast";
 
@@ -16,6 +16,7 @@ const Post = () => {
   const [blogTitle, setBlogTitle] = useState("");
   const [headingImage, setHeadingImage] = useState("");
   const [aaa, setAaa] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [convertedContent, setConvertedContent] = useState("");
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -34,11 +35,11 @@ const Post = () => {
     setConvertedContent(currentContentAsHTML);
   };
 
-  const createMarkup = (html) => {
-    return {
-      __html: DOMPurify.sanitize(html),
-    };
-  };
+  // const createMarkup = (html) => {
+  //   return {
+  //     __html: DOMPurify.sanitize(html),
+  //   };
+  // };
 
   // 👇 今度リサイズした画像をアップロードできるように変える
 
@@ -94,8 +95,6 @@ const Post = () => {
     await onSetHeadingImagSubmit(e);
 
     const convert = convertToRaw(editorState.getCurrentContent());
-
-    console.log("2aaa", aaa);
 
     const blogContents = {
       authorName: userInfo,
@@ -158,10 +157,20 @@ const Post = () => {
       );
     }, headingImage.type);
   };
+
+  // =============================
+  // SSRの問題を回避するために、コンポーネントの動的ロードが必要
+  // SSR window is not defined #893
+  // 【参照】https://github.com/jpuri/react-draft-wysiwyg/issues/893
+  const Editor = dynamic(
+    () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+    { ssr: false }
+  );
   // =============================
 
   return (
     <Layout>
+      <div>hello!</div>
       <div className="min-h-screen py-8 px-4 bg-blue-50">
         {/* 以下inputはreact-form等に変える */}
         <input
@@ -194,51 +203,43 @@ const Post = () => {
           />
         )}
         {/* ======================== */}
-
-        <div className="">
-          <Editor
-            editorState={editorState}
-            onEditorStateChange={onEditorStateChange}
-            toolbarClassName="shadow-sm"
-            editorClassName="mt-2 mb-12 p-2 bg-white border shadow-md"
-            toolbar={{
-              options: [
-                "inline",
-                "blockType",
-                "fontSize",
-                "colorPicker",
-                "list",
-                "textAlign",
-                "link",
-                // "embedded", // 埋め込みリンク(時間があれば実装する)
-                "image",
-                "history",
-              ],
-              inline: {
-                options: ["bold", "italic", "underline", "monospace"],
-              },
-              list: {
-                options: ["unordered", "ordered"],
-              },
-              image: {
-                uploadCallback: uploadCallback,
-                previewImage: true,
-              },
-            }}
-            localization={{
-              locale: "ja",
-            }}
-          />
-        </div>
-
-        {/* ===============- */}
-        {/* 試し */}
-        <div
+        <Editor
+          editorState={editorState}
+          onEditorStateChange={onEditorStateChange}
+          toolbarClassName="shadow-sm"
+          editorClassName="mt-2 mb-12 p-2 bg-white border shadow-md"
+          toolbar={{
+            options: [
+              "inline",
+              "blockType",
+              "fontSize",
+              "colorPicker",
+              "list",
+              "textAlign",
+              "link",
+              // "embedded", // 埋め込みリンク(時間があれば実装する)
+              "image",
+              "history",
+            ],
+            inline: {
+              options: ["bold", "italic", "underline", "monospace"],
+            },
+            list: {
+              options: ["unordered", "ordered"],
+            },
+            image: {
+              uploadCallback: uploadCallback,
+              previewImage: true,
+            },
+          }}
+          localization={{
+            locale: "ja",
+          }}
+        />
+        {/* <div
           className="bg-pink-100"
           dangerouslySetInnerHTML={createMarkup(convertedContent)}
-        ></div>
-        {/* ===============- */}
-
+        ></div> */}
         <div className="my-6 mr-2 text-right">
           <button
             type="submit"
