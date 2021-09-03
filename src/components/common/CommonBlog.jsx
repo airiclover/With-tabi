@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BlogWrap } from "src/components/blog/BlogWrap";
+import { BlogWrap2 } from "src/components/blog/BlogWrap";
 
 export const CommonBlog = () => {
   return (
@@ -8,16 +8,16 @@ export const CommonBlog = () => {
         <p className="text-blue-400 text-opacity-25 text-6xl font-black tracking-wider absolute bottom-16 left-1">
           Blog
         </p>
-        <h1 className="text-2xl font-semibold">旅の思い出</h1>
+        <div className="text-2xl font-semibold">旅の思い出</div>
       </div>
 
       <div className="pb-10 flex flex-col items-center">
-        <BlogWrap />
-        <BlogWrap />
-        <BlogWrap />
-        <BlogWrap />
-        <BlogWrap />
-        <BlogWrap />
+        <BlogWrap2 />
+        <BlogWrap2 />
+        <BlogWrap2 />
+        <BlogWrap2 />
+        <BlogWrap2 />
+        <BlogWrap2 />
       </div>
 
       <Link href="/">

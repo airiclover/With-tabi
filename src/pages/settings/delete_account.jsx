@@ -83,9 +83,9 @@ const DeleteAccount = () => {
   return (
     <CommonLayout>
       <div className="px-4">
-        <h1 className="py-10 text-xl font-semibold">
+        <div className="py-10 text-xl font-semibold">
           アカウントを削除しますか？
-        </h1>
+        </div>
         <div className="pb-8">
           <p>アカウントを削除すると全てのデータが失われます。</p>
           <p>データは復元することができません。</p>

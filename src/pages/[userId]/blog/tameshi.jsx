@@ -11,14 +11,14 @@ const Tameshi = () => {
     <div>
       {/* 試し！！！ */}
       <div className="p-4 bg-pink-300">
-        <Link href="/[userId]" as={`/${Twitter}`}>
+        <Link href="/[userId]/blog" as={`/${Twitter}/blog`}>
           {/* <Link href="/[userId]" as={`/${userInfo.uid}`}> */}
           <a>
             <div className="my-2 py-2 bg-pink-100">試しページ1</div>
           </a>
         </Link>
 
-        <Link href="/[userId]" as={`/${Google}`}>
+        <Link href="/[userId]/blog" as={`/${Google}/blog`}>
           {/* <Link href="/[userId]" as={`/${userInfo.uid}`}> */}
           <a>
             <div className="my-2 py-2 bg-pink-100">試しページ2</div>

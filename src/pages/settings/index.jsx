@@ -36,7 +36,7 @@ const UserPage = () => {
     <CommonLayout>
       <div className="pl-4 pt-4 flex items-center">
         <EmojiIcon className="w-8 h-8" />
-        <h1 className="pl-1 text-2xl font-bold tracking-wider">アカウント</h1>
+        <div className="pl-1 text-2xl font-bold tracking-wider">アカウント</div>
       </div>
 
       <div className="bg-white mt-4 mx-5 mb-8 p-4 rounded-xl">

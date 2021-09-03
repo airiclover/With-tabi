@@ -3,9 +3,9 @@ import Image from "next/image";
 export const FirstView = () => {
   return (
     <div className="px-4">
-      <h1 className="pt-12 pb-14 text-2xl font-semibold tracking-wider">
+      <div className="pt-12 pb-14 text-2xl font-semibold tracking-wider">
         旅をもっと楽しく快適に
-      </h1>
+      </div>
       <div className="h-56 flex justify-around">
         <div className="w-5/12 pr-2 text-sm font-semibold leading-7">
           <p>思いたったこの瞬間からもう旅は始まっている。</p>
