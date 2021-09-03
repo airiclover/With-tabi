@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BlogWrap } from "src/components/blog/BlogWrap";
+import { BlogWrap2 } from "src/components/blog/BlogWrap";
 
 export const CommonBlog = () => {
   return (
@@ -12,12 +12,12 @@ export const CommonBlog = () => {
       </div>
 
       <div className="pb-10 flex flex-col items-center">
-        <BlogWrap />
-        <BlogWrap />
-        <BlogWrap />
-        <BlogWrap />
-        <BlogWrap />
-        <BlogWrap />
+        <BlogWrap2 />
+        <BlogWrap2 />
+        <BlogWrap2 />
+        <BlogWrap2 />
+        <BlogWrap2 />
+        <BlogWrap2 />
       </div>
 
       <Link href="/">
