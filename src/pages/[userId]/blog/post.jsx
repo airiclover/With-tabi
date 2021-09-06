@@ -170,7 +170,6 @@ const Post = () => {
 
   return (
     <Layout>
-      <div>hello!</div>
       <div className="min-h-screen py-8 px-4 bg-blue-50">
         {/* 以下inputはreact-form等に変える */}
         <input
