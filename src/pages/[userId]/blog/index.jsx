@@ -20,12 +20,13 @@ const UserBlogPage = () => {
 
   useEffect(() => {
     if (userInfo && userInfo.uid === router.query.userId) {
-      console.log("管理者だよ");
+      // 管理者の場合
       setAccount(userInfo);
       getAuthorBlogs();
     } else {
-      console.log("管理者じゃないよ");
+      // 管理者じゃない場合
       checkAccount();
+      getAuthorBlogs();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.userId]);
@@ -58,7 +59,6 @@ const UserBlogPage = () => {
   const getAuthorBlogs = () => {
     db.collection("blogs")
       .where("authorName.uid", "==", router.query.userId)
-      // .where("authorName", "array-contains", "uid", "==", router.query.userId)
       .orderBy("createdAt", "desc") //createdAtを降順でソートかける
       .get()
       .then((snapshot) => {

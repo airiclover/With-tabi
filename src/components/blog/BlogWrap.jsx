@@ -42,7 +42,8 @@ export const BlogWrap2 = () => {
               <div className="pl-1 text-xs">あいり</div>
             </div>
 
-            <div className="flex items-center">
+            {/* 👇 お気に入り機能つける？ */}
+            {/* <div className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 text-red-500"
@@ -58,7 +59,7 @@ export const BlogWrap2 = () => {
                 />
               </svg>
               <div className="pt-0.5 text-xs">500</div>
-            </div>
+            </div> */}
           </a>
         </Link>
       </div>
@@ -95,7 +96,10 @@ export const BlogWrap = (props) => {
       </Link>
 
       <div className="h-28 w-80 p-2 bg-white flex flex-col justify-around rounded-b-lg">
-        <Link href="/" prefetch={false}>
+        <Link
+          href={`/${props?.blog.data.authorName.uid}/blog/${props?.blog.id}`}
+          prefetch={false}
+        >
           <a className="h-full flex flex-col justify-center">
             <div className="text-lg font-semibold leading-snug break-words line-clamp-2">
               {props?.blog.data.blogTitle}
@@ -123,7 +127,8 @@ export const BlogWrap = (props) => {
               </div>
             </div>
 
-            <div className="flex items-center">
+            {/* 👇 お気に入り機能つける？ */}
+            {/* <div className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 text-red-500"
@@ -139,7 +144,7 @@ export const BlogWrap = (props) => {
                 />
               </svg>
               <div className="pt-0.5 text-xs">500</div>
-            </div>
+            </div> */}
           </a>
         </Link>
       </div>
