@@ -13,11 +13,9 @@ import Link from "next/link";
 
 const BlogID = () => {
   const [blog, setBlog] = useState({});
+  const [authorData, setAuthorData] = useState({});
   // const [convertedContent, setConvertedContent] = useState("");
   const router = useRouter();
-
-  console.log("blog", blog);
-  console.log(router.query);
 
   // const onEditorStateChange = (state) => {
   //   setEditorState(state);
@@ -31,11 +29,36 @@ const BlogID = () => {
 
   useEffect(() => {
     getBlogData();
+    getAuthorData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getBlogData = async () => {
-    const userDoc = db.collection("blogs").doc(router.query.blogId);
+    const blogDoc = db.collection("blogs").doc(router.query.blogId);
+
+    await blogDoc
+      .get()
+      .then((doc) => {
+        const docData = doc.data();
+        if (doc.exists) {
+          //blogDocにデータがある場合
+          setBlog(docData);
+        } else {
+          //blogDocにデータがない場合
+          console.log("404ページに飛ばすかUI変更させる");
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          error,
+          ":エラーが発生しました。時間をおいてから試してください。"
+        );
+      });
+  };
+
+  const getAuthorData = async () => {
+    const userDoc = db.collection("users").doc(router.query.userId);
+    console.log("userDoc", userDoc);
 
     await userDoc
       .get()
@@ -43,10 +66,10 @@ const BlogID = () => {
         const docData = doc.data();
         if (doc.exists) {
           //userDocにデータがある場合
-          setBlog(docData);
+          setAuthorData(docData);
         } else {
           //userDocにデータがない場合
-          console.log("404ページに飛ばすかUI変更させる");
+          console.log("どうするか後で決める");
         }
       })
       .catch((error) => {
@@ -90,14 +113,14 @@ const BlogID = () => {
           <div className="mb-6 border">
             <div className="py-6 mx-6">
               <div className="flex items-center">
-                {blog?.authorName ? (
+                {authorData?.icon ? (
                   <Link href={`/${router.query.userId}/blog`} prefetch={false}>
-                    <a>
+                    <a className="flex-shrink-0">
                       <Image
-                        src={blog?.authorName?.icon}
+                        src={authorData?.icon}
                         alt="userIcon"
-                        width={55}
-                        height={55}
+                        width={60}
+                        height={60}
                         objectFit="cover"
                         className="rounded-full"
                       />
@@ -108,11 +131,11 @@ const BlogID = () => {
                 )}
 
                 <div className="pl-4 flex flex-col">
-                  <p className="text-2xl font-bold">{blog?.authorName?.name}</p>
+                  <p className="text-xl font-bold">{authorData?.name}</p>
                   <div className="flex">
-                    {blog?.authorName?.twitter ? (
+                    {authorData?.twitter ? (
                       <a
-                        href={`https://twitter.com/${blog?.authorName?.twitter}`}
+                        href={`https://twitter.com/${authorData?.twitter}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="pr-1.5"
@@ -121,9 +144,9 @@ const BlogID = () => {
                       </a>
                     ) : null}
 
-                    {blog?.authorName?.instagram ? (
+                    {authorData?.instagram ? (
                       <a
-                        href={`https://www.instagram.com/${blog?.authorName?.instagram}/?hl=ja`}
+                        href={`https://www.instagram.com/${authorData?.instagram}/?hl=ja`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -134,7 +157,7 @@ const BlogID = () => {
                 </div>
               </div>
               <p className="py-2 px-1 text-sm tracking-tight">
-                {blog?.authorName?.introduce}
+                {authorData?.introduce}
               </p>
             </div>
           </div>

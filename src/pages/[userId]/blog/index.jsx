@@ -58,7 +58,7 @@ const UserBlogPage = () => {
   // ブログ表示など
   const getAuthorBlogs = () => {
     db.collection("blogs")
-      .where("authorName.uid", "==", router.query.userId)
+      .where("uid", "==", router.query.userId)
       .orderBy("createdAt", "desc") //createdAtを降順でソートかける
       .get()
       .then((snapshot) => {
@@ -126,7 +126,7 @@ const UserBlogPage = () => {
             <div className="pt-10 pb-24 px-4 bg-blue-50 flex flex-col items-center">
               {blogs.map((blog) => {
                 console.log("blog", blog);
-                return <BlogWrap key={blog.id} blog={blog} />;
+                return <BlogWrap key={blog.id} account={account} blog={blog} />;
               })}
             </div>
           ) : (

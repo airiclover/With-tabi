@@ -80,7 +80,7 @@ export const BlogWrap = (props) => {
   return (
     <div className="flex flex-col mb-8">
       <Link
-        href={`/${props?.blog.data.authorName.uid}/blog/${props?.blog.id}`}
+        href={`/${props?.blog.data.uid}/blog/${props?.blog.id}`}
         prefetch={false}
       >
         <a className="h-52 ">
@@ -97,7 +97,7 @@ export const BlogWrap = (props) => {
 
       <div className="h-28 w-80 p-2 bg-white flex flex-col justify-around rounded-b-lg">
         <Link
-          href={`/${props?.blog.data.authorName.uid}/blog/${props?.blog.id}`}
+          href={`/${props?.blog.data.uid}/blog/${props?.blog.id}`}
           prefetch={false}
         >
           <a className="h-full flex flex-col justify-center">
@@ -108,23 +108,18 @@ export const BlogWrap = (props) => {
           </a>
         </Link>
 
-        <Link
-          href={`/${props?.blog.data.authorName.uid}/blog`}
-          prefetch={false}
-        >
+        <Link href={`/${props?.blog.data.uid}/blog`} prefetch={false}>
           <a className="pt-1 pr-3 flex justify-between">
             <div className="flex items-center">
               <Image
-                src={props?.blog.data.authorName.icon}
+                src={props?.account.icon}
                 alt="logoImg"
                 width={25}
                 height={25}
                 objectFit="cover"
                 className="rounded-full"
               />
-              <div className="pl-1 text-xs">
-                {props?.blog.data.authorName.name}
-              </div>
+              <div className="pl-1 text-xs">{props?.account.name}</div>
             </div>
 
             {/* 👇 お気に入り機能つける？ */}
