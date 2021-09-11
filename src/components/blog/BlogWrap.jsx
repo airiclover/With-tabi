@@ -79,21 +79,25 @@ export const BlogWrap = (props) => {
 
   return (
     <div className="flex flex-col mb-8">
-      <Link
-        href={`/${props?.blog.data.uid}/blog/${props?.blog.id}`}
-        prefetch={false}
-      >
-        <a className="h-52 ">
-          <Image
-            src="/img/example.webp"
-            alt="exampleImg"
-            width={320}
-            height={208}
-            objectFit="cover"
-            className="rounded-t-lg"
-          />
-        </a>
-      </Link>
+      {props?.blog.data.headingImage ? (
+        <Link
+          href={`/${props?.blog.data.uid}/blog/${props?.blog.id}`}
+          prefetch={false}
+        >
+          <a className="h-52 ">
+            <Image
+              src={props?.blog.data.headingImage}
+              alt="exampleImg"
+              width={320}
+              height={208}
+              objectFit="cover"
+              className="rounded-t-lg"
+            />
+          </a>
+        </Link>
+      ) : (
+        <div className="bg-gray-200 h-52 w-80 animate-pulse" />
+      )}
 
       <div className="h-28 w-80 p-2 bg-white flex flex-col justify-around rounded-b-lg">
         <Link

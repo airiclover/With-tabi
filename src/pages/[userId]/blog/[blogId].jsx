@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { db } from "src/utils/firebase/firebase";
 // import { convertToHTML } from "draft-convert";
 import toast from "react-hot-toast";
 import { CommonLayout } from "src/components/layouts/CommonLayout";
-import Image from "next/image";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
-import Link from "next/link";
+import { ClockIcon } from "src/components/common/assets/ClockIcon";
 
 // import { convertToHTML } from "draft-convert";
 
 const BlogID = () => {
-  const [blog, setBlog] = useState({});
-  const [authorData, setAuthorData] = useState({});
+  const [blog, setBlog] = useState();
+  const [authorData, setAuthorData] = useState();
   // const [convertedContent, setConvertedContent] = useState("");
   const router = useRouter();
 
@@ -42,6 +43,7 @@ const BlogID = () => {
         const docData = doc.data();
         if (doc.exists) {
           //blogDocにデータがある場合
+          console.log("docData", docData);
           setBlog(docData);
         } else {
           //blogDocにデータがない場合
@@ -90,18 +92,27 @@ const BlogID = () => {
       {blog?.length !== 0 ? (
         <div className="min-h-screen bg-white">
           <div className="mx-6">
-            <Image
-              src="/img/example.webp"
-              alt="exampleImg"
-              width={650}
-              height={460}
-              objectFit="cover"
-            />
+            {blog?.headingImage ? (
+              <Image
+                src={blog?.headingImage}
+                alt="exampleImg"
+                width={650}
+                height={460}
+                objectFit="cover"
+              />
+            ) : (
+              <div className="bg-gray-200 h-56 w-full animate-pulse" />
+            )}
           </div>
 
           <div className="mx-6 pb-6">
             <h2 className="text-2xl font-bold pt-3">{blog?.blogTitle}</h2>
-            <p className="py-2 text-sm">{fixUpdateDate}</p>
+
+            <div className="flex items-center">
+              <ClockIcon />
+              <p className="pl-0.5 py-2 text-sm">{fixUpdateDate}</p>
+            </div>
+
             <div className="py-6">
               {blog?.html?.blocks.map((block) => {
                 return <div key={block.key}>{block.text}</div>;

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import firebase, { db, storage } from "src/utils/firebase/firebase";
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import firebase, { db, storage } from "src/utils/firebase/firebase";
 import { EditorState, convertToRaw } from "draft-js";
 import loadImage from "blueimp-load-image";
 import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
@@ -8,6 +9,7 @@ import { useRequireLogin } from "src/hooks/auth/useRequireLogin";
 import { Layout } from "src/components/layouts/Layout";
 import { convertToHTML } from "draft-convert";
 // import DOMPurify from "dompurify";
+// import { Editor } from "react-draft-wysiwyg";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import toast from "react-hot-toast";
 
@@ -15,9 +17,9 @@ const Post = () => {
   const { userInfo } = useCurrentUser();
   const [blogTitle, setBlogTitle] = useState("");
   const [headingImage, setHeadingImage] = useState("");
-  const [aaa, setAaa] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [convertedContent, setConvertedContent] = useState("");
+  const router = useRouter();
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -60,13 +62,10 @@ const Post = () => {
           console.log(error);
         },
         (complete) => {
-          console.log(complete);
-          storage
-            .ref(`/${userInfo?.uid}/${file.name}`)
-            .getDownloadURL()
-            .then((url) => {
-              resolve(url);
-            });
+          console.log("complete", complete);
+          storage.getDownloadURL().then((url) => {
+            resolve(url);
+          });
         }
       );
     });
@@ -84,8 +83,6 @@ const Post = () => {
     });
   };
 
-  console.log("xxx!", convertToRaw(editorState.getCurrentContent()));
-
   const sitagaki = () => {
     // setConverted(con);
     console.log("下書きクリック！");
@@ -94,25 +91,13 @@ const Post = () => {
   const onSubmit = async (e) => {
     await onSetHeadingImagSubmit(e);
 
-    const convert = convertToRaw(editorState.getCurrentContent());
-
-    const blogContents = {
-      authorName: userInfo,
-      blogTitle: blogTitle,
-      // headingImage: headingImage.name,
-      headingImage: aaa,
-      html: convert,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    };
-    const docRef = db.collection("blogs").doc();
-    await docRef.set(blogContents);
-    console.log(blogContents);
+    await router.push(`/${userInfo.uid}/blog`);
+    toast.success("ブログを投稿しました。");
   };
 
   // =============================
   // 見出し画像
-  const handleChangeHeadingImage = async (e) => {
+  const handleChangeHeadingImage = (e) => {
     const image = e.target.files[0];
     setHeadingImage(image);
   };
@@ -120,11 +105,9 @@ const Post = () => {
   const onSetHeadingImagSubmit = async (e) => {
     e.preventDefault();
     if (headingImage === "") {
-      toast.error("画像が選択させていません。");
+      // toast.error("画像が選択させていません。");
       return;
     }
-
-    console.log("???");
 
     const canvas = await loadImage(headingImage, {
       maxWidth: 400,
@@ -136,6 +119,7 @@ const Post = () => {
       const uploadTask = storage
         .ref(`/blog/${userInfo?.uid}/${headingImage.name}`)
         .put(blob);
+
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -147,12 +131,24 @@ const Post = () => {
           toast.error("エラーが発生しました。時間をおいてから試してください。");
         },
         () => {
-          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-            // setHeadingImage("");
-            setAaa(downloadURL);
-            console.log("downloadURL", downloadURL);
-            console.log("aaa", aaa);
-          });
+          storage
+            .ref(`/blog/${userInfo?.uid}/${headingImage.name}`)
+            .getDownloadURL()
+            .then(async (url) => {
+              const convert = convertToRaw(editorState.getCurrentContent());
+
+              const blogContents = {
+                uid: userInfo.uid,
+                blogTitle: blogTitle,
+                headingImage: url,
+                html: convert,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              };
+
+              const docRef = db.collection("blogs").doc();
+              await docRef.set(blogContents);
+            });
         }
       );
     }, headingImage.type);
@@ -182,25 +178,27 @@ const Post = () => {
 
         {/* ======================== */}
         {/* 見出し画像 */}
-        <label className="text-sm text-gray-500 border-b border-gray-500 cursor-pointer">
-          見出し画像を選択する
-          <input
-            type="file"
-            onChange={handleChangeHeadingImage}
-            accept="image/*"
-            className="hidden"
-          />
-        </label>
+        <div className="mb-8">
+          <label className="text-sm text-gray-500 border-b border-gray-500 cursor-pointer">
+            見出し画像を選択する
+            <input
+              type="file"
+              onChange={handleChangeHeadingImage}
+              accept="image/*"
+              className="hidden"
+            />
+          </label>
 
-        {headingImage === "" ? (
-          <div className="h-44 w-64 mx-auto bg-gray-200" />
-        ) : (
-          <img
-            src={URL.createObjectURL(headingImage)}
-            alt="uploaded"
-            className="h-44 w-64 mx-auto object-cover"
-          />
-        )}
+          {headingImage === "" ? (
+            <div className="h-44 w-64 mt-1 mx-auto bg-gray-200" />
+          ) : (
+            <img
+              src={URL.createObjectURL(headingImage)}
+              alt="uploaded"
+              className="h-44 w-64 mx-auto object-cover"
+            />
+          )}
+        </div>
         {/* ======================== */}
         <Editor
           editorState={editorState}
@@ -209,37 +207,28 @@ const Post = () => {
           editorClassName="mt-2 mb-12 p-2 bg-white border shadow-md"
           toolbar={{
             options: [
-              "inline",
               "blockType",
               "fontSize",
+              "inline",
               "colorPicker",
-              "list",
-              "textAlign",
+              "image",
               "link",
               // "embedded", // 埋め込みリンク(時間があれば実装する)
-              "image",
-              "history",
             ],
             inline: {
-              options: ["bold", "italic", "underline", "monospace"],
-            },
-            list: {
-              options: ["unordered", "ordered"],
+              options: ["bold", "italic", "underline"],
             },
             image: {
               uploadCallback: uploadCallback,
               previewImage: true,
             },
           }}
-          localization={{
-            locale: "ja",
-          }}
         />
         {/* <div
           className="bg-pink-100"
           dangerouslySetInnerHTML={createMarkup(convertedContent)}
         ></div> */}
-        <div className="my-6 mr-2 text-right">
+        <div className="my-6 mr-2 text-right flex justify-end">
           <button
             type="submit"
             onClick={sitagaki}
