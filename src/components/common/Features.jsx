@@ -24,12 +24,12 @@ export const Features = () => {
   ];
 
   return (
-    <div className="py-20 px-3">
+    <div className="max-w-screen-md mx-auto py-20 px-3 lg:py-28">
       <div className="pt-8 pb-12 relative">
-        <p className="text-yellow-400 text-opacity-30 text-6xl font-black tracking-wider absolute bottom-24 left-1">
+        <p className="text-yellow-400 text-opacity-30 text-6xl font-black tracking-wider absolute bottom-24 left-1 lg:text-7xl">
           Features
         </p>
-        <div className="text-2xl font-semibold">
+        <div className="text-2xl font-semibold lg:text-3xl">
           旅を楽しくする
           <br />
           さまざまな機能たち
@@ -40,7 +40,7 @@ export const Features = () => {
         return (
           <div
             key={feature.src}
-            className="bg-orange-50 mb-12 mx-4 pt-7 px-7 pb-10 text-center border-4 border-orange-100 rounded-3xl"
+            className="bg-orange-50 mb-12 mx-4 pt-7 px-7 pb-10 text-center border-4 border-orange-100 rounded-3xl lg:w-4/6 lg:mx-auto lg:pt-12 lg:pb-14"
           >
             <Image
               src={`/img/${feature.src}`}
@@ -56,7 +56,7 @@ export const Features = () => {
         );
       })}
 
-      <div className="pb-6 text-center">
+      <div className="pb-6 text-center lg:mt-16 lg:pb-10">
         <Image
           src="/img/maketrip.png"
           alt="catchcopyImg"
@@ -69,7 +69,7 @@ export const Features = () => {
 
       <Link href="/signup">
         <a>
-          <div className="w-full py-3.5 text-white font-semibold tracking-wider rounded-full text-center bg-yellow-500 hover:bg-hover-yellow">
+          <div className="w-full mx-auto max-w-lg py-3.5 text-white font-semibold tracking-wider rounded-full text-center bg-yellow-500 hover:bg-hover-yellow">
             今すぐはじめる
           </div>
         </a>

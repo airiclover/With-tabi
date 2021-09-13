@@ -13,12 +13,12 @@ export const About = () => {
         layout="responsive"
       />
 
-      <div className="pt-28 pb-24 px-4">
+      <div className="mx-auto pt-28 pb-24 px-4 max-w-screen-md lg:pt-36">
         <div className="mb-16 relative">
-          <p className="text-gray-400 text-opacity-30 text-6xl font-black tracking-wider absolute bottom-4 left-1">
+          <p className="text-gray-400 text-opacity-30 text-6xl font-black tracking-wider absolute bottom-4 left-1 lg:text-7xl">
             About
           </p>
-          <div className="text-2xl font-bold tracking-wider">
+          <div className="text-2xl font-bold tracking-wider lg:text-3xl">
             With tabiとは？
           </div>
         </div>
@@ -30,7 +30,7 @@ export const About = () => {
             height={170}
           />
           <div className="w-7/12">
-            <div className="pb-8 text-xl font-semibold tracking-wide">
+            <div className="pb-8 text-xl font-semibold tracking-wide lg:text-2xl">
               旅の予定がひと目
               <br />
               でわかる
@@ -50,7 +50,7 @@ export const About = () => {
 
         <div className="flex justify-around items-center">
           <div className="w-7/12">
-            <div className="pb-8 text-xl font-semibold tracking-wide">
+            <div className="pb-8 text-xl font-semibold tracking-wide lg:text-2xl">
               シンプルで
               <br />
               わかりやすい操作
