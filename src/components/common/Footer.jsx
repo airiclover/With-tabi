@@ -42,25 +42,18 @@ const LINKSRIGHT = [
 export const Footer = () => {
   return (
     <div>
-      <Image
-        src="/img/plainline.png"
-        alt="plainImg"
-        width={140}
-        height={60}
-        layout="responsive"
-        loading="eager"
-        priority
-      />
-
-      <div className="py-10 px-4">
+      <div className="md:hidden">
         <Image
-          src="/img/logo.png"
-          alt="logoImg"
-          width={120}
-          height={28}
-          loading="eager"
-          priority
+          src="/img/plainline.png"
+          alt="plainImg"
+          width={140}
+          height={60}
+          layout="responsive"
         />
+      </div>
+
+      <div className="mx-auto max-w-screen-md py-10 px-4 lg:py-16">
+        <Image src="/img/logo.png" alt="logoImg" width={120} height={28} />
 
         <div className="pt-6 flex justify-around text-sm">
           <div>
