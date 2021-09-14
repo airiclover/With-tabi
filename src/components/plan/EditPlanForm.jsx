@@ -149,7 +149,7 @@ export const EditPlanForm = (props) => {
     <Transition appear show={props.isOpenFixForm} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-10 overflow-y-auto text-gray-800"
+        className="max-w-full mx-auto fixed inset-0 z-10 overflow-y-auto text-gray-800"
         onClose={props.closeFixForm}
       >
         <Transition.Child
@@ -164,273 +164,277 @@ export const EditPlanForm = (props) => {
           {/*  プランページと詳細ページでフォームを出し分ける */}
           {props.planPage === "planPage" ? (
             // 👇 プランページの場合のフォーム
-            <div className="min-h-screen pt-6 px-4 inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white">
-              <div className="text-right">
-                <button
-                  type="button"
-                  className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
-                  onClick={props.closeFixForm}
-                >
-                  <CloseIcon />
-                </button>
-              </div>
-
-              <div className="pt-6 pb-7">
-                <p className="pb-1 font-semibold">アイコンを選択</p>
-                <div className="flex">
+            <div className="min-h-screen pt-6 px-4 inline-block w-full overflow-hidden text-left align-middle transition-all transform bg-white">
+              <div className="max-w-md mx-auto">
+                <div className="text-right">
                   <button
-                    onClick={openEmoji}
-                    className="p-2.5 bg-gray-100 rounded-lg mr-3"
+                    type="button"
+                    className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                    onClick={props.closeFixForm}
                   >
-                    <EmojiIcon className="w-6 h-6" />
+                    <CloseIcon />
                   </button>
+                </div>
 
-                  {emoji ? (
-                    <div className="flex items-center">
-                      <Emoji emoji={emoji} size={30} />
-                      <button
-                        onClick={handleEmojiReset}
-                        className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
-                      >
-                        リセット
-                      </button>
-                    </div>
+                <div className="pt-6 pb-7">
+                  <p className="pb-1 font-semibold">アイコンを選択</p>
+                  <div className="flex">
+                    <button
+                      onClick={openEmoji}
+                      className="p-2.5 bg-gray-100 rounded-lg mr-3"
+                    >
+                      <EmojiIcon className="w-6 h-6" />
+                    </button>
+
+                    {emoji ? (
+                      <div className="flex items-center">
+                        <Emoji emoji={emoji} size={30} />
+                        <button
+                          onClick={handleEmojiReset}
+                          className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
+                        >
+                          リセット
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {/* emoji-mart */}
+                  {isOpenEmoji ? (
+                    <EmojiMart
+                      setEmoji={setEmoji}
+                      setIsOpenEmoji={setIsOpenEmoji}
+                    />
                   ) : null}
                 </div>
 
-                {/* emoji-mart */}
-                {isOpenEmoji ? (
-                  <EmojiMart
-                    setEmoji={setEmoji}
-                    setIsOpenEmoji={setIsOpenEmoji}
-                  />
-                ) : null}
-              </div>
-
-              <form onSubmit={handleSubmit(on_submit)}>
-                <label className="pb-7 font-semibold flex flex-col">
-                  旅行タイトル
-                  <input
-                    defaultValue={props.plan.title}
-                    type="text"
-                    placeholder="旅行タイトル"
-                    {...register("title", {
-                      required: true,
-                      minLength: 1,
-                      maxLength: 50,
-                    })}
-                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
-                  />
-                  {errors.title && (
-                    <span className="pt-1 text-red-500 text-xs">
-                      入力は必須です(50文字以内)
-                    </span>
-                  )}
-                </label>
-
-                <label className="pb-7 font-semibold flex flex-col">
-                  出発日
-                  <input
-                    defaultValue={props.plan.beforeStartDate}
-                    type="date"
-                    {...register("startDate", {
-                      required: true,
-                      maxLength: 10,
-                    })}
-                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
-                  />
-                  {errors.startDate && (
-                    <span className="pt-1 text-red-500 text-xs">
-                      入力は必須です(数値8文字)
-                    </span>
-                  )}
-                </label>
-
-                <label className="pb-12 font-semibold flex flex-col">
-                  帰着日
-                  <input
-                    defaultValue={props.plan.beforeLastDate}
-                    type="date"
-                    {...register("lastDate", {
-                      required: true,
-                      maxLength: 10,
-                    })}
-                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
-                  />
-                  {errors.lastDate && (
-                    <span className="pt-1 text-red-500 text-xs">
-                      入力は必須です(数値8文字)
-                    </span>
-                  )}
-                </label>
-
-                <div className="text-right">
-                  <button
-                    type="submit"
-                    className="px-8 py-3 bg-yellow-500 text-white tracking-widest rounded-full hover:opacity-90 focus:outline-none"
-                  >
-                    編集
-                  </button>
-                </div>
-              </form>
-            </div>
-          ) : (
-            // 👇 プラン詳細ページの場合のフォーム
-            <div className="min-h-screen pt-6 pb-10 px-6 inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white">
-              <div className="text-right">
-                <button
-                  type="button"
-                  className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
-                  onClick={props.closeFixForm}
-                >
-                  <CloseIcon />
-                </button>
-              </div>
-
-              <div className="pt-6 pb-7">
-                <p className="pb-1 font-semibold">アイコンを選択</p>
-                <div className="flex">
-                  <button
-                    onClick={openEmoji}
-                    className="p-2.5 bg-gray-100 rounded-lg mr-3"
-                  >
-                    <EmojiIcon className="w-6 h-6" />
-                  </button>
-                  {emoji ? (
-                    <div className="flex items-center">
-                      <Emoji emoji={emoji} size={30} />
-                      <button
-                        onClick={handleEmojiReset}
-                        className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
-                      >
-                        リセット
-                      </button>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-
-                {/* emoji-mart */}
-                {isOpenEmoji ? (
-                  <EmojiMart
-                    setEmoji={setEmoji}
-                    setIsOpenEmoji={setIsOpenEmoji}
-                  />
-                ) : null}
-              </div>
-
-              <form onSubmit={handleSubmit(on_submit_detail)}>
-                <label className="pb-7 font-semibold flex flex-col">
-                  プランタイトル
-                  <input
-                    defaultValue={props.plan.title}
-                    type="text"
-                    placeholder="プランタイトル"
-                    {...register("title", {
-                      required: true,
-                      minLength: 1,
-                      maxLength: 50,
-                    })}
-                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
-                  />
-                  {errors.title && (
-                    <span className="pt-1 text-red-500 text-xs">
-                      入力は必須です(50文字以内)
-                    </span>
-                  )}
-                </label>
-
-                <div className="flex pb-6">
-                  <label className="w-5/12 mr-6 font-semibold">
-                    開始時刻
+                <form onSubmit={handleSubmit(on_submit)}>
+                  <label className="pb-7 font-semibold flex flex-col">
+                    旅行タイトル
                     <input
-                      defaultValue={props.plan.startTime}
-                      type="time"
-                      {...register("startTime", {
+                      defaultValue={props.plan.title}
+                      type="text"
+                      placeholder="旅行タイトル"
+                      {...register("title", {
                         required: true,
+                        minLength: 1,
+                        maxLength: 50,
                       })}
-                      className="w-full mt-1 p-2 bg-gray-100 rounded-lg inline-block"
+                      className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
                     />
-                    {errors.startTime && (
+                    {errors.title && (
                       <span className="pt-1 text-red-500 text-xs">
-                        入力は必須です
+                        入力は必須です(50文字以内)
                       </span>
                     )}
                   </label>
 
-                  <label className="w-5/12 font-semibold">
-                    <div className="flex items-center">
-                      <p>終了時刻</p>
-                      <input
-                        type="button"
-                        onClick={() =>
-                          reset({
-                            lastTime: "",
-                          })
-                        }
-                        className="ml-3 bg-white text-xs text-gray-400 border-b border-gray-400 cursor-pointer"
-                        value="リセット"
-                      />
-                    </div>
+                  <label className="pb-7 font-semibold flex flex-col">
+                    出発日
                     <input
-                      defaultValue={props.plan.lastTime}
-                      type="time"
-                      {...register("lastTime", {
-                        required: false,
+                      defaultValue={props.plan.beforeStartDate}
+                      type="date"
+                      {...register("startDate", {
+                        required: true,
+                        maxLength: 10,
                       })}
                       className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
                     />
+                    {errors.startDate && (
+                      <span className="pt-1 text-red-500 text-xs">
+                        入力は必須です(数値8文字)
+                      </span>
+                    )}
                   </label>
-                </div>
 
-                <label className="mb-6 font-semibold flex flex-col">
-                  メモ
-                  <textarea
-                    defaultValue={props.plan.memo}
-                    placeholder="メモ"
-                    {...register("memo", {
-                      required: false,
-                      maxLength: 800,
-                    })}
-                    className="w-full h-24 p-2.5 text-base bg-gray-100 rounded-lg resize-none"
-                  />
-                  {errors.memo && (
-                    <span className="pt-1 text-red-500 text-xs">
-                      入力は800文字以内です。
-                    </span>
-                  )}
-                </label>
+                  <label className="pb-12 font-semibold flex flex-col">
+                    帰着日
+                    <input
+                      defaultValue={props.plan.beforeLastDate}
+                      type="date"
+                      {...register("lastDate", {
+                        required: true,
+                        maxLength: 10,
+                      })}
+                      className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                    />
+                    {errors.lastDate && (
+                      <span className="pt-1 text-red-500 text-xs">
+                        入力は必須です(数値8文字)
+                      </span>
+                    )}
+                  </label>
 
-                <label className="mb-10 font-semibold flex flex-col">
-                  推定金額
-                  <input
-                    defaultValue={props.plan.money.replaceAll(",", "")}
-                    type="text"
-                    placeholder="10000 (数値のみ)"
-                    {...register("money", {
-                      required: false,
-                      pattern: /^[0-9]+$/,
-                      maxLength: 8,
-                    })}
-                    className="w-full p-2 bg-gray-100 rounded-lg"
-                  />
-                  {errors.money && (
-                    <span className="pt-1 text-red-500 text-xs">
-                      数値(半角8桁以内)を入力して下さい。
-                    </span>
-                  )}
-                </label>
-
+                  <div className="text-right">
+                    <button
+                      type="submit"
+                      className="px-8 py-2.5 bg-yellow-500 text-white tracking-widest rounded-full hover:opacity-90 focus:outline-none"
+                    >
+                      編集
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          ) : (
+            // 👇 プラン詳細ページの場合のフォーム
+            <div className="min-h-screen pt-6 pb-10 px-6 inline-block w-full overflow-hidden text-left align-middle transition-all transform bg-white">
+              <div className="max-w-md mx-auto">
                 <div className="text-right">
                   <button
-                    type="submit"
-                    className="px-8 py-3 bg-yellow-500 text-white tracking-widest rounded-full hover:opacity-90 focus:outline-none"
+                    type="button"
+                    className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                    onClick={props.closeFixForm}
                   >
-                    編集
+                    <CloseIcon />
                   </button>
                 </div>
-              </form>
+
+                <div className="pt-6 pb-7">
+                  <p className="pb-1 font-semibold">アイコンを選択</p>
+                  <div className="flex">
+                    <button
+                      onClick={openEmoji}
+                      className="p-2.5 bg-gray-100 rounded-lg mr-3"
+                    >
+                      <EmojiIcon className="w-6 h-6" />
+                    </button>
+                    {emoji ? (
+                      <div className="flex items-center">
+                        <Emoji emoji={emoji} size={30} />
+                        <button
+                          onClick={handleEmojiReset}
+                          className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
+                        >
+                          リセット
+                        </button>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+
+                  {/* emoji-mart */}
+                  {isOpenEmoji ? (
+                    <EmojiMart
+                      setEmoji={setEmoji}
+                      setIsOpenEmoji={setIsOpenEmoji}
+                    />
+                  ) : null}
+                </div>
+
+                <form onSubmit={handleSubmit(on_submit_detail)}>
+                  <label className="pb-7 font-semibold flex flex-col">
+                    プランタイトル
+                    <input
+                      defaultValue={props.plan.title}
+                      type="text"
+                      placeholder="プランタイトル"
+                      {...register("title", {
+                        required: true,
+                        minLength: 1,
+                        maxLength: 50,
+                      })}
+                      className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                    />
+                    {errors.title && (
+                      <span className="pt-1 text-red-500 text-xs">
+                        入力は必須です(50文字以内)
+                      </span>
+                    )}
+                  </label>
+
+                  <div className="flex pb-6">
+                    <label className="w-5/12 mr-6 font-semibold">
+                      開始時刻
+                      <input
+                        defaultValue={props.plan.startTime}
+                        type="time"
+                        {...register("startTime", {
+                          required: true,
+                        })}
+                        className="w-full mt-1 p-2 bg-gray-100 rounded-lg inline-block"
+                      />
+                      {errors.startTime && (
+                        <span className="pt-1 text-red-500 text-xs">
+                          入力は必須です
+                        </span>
+                      )}
+                    </label>
+
+                    <label className="w-5/12 font-semibold">
+                      <div className="flex items-center">
+                        <p>終了時刻</p>
+                        <input
+                          type="button"
+                          onClick={() =>
+                            reset({
+                              lastTime: "",
+                            })
+                          }
+                          className="ml-3 bg-white text-xs text-gray-400 border-b border-gray-400 cursor-pointer"
+                          value="リセット"
+                        />
+                      </div>
+                      <input
+                        defaultValue={props.plan.lastTime}
+                        type="time"
+                        {...register("lastTime", {
+                          required: false,
+                        })}
+                        className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                      />
+                    </label>
+                  </div>
+
+                  <label className="mb-6 font-semibold flex flex-col">
+                    メモ
+                    <textarea
+                      defaultValue={props.plan.memo}
+                      placeholder="メモ"
+                      {...register("memo", {
+                        required: false,
+                        maxLength: 800,
+                      })}
+                      className="w-full h-24 p-2.5 text-base bg-gray-100 rounded-lg resize-none"
+                    />
+                    {errors.memo && (
+                      <span className="pt-1 text-red-500 text-xs">
+                        入力は800文字以内です。
+                      </span>
+                    )}
+                  </label>
+
+                  <label className="mb-10 font-semibold flex flex-col">
+                    推定金額
+                    <input
+                      defaultValue={props.plan.money.replaceAll(",", "")}
+                      type="text"
+                      placeholder="10000 (数値のみ)"
+                      {...register("money", {
+                        required: false,
+                        pattern: /^[0-9]+$/,
+                        maxLength: 8,
+                      })}
+                      className="w-full p-2 bg-gray-100 rounded-lg"
+                    />
+                    {errors.money && (
+                      <span className="pt-1 text-red-500 text-xs">
+                        数値(半角8桁以内)を入力して下さい。
+                      </span>
+                    )}
+                  </label>
+
+                  <div className="text-right">
+                    <button
+                      type="submit"
+                      className="px-8 py-2.5 bg-yellow-500 text-white tracking-widest rounded-full hover:opacity-90 focus:outline-none"
+                    >
+                      編集
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           )}
         </Transition.Child>

@@ -112,150 +112,152 @@ const Settings = () => {
 
   return (
     <Layout>
-      <div className="p-4 text-4xl font-bold tracking-wider">Settings</div>
+      <div className="max-w-lg mx-auto">
+        <div className="p-4 text-4xl font-bold tracking-wider">Settings</div>
 
-      <div className="pt-2 pb-10 flex flex-col items-center">
-        {icon === "" ? (
-          <Image
-            src={userInfo?.icon}
-            alt="userIcon"
-            width={112}
-            height={112}
-            objectFit="cover"
-            className="rounded-full"
-            loading="eager"
-            priority
-          />
-        ) : icon === "isLoadingIcon" ? (
-          // 変更完了まではスケルトンローディングを表示
-          <div className="animate-pulse h-28 w-28 bg-gray-200 rounded-full"></div>
-        ) : (
-          <img
-            src={URL.createObjectURL(icon)}
-            alt="uploaded"
-            className="w-28 h-28 rounded-full object-cover"
-          />
-        )}
+        <div className="pt-2 pb-10 flex flex-col items-center">
+          {icon === "" ? (
+            <Image
+              src={userInfo?.icon}
+              alt="userIcon"
+              width={112}
+              height={112}
+              objectFit="cover"
+              className="rounded-full"
+              loading="eager"
+              priority
+            />
+          ) : icon === "isLoadingIcon" ? (
+            // 変更完了まではスケルトンローディングを表示
+            <div className="animate-pulse h-28 w-28 bg-gray-200 rounded-full"></div>
+          ) : (
+            <img
+              src={URL.createObjectURL(icon)}
+              alt="uploaded"
+              className="w-28 h-28 rounded-full object-cover"
+            />
+          )}
 
-        <label className="text-sm text-gray-500 border-b border-gray-500 cursor-pointer">
-          ファイルを選択する
-          <input
-            type="file"
-            onChange={handleChangeIcon}
-            accept="image/*"
-            className="hidden"
-          />
-        </label>
+          <label className="text-sm text-gray-500 border-b border-gray-500 cursor-pointer">
+            ファイルを選択する
+            <input
+              type="file"
+              onChange={handleChangeIcon}
+              accept="image/*"
+              className="hidden"
+            />
+          </label>
 
-        {icon != "" && (
-          <>
-            <div className="flex my-6">
-              <button
-                className="mr-2 py-2 px-4 text-yellow-500 text-sm rounded-full border border-yellow-500 hover:bg-hover-yellow"
-                onClick={chancelSetIcon}
-              >
-                キャンセル
-              </button>
-
-              <form onSubmit={onSetIconSubmit}>
+          {icon != "" && (
+            <>
+              <div className="flex my-6">
                 <button
-                  className="py-2 px-4 bg-yellow-500 text-white text-sm rounded-full hover:bg-hover-yellow"
-                  onClick={onSetIconSubmit}
+                  className="mr-2 py-2 px-4 text-yellow-500 text-sm rounded-full border border-yellow-500 hover:bg-hover-yellow"
+                  onClick={chancelSetIcon}
                 >
-                  アイコンを変更する
+                  キャンセル
                 </button>
-              </form>
+
+                <form onSubmit={onSetIconSubmit}>
+                  <button
+                    className="py-2 px-4 bg-yellow-500 text-white text-sm rounded-full hover:bg-hover-yellow"
+                    onClick={onSetIconSubmit}
+                  >
+                    アイコンを変更する
+                  </button>
+                </form>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="px-10 pb-6">
+          <form onSubmit={handleSubmit(on_submit)}>
+            <label className="text-sm mb-4 flex flex-col lg:mb-6">
+              名前（ニックネーム）
+              <input
+                defaultValue={userInfo?.name}
+                placeholder="名前"
+                {...register("name", {
+                  required: true,
+                  minLength: 1,
+                  maxLength: 50,
+                })}
+                className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
+              />
+              {errors.name && (
+                <span className="pt-1 text-red-500 text-xs">
+                  入力は必須です(1-50文字以内)
+                </span>
+              )}
+            </label>
+
+            <label className="text-sm mb-4 flex flex-col lg:mb-6">
+              Twitterユーザー名
+              <input
+                defaultValue={userInfo?.twitter}
+                placeholder="@なしで入力"
+                {...register("twitter", {
+                  required: false,
+                  pattern: /^[0-9_a-zA-Z]+$/,
+                  maxLength: 15,
+                })}
+                className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
+              />
+              {errors.twitter && (
+                <span className="pt-1 text-red-500 text-xs">
+                  正しいユーザー名を入力してください。
+                </span>
+              )}
+            </label>
+
+            <label className="text-sm mb-4 flex flex-col lg:mb-6">
+              Instagramユーザー名
+              <input
+                defaultValue={userInfo?.instagram}
+                placeholder="@なしで入力"
+                {...register("instagram", {
+                  required: false,
+                  pattern: /^[0-9_.a-zA-Z]+$/,
+                  maxLength: 30,
+                })}
+                className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
+              />
+              {errors.instagram && (
+                <span className="pt-1 text-red-500 text-xs">
+                  正しいユーザー名を入力してください。
+                </span>
+              )}
+            </label>
+
+            <label className="text-sm mb-6 flex flex-col lg:mb-8">
+              自己紹介
+              <textarea
+                defaultValue={userInfo?.introduce}
+                placeholder="自己紹介（160文字以内）"
+                {...register("introduce", {
+                  required: false,
+                  maxLength: 160,
+                })}
+                className="w-full h-24 p-2.5 text-base bg-gray-100 rounded-lg resize-none"
+              />
+              {errors.introduce && (
+                <span className="pt-1 text-red-500 text-xs">
+                  入力は160文字以内です。
+                </span>
+              )}
+            </label>
+
+            <div className="text-right">
+              <button
+                type="submit"
+                className="h-11 w-28 bg-yellow-500 text-white rounded-full hover:bg-hover-yellow lg:w-32"
+              >
+                変更する
+              </button>
             </div>
-          </>
-        )}
-      </div>
-
-      <div className="px-10 pb-6">
-        <form onSubmit={handleSubmit(on_submit)}>
-          <label className="text-sm mb-4 flex flex-col">
-            名前（ニックネーム）
-            <input
-              defaultValue={userInfo?.name}
-              placeholder="名前"
-              {...register("name", {
-                required: true,
-                minLength: 1,
-                maxLength: 50,
-              })}
-              className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
-            />
-            {errors.name && (
-              <span className="pt-1 text-red-500 text-xs">
-                入力は必須です(1-50文字以内)
-              </span>
-            )}
-          </label>
-
-          <label className="text-sm mb-4 flex flex-col">
-            Twitterユーザー名
-            <input
-              defaultValue={userInfo?.twitter}
-              placeholder="@なしで入力"
-              {...register("twitter", {
-                required: false,
-                pattern: /^[0-9_a-zA-Z]+$/,
-                maxLength: 15,
-              })}
-              className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
-            />
-            {errors.twitter && (
-              <span className="pt-1 text-red-500 text-xs">
-                正しいユーザー名を入力してください。
-              </span>
-            )}
-          </label>
-
-          <label className="text-sm mb-4 flex flex-col">
-            Instagramユーザー名
-            <input
-              defaultValue={userInfo?.instagram}
-              placeholder="@なしで入力"
-              {...register("instagram", {
-                required: false,
-                pattern: /^[0-9_.a-zA-Z]+$/,
-                maxLength: 30,
-              })}
-              className="w-full p-2.5 text-base bg-gray-100 rounded-lg"
-            />
-            {errors.instagram && (
-              <span className="pt-1 text-red-500 text-xs">
-                正しいユーザー名を入力してください。
-              </span>
-            )}
-          </label>
-
-          <label className="text-sm mb-6 flex flex-col">
-            自己紹介
-            <textarea
-              defaultValue={userInfo?.introduce}
-              placeholder="自己紹介（160文字以内）"
-              {...register("introduce", {
-                required: false,
-                maxLength: 160,
-              })}
-              className="w-full h-24 p-2.5 text-base bg-gray-100 rounded-lg resize-none"
-            />
-            {errors.introduce && (
-              <span className="pt-1 text-red-500 text-xs">
-                入力は160文字以内です。
-              </span>
-            )}
-          </label>
-
-          <div className="text-right">
-            <button
-              type="submit"
-              className="h-11 w-28 bg-yellow-500 text-white rounded-full hover:bg-hover-yellow"
-            >
-              変更する
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </Layout>
   );

@@ -9,7 +9,7 @@ export const Header = () => {
 
   return (
     <header className="h-16 flex items-center lg:h-18">
-      <div className="w-2/5">
+      <div className="w-2/5 lg:w-9/12">
         <Link href="/">
           <a className="py-5 px-2">
             <Image
@@ -26,7 +26,7 @@ export const Header = () => {
 
       {userInfo ? (
         // ユーザー情報がある場合
-        <div className="w-3/5">
+        <div className="w-3/5 lg:w-3/12">
           <div className="h-16 flex items-center text-xxs">
             <Link href="/[userId]/plan" as={`/${userInfo.uid}/plan`}>
               <a className="py-2 flex-1 hover:bg-gray-50">
@@ -69,13 +69,13 @@ export const Header = () => {
         // ユーザー情報がない場合
         <div className="w-3/5 pr-2 text-right lg:pr-5">
           <Link href="/login">
-            <a className="mr-2 py-1.5 px-2.5 text-xs text-yellow-500 border border-yellow-500 rounded-full leading-6 lg:mr-3 lg:py-2 lg:px-3">
+            <a className="mr-2 py-1.5 px-2.5 text-xs text-yellow-500 border border-yellow-500 rounded-full leading-6 lg:mr-3 lg:py-2 lg:px-4">
               ログイン
             </a>
           </Link>
 
           <Link href="/signup">
-            <a className="text-xs py-1.5 px-2.5 bg-yellow-500 text-white border border-yellow-500 rounded-full leading-6 hover:bg-hover-yellow lg:py-2 lg:px-3">
+            <a className="text-xs py-1.5 px-2.5 bg-yellow-500 text-white border border-yellow-500 rounded-full leading-6 hover:bg-hover-yellow lg:py-2 lg:px-4">
               新規登録
             </a>
           </Link>

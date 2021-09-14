@@ -79,7 +79,7 @@ const UserBlogPage = () => {
     <Layout>
       {account ? (
         <>
-          <div className="pt-6 pb-8 px-5">
+          <div className="max-w-lg mx-auto pt-6 pb-8 px-5 lg:py-12">
             <div className="flex">
               <Image
                 src={account?.icon}

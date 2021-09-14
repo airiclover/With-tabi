@@ -90,8 +90,8 @@ const BlogID = () => {
   return (
     <CommonLayout>
       {blog?.length !== 0 ? (
-        <div className="min-h-screen bg-white">
-          <div className="mx-6">
+        <div className="mx-auto max-w-screen-sm min-h-screen bg-white">
+          <div className="mx-6 md:mx-0">
             {blog?.headingImage ? (
               <Image
                 src={blog?.headingImage}
@@ -121,7 +121,7 @@ const BlogID = () => {
           </div>
 
           {/* ユーザー情報========== */}
-          <div className="mb-6 border">
+          <div className="border">
             <div className="py-6 mx-6">
               <div className="flex items-center">
                 {authorData?.icon ? (

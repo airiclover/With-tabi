@@ -167,85 +167,87 @@ const Post = () => {
   return (
     <Layout>
       <div className="min-h-screen py-8 px-4 bg-blue-50">
-        {/* 以下inputはreact-form等に変える */}
-        <input
-          type="text"
-          value={blogTitle}
-          onChange={onChangeBlogTitle}
-          placeholder="タイトル"
-          className="w-full h-8 mt-6 mb-8 py-5 px-2 border shadow-md"
-        />
+        <div className="mx-auto max-w-screen-sm">
+          {/* 以下inputはreact-form等に変える */}
+          <input
+            type="text"
+            value={blogTitle}
+            onChange={onChangeBlogTitle}
+            placeholder="タイトル"
+            className="w-full h-8 mt-6 mb-8 py-5 px-2 border shadow-md"
+          />
 
-        {/* ======================== */}
-        {/* 見出し画像 */}
-        <div className="mb-8">
-          <label className="text-sm text-gray-500 border-b border-gray-500 cursor-pointer">
-            見出し画像を選択する
-            <input
-              type="file"
-              onChange={handleChangeHeadingImage}
-              accept="image/*"
-              className="hidden"
-            />
-          </label>
+          {/* ======================== */}
+          {/* 見出し画像 */}
+          <div className="mb-8">
+            <label className="text-sm text-gray-500 border-b border-gray-500 cursor-pointer">
+              見出し画像を選択する
+              <input
+                type="file"
+                onChange={handleChangeHeadingImage}
+                accept="image/*"
+                className="hidden"
+              />
+            </label>
 
-          {headingImage === "" ? (
-            <div className="h-44 w-64 mt-1 mx-auto bg-gray-200" />
-          ) : (
-            <img
-              src={URL.createObjectURL(headingImage)}
-              alt="uploaded"
-              className="h-44 w-64 mx-auto object-cover"
-            />
-          )}
-        </div>
-        {/* ======================== */}
-        <Editor
-          editorState={editorState}
-          onEditorStateChange={onEditorStateChange}
-          toolbarClassName="shadow-sm"
-          editorClassName="mt-2 mb-12 p-2 bg-white border shadow-md"
-          toolbar={{
-            options: [
-              "blockType",
-              "fontSize",
-              "inline",
-              "colorPicker",
-              "image",
-              "link",
-              // "embedded", // 埋め込みリンク(時間があれば実装する)
-            ],
-            inline: {
-              options: ["bold", "italic", "underline"],
-            },
-            image: {
-              uploadCallback: uploadCallback,
-              previewImage: true,
-            },
-          }}
-        />
-        {/* <div
+            {headingImage === "" ? (
+              <div className="h-44 w-64 mt-1 mx-auto bg-gray-200" />
+            ) : (
+              <img
+                src={URL.createObjectURL(headingImage)}
+                alt="uploaded"
+                className="h-44 w-64 mx-auto object-cover"
+              />
+            )}
+          </div>
+          {/* ======================== */}
+          <Editor
+            editorState={editorState}
+            onEditorStateChange={onEditorStateChange}
+            toolbarClassName="shadow-sm"
+            editorClassName="mt-2 mb-12 p-2 bg-white border shadow-md"
+            toolbar={{
+              options: [
+                "blockType",
+                "fontSize",
+                "inline",
+                "colorPicker",
+                "image",
+                "link",
+                // "embedded", // 埋め込みリンク(時間があれば実装する)
+              ],
+              inline: {
+                options: ["bold", "italic", "underline"],
+              },
+              image: {
+                uploadCallback: uploadCallback,
+                previewImage: true,
+              },
+            }}
+          />
+          {/* <div
           className="bg-pink-100"
           dangerouslySetInnerHTML={createMarkup(convertedContent)}
         ></div> */}
-        <div className="my-6 mr-2 text-right flex justify-end">
-          <button
-            type="submit"
-            onClick={sitagaki}
-            className="mr-2 px-7 py-2.5 bg-blue-500 text-white text-sm tracking-widest rounded-full hover:opacity-90 focus:outline-none"
-          >
-            下書き
-          </button>
-
-          <form onSubmit={onSubmit}>
+          <div className="my-6 mr-2 text-right flex justify-end">
             <button
               type="submit"
-              onClick={onSubmit}
-              className="px-7 py-2.5 bg-blue-500 text-white text-sm tracking-widest rounded-full hover:opacity-90 focus:outline-none"
+              onClick={sitagaki}
+              className="mr-2 px-7 py-2.5 bg-blue-500 text-white text-sm tracking-widest rounded-full hover:opacity-90 focus:outline-none"
             >
-              送信
+              下書き
             </button>
-          </form>
+
+            <form onSubmit={onSubmit}>
+              <button
+                type="submit"
+                onClick={onSubmit}
+                className="px-7 py-2.5 bg-blue-500 text-white text-sm tracking-widest rounded-full hover:opacity-90 focus:outline-none"
+              >
+                送信
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </Layout>

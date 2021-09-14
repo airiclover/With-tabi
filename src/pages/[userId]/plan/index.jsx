@@ -65,7 +65,7 @@ const UserPlanPage = () => {
 
   return (
     <CommonLayout>
-      <div className="px-3 pb-28">
+      <div className="mx-auto max-w-screen-sm px-3 pb-28">
         <div className="py-4 flex items-center relative">
           <CalendarIcon className={"h-9 w-9"} />
           <div className="pl-2 text-4xl font-bold tracking-wide">
@@ -80,7 +80,7 @@ const UserPlanPage = () => {
               return (
                 <div
                   key={plan.id}
-                  className="h-24 bg-white mt-5 py-3 px-4 rounded-xl relative"
+                  className="h-24 py-3 px-4 bg-white mt-5 rounded-xl relative"
                 >
                   <Link
                     href="/[userId]/plan/[planId]"
