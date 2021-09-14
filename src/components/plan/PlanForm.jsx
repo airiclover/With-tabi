@@ -84,7 +84,7 @@ export const PlanForm = (props) => {
     <Transition appear show={props.isOpenModal} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-10 overflow-y-auto text-gray-800"
+        className="max-w-full mx-auto fixed inset-0 z-10 overflow-y-auto text-gray-800"
         onClose={props.closeFormModal}
       >
         <Transition.Child
@@ -96,113 +96,115 @@ export const PlanForm = (props) => {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="min-h-screen pt-6 px-6 inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white">
-            <div className="text-right">
-              <button
-                type="button"
-                className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
-                onClick={props.closeFormModal}
-              >
-                <CloseIcon />
-              </button>
-            </div>
-
-            <div className="pt-6 pb-7">
-              <p className="pb-1 font-semibold">アイコンを選択</p>
-              <div className="flex">
-                <button
-                  onClick={openEmoji}
-                  className="p-2.5 bg-gray-100 rounded-lg mr-3"
-                >
-                  <EmojiIcon className="w-6 h-6" />
-                </button>
-                {emoji ? (
-                  <div className="flex items-center">
-                    <Emoji emoji={emoji} size={30} />
-                    <button
-                      onClick={handleEmojiReset}
-                      className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
-                    >
-                      リセット
-                    </button>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
-
-              {/* emoji-mart */}
-              {isOpenEmoji ? (
-                <EmojiMart
-                  setEmoji={setEmoji}
-                  setIsOpenEmoji={setIsOpenEmoji}
-                />
-              ) : null}
-            </div>
-
-            <form onSubmit={handleSubmit(on_submit)}>
-              <label className="pb-7 font-semibold flex flex-col">
-                旅行タイトル
-                <input
-                  type="text"
-                  placeholder="旅行タイトル"
-                  {...register("title", {
-                    required: true,
-                    minLength: 1,
-                    maxLength: 50,
-                  })}
-                  className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
-                />
-                {errors.title && (
-                  <span className="pt-1 text-red-500 text-xs">
-                    入力は必須です(50文字以内)
-                  </span>
-                )}
-              </label>
-
-              <label className="pb-7 font-semibold flex flex-col">
-                出発日
-                <input
-                  type="date"
-                  {...register("startDate", {
-                    required: true,
-                    maxLength: 10,
-                  })}
-                  className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
-                />
-                {errors.startDate && (
-                  <span className="pt-1 text-red-500 text-xs">
-                    入力は必須です(数値8文字)
-                  </span>
-                )}
-              </label>
-
-              <label className="pb-12 font-semibold flex flex-col">
-                帰着日
-                <input
-                  type="date"
-                  {...register("lastDate", {
-                    required: true,
-                    maxLength: 10,
-                  })}
-                  className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
-                />
-                {errors.lastDate && (
-                  <span className="pt-1 text-red-500 text-xs">
-                    入力は必須です(数値8文字)
-                  </span>
-                )}
-              </label>
-
+          <div className="min-h-screen pt-6 px-6 inline-block w-full overflow-hidden text-left align-middle transition-all transform bg-white">
+            <div className="max-w-md mx-auto">
               <div className="text-right">
                 <button
-                  type="submit"
-                  className="px-8 py-3 bg-yellow-500 text-white tracking-widest rounded-full hover:opacity-90 focus:outline-none"
+                  type="button"
+                  className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                  onClick={props.closeFormModal}
                 >
-                  登録
+                  <CloseIcon />
                 </button>
               </div>
-            </form>
+
+              <div className="pt-6 pb-7">
+                <p className="pb-1 font-semibold">アイコンを選択</p>
+                <div className="flex">
+                  <button
+                    onClick={openEmoji}
+                    className="p-2.5 bg-gray-100 rounded-lg mr-3"
+                  >
+                    <EmojiIcon className="w-6 h-6" />
+                  </button>
+                  {emoji ? (
+                    <div className="flex items-center">
+                      <Emoji emoji={emoji} size={30} />
+                      <button
+                        onClick={handleEmojiReset}
+                        className="mt-1 ml-4 text-xs text-gray-400 border-b border-gray-400"
+                      >
+                        リセット
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+
+                {/* emoji-mart */}
+                {isOpenEmoji ? (
+                  <EmojiMart
+                    setEmoji={setEmoji}
+                    setIsOpenEmoji={setIsOpenEmoji}
+                  />
+                ) : null}
+              </div>
+
+              <form onSubmit={handleSubmit(on_submit)}>
+                <label className="pb-7 font-semibold flex flex-col">
+                  旅行タイトル
+                  <input
+                    type="text"
+                    placeholder="旅行タイトル"
+                    {...register("title", {
+                      required: true,
+                      minLength: 1,
+                      maxLength: 50,
+                    })}
+                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                  />
+                  {errors.title && (
+                    <span className="pt-1 text-red-500 text-xs">
+                      入力は必須です(50文字以内)
+                    </span>
+                  )}
+                </label>
+
+                <label className="pb-7 font-semibold flex flex-col">
+                  出発日
+                  <input
+                    type="date"
+                    {...register("startDate", {
+                      required: true,
+                      maxLength: 10,
+                    })}
+                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                  />
+                  {errors.startDate && (
+                    <span className="pt-1 text-red-500 text-xs">
+                      入力は必須です(数値8文字)
+                    </span>
+                  )}
+                </label>
+
+                <label className="pb-12 font-semibold flex flex-col">
+                  帰着日
+                  <input
+                    type="date"
+                    {...register("lastDate", {
+                      required: true,
+                      maxLength: 10,
+                    })}
+                    className="w-full mt-1 p-2 bg-gray-100 rounded-lg"
+                  />
+                  {errors.lastDate && (
+                    <span className="pt-1 text-red-500 text-xs">
+                      入力は必須です(数値8文字)
+                    </span>
+                  )}
+                </label>
+
+                <div className="text-right">
+                  <button
+                    type="submit"
+                    className="px-8 py-3 bg-yellow-500 text-white tracking-widest rounded-full hover:opacity-90 focus:outline-none"
+                  >
+                    登録
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </Transition.Child>
       </Dialog>

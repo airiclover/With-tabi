@@ -129,92 +129,94 @@ const PlanId = () => {
 
   return (
     <CommonLayout>
-      {/* 念の為、「arrPlans.length == plan.arrDates.length」のチェックも挟む */}
-      {plan && arrPlans.length == plan.arrDates.length ? (
-        <div>
-          <div className="pt-6 pb-4 px-4 font-extrabold">
-            <div className="flex items-center">
-              {plan?.planIcon && (
-                <div className="pt-1 pr-1.5">
-                  <Emoji emoji={plan?.planIcon} size={25} />
-                </div>
-              )}
-              <div className="text-2xl leading-snug">{plan?.title}</div>
-            </div>
-
-            <p className="py-2 text-right">{`${startDate} - ${lastDate}`}</p>
-          </div>
-
-          {arrChangePlans.length != 0 && (
-            <Link
-              href="/[userId]/plan/[planId]/changeplan"
-              as={`/${userInfo.uid}/plan/${router.query.planId}/changeplan`}
-            >
-              <a className="bg-red-300 mb-5 mx-3 py-3 text-xs font-semibold text-center block border-4 border-red-400 rounded-lg">
-                {`日付の変更が必要なデータが${arrChangePlans.length}件あります →`}
-              </a>
-            </Link>
-          )}
-
-          {plan.arrDates.length <= 1 ? (
-            <DetailWrap
-              arrPlans={arrPlans}
-              arrTotalMoney={arrTotalMoney}
-              getPage={getPlan}
-              query={router.query.planId}
-            />
-          ) : (
-            <PlanTab
-              plan={plan}
-              arrTotalMoney={arrTotalMoney}
-              arrPlans={arrPlans}
-              getPage={getPlan}
-              query={router.query.planId}
-              setIsTabId={setIsTabId}
-            />
-          )}
-        </div>
-      ) : (
-        // スケルトンローディングを表示
-        <>
-          <div className="pt-6 pb-4 px-4">
-            <div className="animate-pulse flex flex-col space-y-2 space-x-2">
+      <div className="max-w-screen-sm mx-auto">
+        {/* 念の為、「arrPlans.length == plan.arrDates.length」のチェックも挟む */}
+        {plan && arrPlans.length == plan.arrDates.length ? (
+          <div>
+            <div className="pt-6 pb-4 px-4 font-extrabold">
               <div className="flex items-center">
-                <div className="h-7 w-7 mr-2 bg-gray-200 rounded-full"></div>
-                <div className="w-5/6 h-7 bg-gray-200 rounded"></div>
+                {plan?.planIcon && (
+                  <div className="pt-1 pr-1.5">
+                    <Emoji emoji={plan?.planIcon} size={25} />
+                  </div>
+                )}
+                <div className="text-2xl leading-snug">{plan?.title}</div>
               </div>
-              <div className="w-3/4 h-7 bg-gray-200 rounded self-end"></div>
-            </div>
-          </div>
 
-          {[1, 2, 3, 4].map((number) => (
-            <div
-              key={number}
-              className="h-24 mb-5 mx-4 py-3 px-2 rounded-xl bg-white bg-opacity-50"
-            >
-              <div className="animate-pulse flex space-x-2">
-                <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
-                <div className="flex-1 space-y-4">
-                  <div className="w-5/6 h-4 bg-gray-200 rounded"></div>
-                  <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+              <p className="py-2 text-right">{`${startDate} - ${lastDate}`}</p>
+            </div>
+
+            {arrChangePlans.length != 0 && (
+              <Link
+                href="/[userId]/plan/[planId]/changeplan"
+                as={`/${userInfo.uid}/plan/${router.query.planId}/changeplan`}
+              >
+                <a className="bg-red-300 mb-5 mx-3 py-3 text-xs font-semibold text-center block border-4 border-red-400 rounded-lg">
+                  {`日付の変更が必要なデータが${arrChangePlans.length}件あります →`}
+                </a>
+              </Link>
+            )}
+
+            {plan.arrDates.length <= 1 ? (
+              <DetailWrap
+                arrPlans={arrPlans}
+                arrTotalMoney={arrTotalMoney}
+                getPage={getPlan}
+                query={router.query.planId}
+              />
+            ) : (
+              <PlanTab
+                plan={plan}
+                arrTotalMoney={arrTotalMoney}
+                arrPlans={arrPlans}
+                getPage={getPlan}
+                query={router.query.planId}
+                setIsTabId={setIsTabId}
+              />
+            )}
+          </div>
+        ) : (
+          // スケルトンローディングを表示
+          <>
+            <div className="pt-6 pb-4 px-4">
+              <div className="animate-pulse flex flex-col space-y-2 space-x-2">
+                <div className="flex items-center">
+                  <div className="h-7 w-7 mr-2 bg-gray-200 rounded-full"></div>
+                  <div className="w-5/6 h-7 bg-gray-200 rounded"></div>
+                </div>
+                <div className="w-3/4 h-7 bg-gray-200 rounded self-end"></div>
+              </div>
+            </div>
+
+            {[1, 2, 3, 4].map((number) => (
+              <div
+                key={number}
+                className="h-24 mb-5 mx-4 py-3 px-2 rounded-xl bg-white bg-opacity-50"
+              >
+                <div className="animate-pulse flex space-x-2">
+                  <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
+                  <div className="flex-1 space-y-4">
+                    <div className="w-5/6 h-4 bg-gray-200 rounded"></div>
+                    <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </>
-      )}
+            ))}
+          </>
+        )}
 
-      <ButtonAddPlan openFormModal={openFormModal} />
+        <ButtonAddPlan openFormModal={openFormModal} />
 
-      <PlanDetailForm
-        userInfo={userInfo}
-        plan={plan}
-        isOpenModal={isOpenModal}
-        closeFormModal={closeFormModal}
-        query={router.query.planId}
-        isTabId={isTabId}
-        getPage={getPlan}
-      />
+        <PlanDetailForm
+          userInfo={userInfo}
+          plan={plan}
+          isOpenModal={isOpenModal}
+          closeFormModal={closeFormModal}
+          query={router.query.planId}
+          isTabId={isTabId}
+          getPage={getPlan}
+        />
+      </div>
     </CommonLayout>
   );
 };

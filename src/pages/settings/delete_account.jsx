@@ -82,7 +82,7 @@ const DeleteAccount = () => {
 
   return (
     <CommonLayout>
-      <div className="px-4">
+      <div className="max-w-lg mx-auto px-4">
         <div className="py-10 text-xl font-semibold">
           アカウントを削除しますか？
         </div>

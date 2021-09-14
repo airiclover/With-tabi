@@ -11,7 +11,7 @@ export const PlanTab = (props) => {
   };
 
   return (
-    <div className="w-full max-w-md px-2 sm:px-0">
+    <div className="max-w-lg mx-auto px-2 sm:px-0">
       <Tab.Group
         onChange={(index) => {
           console.log("Changed selected tab to:", index);
