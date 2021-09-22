@@ -3,39 +3,31 @@ import Image from "next/image";
 
 const LINKSLEFT = [
   {
-    href: "/1",
+    href: "/",
     title: "使いかた",
   },
   {
-    href: "/2",
+    href: "/",
     title: "よくある質問",
   },
   {
-    href: "/3",
+    href: "/",
     title: "with tabiとは",
-  },
-  {
-    href: "/4",
-    title: "お問い合わせ",
   },
 ];
 
 const LINKSRIGHT = [
   {
-    href: "/1",
+    href: "/",
     title: "利用規約",
   },
   {
-    href: "/2",
+    href: "/",
     title: "プライバシーポリシー",
   },
   {
-    href: "/3",
-    title: "あああああ",
-  },
-  {
-    href: "/4",
-    title: "あああああ",
+    href: "/",
+    title: "お問い合わせ",
   },
 ];
 
@@ -69,7 +61,7 @@ export const Footer = () => {
           <div>
             {LINKSRIGHT.map((linkright) => {
               return (
-                <Link key={linkright.href} href={linkright.href}>
+                <Link key={linkright.title} href={linkright.href}>
                   <a className="py-1 block">{linkright.title}</a>
                 </Link>
               );
