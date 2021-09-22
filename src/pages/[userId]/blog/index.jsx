@@ -134,7 +134,7 @@ const UserBlogPage = () => {
               <div className="pb-12 pl-4 text-sm">
                 <div className="flex">
                   <ExclamationIcon />
-                  {userInfo.uid === router.query.userId ? (
+                  {userInfo?.uid === router.query.userId ? (
                     <p className="pl-1">
                       右下の投稿ボタンから
                       <br />
@@ -158,20 +158,9 @@ const UserBlogPage = () => {
             </div>
           )}
 
-          {/* =================== */}
-          {/* 試し！！！ */}
-          <div className="p-4 bg-pink-300">
-            <Link href={`/${userInfo.uid}/blog/tameshi`}>
-              <a>
-                <div>試しページ1</div>
-              </a>
-            </Link>
-          </div>
-          {/* =================== */}
-
           {/* 👇 自分のアカウントページだったら以下表示させる */}
-          {userInfo.uid === router.query.userId && (
-            <Link href={`/${userInfo.uid}/blog/post`}>
+          {userInfo?.uid === router.query.userId && (
+            <Link href={`/${userInfo?.uid}/blog/post`}>
               <a>
                 <ButtonAddBlog />
               </a>

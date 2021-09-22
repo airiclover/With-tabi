@@ -142,7 +142,11 @@ const BlogID = () => {
                 )}
 
                 <div className="pl-4 flex flex-col">
-                  <p className="text-xl font-bold">{authorData?.name}</p>
+                  <Link href={`/${router.query.userId}/blog`} prefetch={false}>
+                    <a>
+                      <p className="text-xl font-bold">{authorData?.name}</p>
+                    </a>
+                  </Link>
                   <div className="flex">
                     {authorData?.twitter ? (
                       <a

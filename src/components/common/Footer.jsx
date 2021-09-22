@@ -3,30 +3,30 @@ import Image from "next/image";
 
 const LINKSLEFT = [
   {
-    href: "/",
+    href: "/howtouse",
     title: "使いかた",
   },
   {
-    href: "/",
+    href: "/question",
     title: "よくある質問",
   },
   {
-    href: "/",
+    href: "/about",
     title: "with tabiとは",
   },
 ];
 
 const LINKSRIGHT = [
   {
-    href: "/",
+    href: "/rules",
     title: "利用規約",
   },
   {
-    href: "/",
+    href: "/privacypolicy",
     title: "プライバシーポリシー",
   },
   {
-    href: "/",
+    href: "/contact",
     title: "お問い合わせ",
   },
 ];
