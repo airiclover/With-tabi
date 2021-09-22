@@ -121,7 +121,7 @@ const BlogID = () => {
           </div>
 
           {/* ユーザー情報========== */}
-          <div className="border">
+          <div className="border-t md:py-6">
             <div className="py-6 mx-6">
               <div className="flex items-center">
                 {authorData?.icon ? (

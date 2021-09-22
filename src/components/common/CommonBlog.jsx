@@ -37,10 +37,10 @@ export const CommonBlog = () => {
           <div className="text-2xl font-semibold">旅の思い出</div>
         </div>
 
-        <div className="pt-2 px-4 pb-8 flex flex-col items-center lg:grid lg:grid-cols-2 lg:gap-4">
+        <div className="pt-2 px-4 pb-8">
           {blogs.length !== 0 ? (
             // ブログ表示の試し
-            <div className="bg-blue-50 flex flex-col items-center">
+            <div className="bg-blue-50 flex flex-col items-center md:grid md:grid-cols-2 md:gap-4">
               {blogs.map((blog) => {
                 console.log(blog);
 
