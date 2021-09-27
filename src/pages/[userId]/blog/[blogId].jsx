@@ -3,13 +3,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { db } from "src/utils/firebase/firebase";
-// import { convertToHTML } from "draft-convert";
 import toast from "react-hot-toast";
 import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
 import { ClockIcon } from "src/components/common/assets/ClockIcon";
-
+// import { convertToHTML } from "draft-convert";
 // import { convertToHTML } from "draft-convert";
 
 const BlogID = () => {
@@ -113,10 +112,11 @@ const BlogID = () => {
               <p className="pl-0.5 py-2 text-sm">{fixUpdateDate}</p>
             </div>
 
-            <div className="py-6">
-              {blog?.html?.blocks.map((block) => {
+            <div className="py-6 whitespace-pre-wrap">
+              {/* {blog?.html?.blocks.map((block) => {
                 return <div key={block.key}>{block.text}</div>;
-              })}
+              })} */}
+              {blog?.html}
             </div>
           </div>
 

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
 import firebase, { db, storage } from "src/utils/firebase/firebase";
-import { EditorState, convertToRaw } from "draft-js";
+import { Layout } from "src/components/layouts/Layout";
 import loadImage from "blueimp-load-image";
 import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
-import { useRequireLogin } from "src/hooks/auth/useRequireLogin";
-import { Layout } from "src/components/layouts/Layout";
-import { convertToHTML } from "draft-convert";
+// import dynamic from "next/dynamic";
+// import { useRequireLogin } from "src/hooks/auth/useRequireLogin";
+// import { EditorState, convertToRaw } from "draft-js";
+// import { convertToHTML } from "draft-convert";
 // import DOMPurify from "dompurify";
 // import { Editor } from "react-draft-wysiwyg";
 import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -16,26 +16,28 @@ import toast from "react-hot-toast";
 const Post = () => {
   const { userInfo } = useCurrentUser();
   const [blogTitle, setBlogTitle] = useState("");
+  const [blogDetail, setBlogDetail] = useState("");
   const [headingImage, setHeadingImage] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [convertedContent, setConvertedContent] = useState("");
   const router = useRouter();
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
-  useRequireLogin();
+  // const [convertedContent, setConvertedContent] = useState("");
+  // const [editorState, setEditorState] = useState(() =>
+  //   EditorState.createEmpty()
+  // );
+  // useRequireLogin();
 
   const onChangeBlogTitle = (e) => setBlogTitle(e.target.value);
 
-  const onEditorStateChange = (state) => {
-    setEditorState(state);
-    convertContentToHTML();
-  };
+  const onChangeBlogDetail = (e) => setBlogDetail(e.target.value);
 
-  const convertContentToHTML = () => {
-    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-    setConvertedContent(currentContentAsHTML);
-  };
+  // const onEditorStateChange = (state) => {
+  //   setEditorState(state);
+  //   convertContentToHTML();
+  // };
+
+  // const convertContentToHTML = () => {
+  //   let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+  //   setConvertedContent(currentContentAsHTML);
+  // };
 
   // const createMarkup = (html) => {
   //   return {
@@ -44,55 +46,50 @@ const Post = () => {
   // };
 
   // 👇 今度リサイズした画像をアップロードできるように変える
+  // const firebaseUpload = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     if (!file) {
+  //       reject("Invalid file");
+  //     }
+  //     const uploadTask = storage
+  //       .ref(`/${userInfo?.uid}/${file.name}`)
+  //       .put(file);
+  //     uploadTask.on(
+  //       "state_changed",
+  //       (snapShot) => {
+  //         console.log(snapShot);
+  //       },
+  //       (error) => {
+  //         console.log(error);
+  //       },
+  //       (complete) => {
+  //         console.log("complete", complete);
+  //         storage.getDownloadURL().then((url) => {
+  //           resolve(url);
+  //         });
+  //       }
+  //     );
+  //   });
+  // };
 
-  const firebaseUpload = (file) => {
-    return new Promise((resolve, reject) => {
-      if (!file) {
-        reject("Invalid file");
-      }
-      const uploadTask = storage
-        .ref(`/${userInfo?.uid}/${file.name}`)
-        .put(file);
-      uploadTask.on(
-        "state_changed",
-        (snapShot) => {
-          console.log(snapShot);
-        },
-        (error) => {
-          console.log(error);
-        },
-        (complete) => {
-          console.log("complete", complete);
-          storage.getDownloadURL().then((url) => {
-            resolve(url);
-          });
-        }
-      );
-    });
-  };
+  // const uploadCallback = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     firebaseUpload(file)
+  //       .then((link) => {
+  //         resolve({ data: { link } });
+  //       })
+  //       .catch((error) => {
+  //         reject(error);
+  //       });
+  //   });
+  // };
 
-  const uploadCallback = (file) => {
-    return new Promise((resolve, reject) => {
-      firebaseUpload(file)
-        .then((link) => {
-          resolve({ data: { link } });
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
+  // const sitagaki = () => {
+  //   console.log("下書きクリック！");
+  // };
 
-  const sitagaki = () => {
-    // setConverted(con);
-    console.log("下書きクリック！");
-  };
-
-  const onSubmit = async (e) => {
-    await onSetHeadingImagSubmit(e);
-
-    await router.push(`/${userInfo.uid}/blog`);
-    toast.success("ブログを投稿しました。");
+  const onSubmit = (e) => {
+    onSetHeadingImagSubmit(e);
   };
 
   // =============================
@@ -105,7 +102,7 @@ const Post = () => {
   const onSetHeadingImagSubmit = async (e) => {
     e.preventDefault();
     if (headingImage === "") {
-      // toast.error("画像が選択させていません。");
+      toast.error("画像が選択させていません。");
       return;
     }
 
@@ -135,13 +132,14 @@ const Post = () => {
             .ref(`/blog/${userInfo?.uid}/${headingImage.name}`)
             .getDownloadURL()
             .then(async (url) => {
-              const convert = convertToRaw(editorState.getCurrentContent());
+              // const convert = convertToRaw(editorState.getCurrentContent());
 
               const blogContents = {
                 uid: userInfo.uid,
                 blogTitle: blogTitle,
                 headingImage: url,
-                html: convert,
+                // html: convert,
+                html: blogDetail,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               };
@@ -152,16 +150,19 @@ const Post = () => {
         }
       );
     }, headingImage.type);
+
+    router.push(`/${userInfo.uid}/blog`);
+    toast.success("ブログを投稿しました。反映までに少し時間が掛かります。");
   };
 
   // =============================
   // SSRの問題を回避するために、コンポーネントの動的ロードが必要
   // SSR window is not defined #893
   // 【参照】https://github.com/jpuri/react-draft-wysiwyg/issues/893
-  const Editor = dynamic(
-    () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
-    { ssr: false }
-  );
+  // const Editor = dynamic(
+  //   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+  //   { ssr: false }
+  // );
   // =============================
 
   return (
@@ -200,8 +201,9 @@ const Post = () => {
               />
             )}
           </div>
+
           {/* ======================== */}
-          <Editor
+          {/* <Editor
             editorState={editorState}
             onEditorStateChange={onEditorStateChange}
             toolbarClassName="shadow-sm"
@@ -224,19 +226,28 @@ const Post = () => {
                 previewImage: true,
               },
             }}
-          />
+          /> */}
           {/* <div
           className="bg-pink-100"
           dangerouslySetInnerHTML={createMarkup(convertedContent)}
         ></div> */}
+          <textarea
+            type="text"
+            value={blogDetail}
+            onChange={onChangeBlogDetail}
+            placeholder="本文入力"
+            className="w-full h-80 mt-4 mb-8 py-5 px-2 border shadow-md"
+          />
+          {/* ======================== */}
+
           <div className="my-6 mr-2 text-right flex justify-end">
-            <button
+            {/* <button
               type="submit"
               onClick={sitagaki}
               className="mr-2 px-7 py-2.5 bg-blue-500 text-white text-sm tracking-widest rounded-full hover:opacity-90 focus:outline-none"
             >
               下書き
-            </button>
+            </button> */}
 
             <form onSubmit={onSubmit}>
               <button
