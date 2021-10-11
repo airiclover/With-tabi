@@ -12,6 +12,8 @@ import { GoogleIcon } from "src/components/common/assets/GoogleIcon";
 
 //ソーシャルログインは新規登録・ログインの関数が同じため、Authコンポーネントにまとめて記述
 export const Auth = (props) => {
+  const [email, setEmail] = useState("login@test.com");
+  const [password, setPassword] = useState("test123");
   const [isAuth, setIsAuth] = useState(false);
   const setUserInfo = useSetRecoilState(userState);
   const router = useRouter();
@@ -129,6 +131,42 @@ export const Auth = (props) => {
       });
   };
 
+  // ============================
+  //testログイン用
+  const onChangeEmail = (e) => setEmail(e.target.value);
+  const onChangePassword = (e) => setPassword(e.target.value);
+
+  const testLoginButton = async (e) => {
+    e.preventDefault();
+    try {
+      await auth.signInWithEmailAndPassword(email, password).then(() => {
+        const userDoc = db
+          .collection("users")
+          .doc("8gcH4lbpJRb2Z1Pj10K6JUuXrXt2"); //test用uid
+        userDoc.get().then((doc) => {
+          const docData = doc.data();
+          if (doc.exists) {
+            //userDocにデータがある場合
+            setUserInfo({
+              uid: "8gcH4lbpJRb2Z1Pj10K6JUuXrXt2",
+              name: docData.name,
+              icon: docData.icon,
+              twitter: docData.twitter,
+              instagram: docData.instagram,
+              introduce: docData.introduce,
+            });
+          } else {
+            console.log("データなし");
+          }
+        });
+        router.push("/8gcH4lbpJRb2Z1Pj10K6JUuXrXt2/plan");
+      });
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+  // ============================
+
   return (
     <div
       className={`min-h-screen pt-28 px-4 text-center 
@@ -168,6 +206,30 @@ export const Auth = (props) => {
             </div>
           </a>
         </Link>
+
+        {props.page === "login" && (
+          <div className="my-10 bg-gray-200 p-6 rounded-lg">
+            <p>テストログインはこちら</p>
+            <input
+              type="text"
+              value={email}
+              onChange={onChangeEmail}
+              className="w-5/6 mt-3 py-1 px-2.5 text-sm rounded-full"
+            />
+            <input
+              type="text"
+              value={password}
+              onChange={onChangePassword}
+              className="w-5/6 mt-3 py-1 px-2.5 text-sm rounded-full"
+            />
+            <button
+              onClick={testLoginButton}
+              className="mx-auto mt-4 py-1.5 px-10 bg-gray-400 text-white text-sm rounded-full block"
+            >
+              ログイン
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
