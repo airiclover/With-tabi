@@ -208,7 +208,7 @@ export const Auth = (props) => {
         </Link>
 
         {props.page === "login" && (
-          <div className="my-10 bg-gray-200 p-6 rounded-lg">
+          <div className="mx-auto max-w-md my-10 bg-gray-200 p-6 rounded-lg">
             <p>テストログインはこちら</p>
             <input
               type="text"
