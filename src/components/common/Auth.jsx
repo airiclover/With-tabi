@@ -137,13 +137,16 @@ export const Auth = (props) => {
   const onChangePassword = (e) => setPassword(e.target.value);
 
   const testLoginButton = async (e) => {
+    toast.loading("Loading...🏝");
+    setIsAuth(true);
+
     e.preventDefault();
     try {
-      await auth.signInWithEmailAndPassword(email, password).then(() => {
+      await auth.signInWithEmailAndPassword(email, password).then(async () => {
         const userDoc = db
           .collection("users")
           .doc("8gcH4lbpJRb2Z1Pj10K6JUuXrXt2"); //test用uid
-        userDoc.get().then((doc) => {
+        await userDoc.get().then((doc) => {
           const docData = doc.data();
           if (doc.exists) {
             //userDocにデータがある場合
@@ -159,10 +162,17 @@ export const Auth = (props) => {
             console.log("データなし");
           }
         });
-        router.push("/8gcH4lbpJRb2Z1Pj10K6JUuXrXt2/plan");
+        toast.dismiss();
+        setIsAuth(false);
+        await router.push("/8gcH4lbpJRb2Z1Pj10K6JUuXrXt2/plan");
       });
-    } catch (err) {
-      alert(err.message);
+    } catch (error) {
+      toast.dismiss();
+      toast.error(
+        error,
+        ":エラーが発生しました。時間をおいてから試してください。"
+      );
+      setIsAuth(false);
     }
   };
   // ============================
