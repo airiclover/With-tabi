@@ -24,9 +24,9 @@ export const About = () => {
         </div>
         <div className="pb-20 flex justify-around items-center">
           <Image
-            src="/img/phone.webp"
+            src="/img/exampleImg.png"
             alt="abputImg"
-            width={100}
+            width={110}
             height={170}
           />
           <div className="w-7/12">
@@ -65,10 +65,12 @@ export const About = () => {
             </div>
           </div>
           <Image
-            src="/img/phone.webp"
+            src="/img/exampleImg2.png"
             alt="abputImg"
-            width={100}
+            width={110}
             height={170}
+            // width={100}
+            // height={170}
           />
         </div>
       </div>
