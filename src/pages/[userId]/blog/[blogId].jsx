@@ -8,6 +8,8 @@ import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
 import { ClockIcon } from "src/components/common/assets/ClockIcon";
+import { DotsIcon } from "src/components/common/assets/DotsIcon";
+
 // import { convertToHTML } from "draft-convert";
 // import { convertToHTML } from "draft-convert";
 
@@ -105,7 +107,12 @@ const BlogID = () => {
           </div>
 
           <div className="mx-6 pb-6">
-            <h2 className="text-2xl font-bold pt-3">{blog?.blogTitle}</h2>
+            <div className="flex flex-col">
+              <div className="my-1 mr-6 p-0.5 absolute right-0">
+                <DotsIcon class="bg-gray-200 rounded-full hover:bg-gray-300" />
+              </div>
+              <h2 className="text-2xl font-bold pt-3">{blog?.blogTitle}</h2>
+            </div>
 
             <div className="flex items-center">
               <ClockIcon />
