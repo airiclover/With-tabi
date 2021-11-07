@@ -26,8 +26,9 @@ export const About = () => {
           <Image
             src="/img/exampleImg.png"
             alt="abputImg"
-            width={110}
-            height={170}
+            width={115}
+            height={200}
+            objectFit="cover"
           />
           <div className="w-7/12">
             <div className="pb-8 text-xl font-semibold tracking-wide lg:text-2xl">
@@ -67,10 +68,9 @@ export const About = () => {
           <Image
             src="/img/exampleImg2.png"
             alt="abputImg"
-            width={110}
-            height={170}
-            // width={100}
-            // height={170}
+            width={115}
+            height={180}
+            objectFit="cover"
           />
         </div>
       </div>
