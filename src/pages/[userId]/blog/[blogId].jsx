@@ -8,6 +8,8 @@ import { CommonLayout } from "src/components/layouts/CommonLayout";
 import { TwitterIcon } from "src/components/common/assets/TwitterIcon";
 import { InstagramIcon } from "src/components/common/assets/InstagramIcon";
 import { ClockIcon } from "src/components/common/assets/ClockIcon";
+import { DotsIcon } from "src/components/common/assets/DotsIcon";
+import { useCurrentUser } from "src/hooks/auth/useCurrentUser";
 
 // import { convertToHTML } from "draft-convert";
 // import { convertToHTML } from "draft-convert";
@@ -15,6 +17,8 @@ import { ClockIcon } from "src/components/common/assets/ClockIcon";
 const BlogID = () => {
   const [blog, setBlog] = useState();
   const [authorData, setAuthorData] = useState();
+  const { userInfo } = useCurrentUser();
+
   // const [convertedContent, setConvertedContent] = useState("");
   const router = useRouter();
 
@@ -87,6 +91,12 @@ const BlogID = () => {
     updateDate?.getMonth() + 1
   }月${updateDate?.getDate()}日`;
 
+  const EditBlogButton = () => {
+    toast("編集・削除機能はまだありません", {
+      icon: "🙇‍♀️",
+    });
+  };
+
   return (
     <CommonLayout>
       {blog?.length !== 0 ? (
@@ -106,9 +116,26 @@ const BlogID = () => {
           </div>
 
           <div className="mx-6 pb-6">
-            <div className="flex items-center">
-              <ClockIcon />
-              <p className="pl-0.5 py-2 text-sm">{fixUpdateDate}</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <ClockIcon />
+                <p className="pl-0.5 py-2 text-sm">{fixUpdateDate}</p>
+              </div>
+              {/* {userInfo?.uid == blog?.uid ? (
+                <div className="p-0.5 rounded-full cursor-pointer hover:bg-gray-100">
+                  <DotsIcon />
+                </div>
+              ) : null} */}
+              {userInfo?.uid == blog?.uid ? (
+                // <div className="p-0.5 rounded-full cursor-pointer hover:bg-gray-100">
+                <button
+                  onClick={EditBlogButton}
+                  className="p-0.5 rounded-full hover:bg-gray-100"
+                >
+                  <DotsIcon />
+                </button>
+              ) : // </div>
+              null}
             </div>
 
             <div className="py-6 whitespace-pre-wrap">
