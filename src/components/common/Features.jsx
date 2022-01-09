@@ -5,9 +5,9 @@ export const Features = () => {
   const FEATURES = [
     {
       src: "undraw_sharing.svg",
-      title: "プランをみんなで共有",
+      title: "プランを作成",
       Introduction:
-        "ボタンひとつでかんたんに旅プランの共有ができます。仲間と一緒にプランを練ったり予定の認識合わせに最適です。",
+        "かんたんにプランを作成することができます。プランと一緒にメモや金額入力も可能で、より便利に自分好みのプランを作ることができます。",
     },
     {
       src: "undraw_attached.svg",

@@ -44,16 +44,20 @@ const UserPage = () => {
 
         <div className="bg-white mt-4 mx-5 mb-8 p-4 rounded-xl">
           <div className="flex">
-            <Image
-              src={userInfo?.icon}
-              alt="userIcon"
-              width={112}
-              height={112}
-              objectFit="cover"
-              className="rounded-full"
-              loading="eager"
-              priority
-            />
+            {userInfo?.icon ? (
+              <Image
+                src={userInfo?.icon}
+                alt="userIcon"
+                width={112}
+                height={112}
+                objectFit="cover"
+                className="rounded-full"
+                loading="eager"
+                priority
+              />
+            ) : (
+              ""
+            )}
 
             <div className="pl-3 flex items-end">
               {userInfo?.twitter ? (
