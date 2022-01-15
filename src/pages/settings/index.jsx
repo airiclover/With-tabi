@@ -103,9 +103,18 @@ const UserPage = () => {
         </button>
 
         <Link href="/settings/delete_account">
-          <a className="py-4 px-6 text-sm border-t-2 border-b-2 block hover:bg-gray-200">
-            アカウントを削除
-          </a>
+          {userInfo?.uid == "8gcH4lbpJRb2Z1Pj10K6JUuXrXt2" ? (
+            <a className="opacity-40 pointer-events-none py-4 px-6 text-sm border-t-2 border-b-2 block hover:bg-gray-200">
+              <p>アカウントを削除</p>
+              <p className="text-xs text-red-500">
+                ※テストアカウントのため削除できません
+              </p>
+            </a>
+          ) : (
+            <a className="py-4 px-6 text-sm border-t-2 border-b-2 block hover:bg-gray-200">
+              アカウントを削除
+            </a>
+          )}
         </Link>
       </div>
     </CommonLayout>
